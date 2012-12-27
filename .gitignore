@@ -1,0 +1,5 @@
+# ignore Dart files and IDE clutter
+.DS_Store
+packages # external packagaes
+.project
+pubspec.lock # pub lock file
