@@ -2,5 +2,8 @@
 .project
 pubspec.lock
 
+# Symlinks #
+packages
+
 # Folders #
 packages/

@@ -83,6 +83,8 @@ class InfinitePlane extends Primitive {
     var div = new vec4(r.direction).dot(equation);
     if (div.abs() > EPS) {
       var dist = (-new vec4(r.origin).dot(equation)) / div;
+      
+      // TODO encapsulte hit point?
       intersect.distance = dist;
       intersect.prim = this;
     }
@@ -102,9 +104,32 @@ class Sphere extends Primitive {
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
     
-    var A = r.direction * r.direction;
-    var B = 2 * (r.origin - this.center) * r.direction;
-    vec3 v3 = (r.origin-this.center);
-    var C = (r.origin - this.center) * (r.origin - this.center) - (this.radius * this.radius);
+    num A = r.direction.dot(r.direction);
+    num B = (r.origin - this.center).dot(r.direction) * 2;
+    num C = (r.origin - this.center).dot(r.origin - this.center) - (this.radius * this.radius);
+    num det = B * B - 4 * A * C;
+    
+    if (det >= 0) {
+      num sol1 = (-B + sqrt(det)) / (2 * A);
+      num sol2 = (-B - sqrt(det)) / (2 * A);
+      
+      if (sol1 >= sol2) {
+        swap(sol1,sol2);
+      }
+      
+      num dist = sol1 > EPS ? sol1 : sol2;
+      
+      //TODO encapsulate hit point?
+      intersect.distance = dist;
+      intersect.prim = this;
+    }
+    
+    return intersect;
+  }
+  
+  void swap(a, b) {
+    var temp = a;
+    a = b;
+    b = temp;
   }
 }
