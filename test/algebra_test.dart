@@ -7,6 +7,7 @@ main() {
   group('Algebra Tests', () {
     setUp(initAlgebra);
     test('Point Creation', pointCreation);
+    test('Point Equality', pointEquality);
     test('Point Subtraction', pointSubtraction);
     test('Point Addition', pointAddition);
     test('Point LERP', pointLerp);
@@ -37,6 +38,14 @@ pointCreation() {
   expect(p2.x, equals(4));
   expect(p2.y, equals(-5));
   expect(p2.z, equals(7));
+}
+
+pointEquality() {
+  expect(p0 == p0, isTrue);
+  expect(p0 == p1, isFalse);
+  expect(p1 == p0, isFalse);
+  expect(p1 == p2, isFalse);
+  expect(p2 == p2, isTrue);
 }
 
 pointSubtraction() {

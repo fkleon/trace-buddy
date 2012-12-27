@@ -25,6 +25,15 @@ class Point {
   // unary minus, negates point components
   Point operator-() => new Point(-this.x, -this.y, -this.z);
   
+  // equality
+  bool operator==(Object o) {
+    if (o is Point) {
+      return this.x == o.x && this.y == o.y && this.z == o.z;
+    } else {
+      return false;
+    }
+  }
+  
   // linear interpolation between 2 points
   Point lerp(Point p2, num coeff) {
     return new Point(
@@ -35,6 +44,7 @@ class Point {
   }
   // TODO 3d lerp?
 
+  // transformation to 3d and 4d vectors
   vec3 toVec3() => new vec3.raw(this.x, this.y, this.z);
   vec4 toVec4() => new vec4.raw(this.x, this.y, this.z, 1);
 }
