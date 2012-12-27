@@ -13,7 +13,5 @@ class Ray {
   Ray(Point this.origin, vec3 this.direction);
   
   // returns the point in space after the ray has traveled the given distance from its origin
-  Point getPoint(num distance) {
-    return this.origin + (this.direction*distance);
-  }
+  Point getPoint(num distance) => this.origin + (this.direction*distance);
 }
