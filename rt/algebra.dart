@@ -17,11 +17,11 @@ class Point {
   Point operator+(vec3 v) => new Point(this.x + v.x, this.y + v.y, this.z + v.z);
   
   // moves the point to new position determined by given vector
-  Point operator-(vec3 v) => new Point(this.x - v.x, this.y - v.y, this.z - v.z);
+  //Point operator-(vec3 v) => new Point(this.x - v.x, this.y - v.y, this.z - v.z);
   
   // returns the vector pointing from given point to this point
   vec3 operator-(Point p2) => new vec3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
-
+  
   // unary minus, negates point components
   Point operator-() => new Point(-this.x, -this.y, -this.z);
   
@@ -33,7 +33,8 @@ class Point {
         this.z * coeff + p2.z * (1-coeff)
     );
   }
-  
   // TODO 3d lerp?
-  
+
+  vec3 toVec3() => new vec3.raw(this.x, this.y, this.z);
+  vec4 toVec4() => new vec4.raw(this.x, this.y, this.z, 1);
 }

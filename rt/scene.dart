@@ -1,4 +1,6 @@
 import 'ray.dart';
+import 'algebra.dart';
+import 'package:vector_math/vector_math_console.dart';
 
 // floating-point relative accuracy
 const num EPS = 0.000001; 
@@ -63,4 +65,46 @@ class Scene extends Primitive {
   // TODO indexable primitives
   // TODO acceleration structure?
   // TODO rebuild index
+}
+
+// a infinite plane specified by given equation
+class InfinitePlane extends Primitive {
+  
+  vec4 equation;
+  
+  InfinitePlane(Point origin, vec3 normal) {
+    var w = -normal.dot(origin.toVec3());
+    equation = new vec4(normal, w);
+  }
+  
+  Intersection intersect(Ray r, num prevBestDistance) {
+    Intersection intersect = new Intersection();
+    
+    var div = new vec4(r.direction).dot(equation);
+    if (div.abs() > EPS) {
+      var dist = (-new vec4(r.origin).dot(equation)) / div;
+      intersect.distance = dist;
+      intersect.prim = this;
+    }
+    
+    return intersect;
+  }
+}
+
+// a sphere
+class Sphere extends Primitive {
+  
+  Point center;
+  num radius;
+  
+  Sphere(Point this.center, num this.radius);
+  
+  Intersection intersect(Ray r, num prevBestDistance) {
+    Intersection intersect = new Intersection();
+    
+    var A = r.direction * r.direction;
+    var B = 2 * (r.origin - this.center) * r.direction;
+    vec3 v3 = (r.origin-this.center);
+    var C = (r.origin - this.center) * (r.origin - this.center) - (this.radius * this.radius);
+  }
 }
