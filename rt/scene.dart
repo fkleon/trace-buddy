@@ -1,6 +1,4 @@
-import 'ray.dart';
-import 'algebra.dart';
-import 'package:vector_math/vector_math_console.dart';
+part of rt_basics;
 
 // floating-point relative accuracy
 const num EPS = 0.000001; 
@@ -20,16 +18,18 @@ class Intersection {
 // - can be an arbitraty geometric shape, mathematical function, etc.
 abstract class Primitive {
   
-  Intersection intersect(Ray ray, num previousBestDistance); 
+  Intersection intersect(Ray ray, num previousBestDistance);
+  
+  vec3 get color => new vec3.raw(100,100,100); // TODO
 }
 
 // basically a collection of primitives which together form the scene to be rendered
 class Scene extends Primitive {
   // non indexable primitives
-  List<Primitive> nonIdxPrimitives;
+  Collection<Primitive> nonIdxPrimitives;
   
   // creates a new scene, can be initialized with the given primitives
-  Scene({List<Primitive> primitives}) {
+  Scene([Collection<Primitive> primitives]) {
     if (?primitives) {
       this.nonIdxPrimitives = primitives;
     } else {
@@ -42,6 +42,8 @@ class Scene extends Primitive {
     
     num bestDistance = prevBestDistance;
     Primitive bestPrimitive = null;
+    
+    print('Intersecting ${nonIdxPrimitives.length} primitives');
     
     // iterate over non-indexable primitives
     for (Primitive p in this.nonIdxPrimitives) {
@@ -73,8 +75,8 @@ class InfinitePlane extends Primitive {
   vec4 equation;
   
   InfinitePlane(Point origin, vec3 normal) {
-    var w = -normal.dot(origin.toVec3());
-    equation = new vec4(normal, w);
+    num w = -normal.dot(origin.toVec3());
+    equation = new vec4(normal,w);
   }
   
   Intersection intersect(Ray r, num prevBestDistance) {
@@ -82,9 +84,9 @@ class InfinitePlane extends Primitive {
     
     var div = new vec4(r.direction).dot(equation);
     if (div.abs() > EPS) {
-      var dist = (-new vec4(r.origin).dot(equation)) / div;
+      var dist = (-r.origin.toVec4().dot(equation)) / div;
       
-      // TODO encapsulte hit point?
+      // TODO encapsulate hit point?
       intersect.distance = dist;
       intersect.prim = this;
     }
