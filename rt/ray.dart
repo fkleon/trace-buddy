@@ -8,12 +8,14 @@ part 'scene.dart';
 // represents a ray
 class Ray {
   
-  Point origin;
+  Point3D origin;
   vec3 direction;
   
-  // creates a ray from given point and direction vector
-  Ray(Point this.origin, vec3 this.direction);
+  // creates a ray from given Point3D and direction vector
+  Ray(Point3D this.origin, vec3 this.direction);
   
-  // returns the point in space after the ray has traveled the given distance from its origin
-  Point getPoint(num distance) => this.origin + (this.direction*distance);
+  // returns the Point3D in space after the ray has traveled the given distance from its origin
+  Point3D getPoint3D(num distance) => this.origin + (this.direction*distance);
+
+  String toString() => "Ray [$origin --> $direction].";
 }

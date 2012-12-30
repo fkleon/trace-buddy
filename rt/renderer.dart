@@ -9,7 +9,7 @@ import 'package:vector_math/vector_math_console.dart';
 main() {
   Sampler sampler = new DefaultSampler();
   Camera camera = new PerspectiveCamera(
-      new Point.zero(),
+      new Point3D.zero(),
       new vec3.raw(0,1,0),
       new vec3.raw(1,0,0),
       60,
@@ -17,6 +17,66 @@ main() {
   
   Renderer r = new Renderer(sampler,camera);
   r.render();
+}
+
+// contains the output colors set at every pixel
+// color is a RGB vec3, each component in the interval [0..1]
+class OutputMatrix {
+  
+  final int rows, columns;
+  List<vec3> _content; // [(row1_col1, row1_col2, .. row1_colN), .. , (rowN_col1, ..)]
+  
+  // initializes matrix of size rows*columns,
+  // sets all colors to black.
+  OutputMatrix(int this.rows, int this.columns) {
+    // init the array (serialized matrix)
+    _content = new List<vec3>(rows*columns);
+    
+    // set all pixel to black
+    clear();
+  }
+  
+  // clears image to black
+  clear() {
+    vec3 black = new vec3.zero();
+    for (int i = 0; i<rows*columns; i++) {
+      _content[i] = black;
+    }
+  }
+  
+  // sets given pixel to given color
+  // x=width, y=height
+  setPixel(int row,int column,vec3 color) {
+    if (!isValidRow(row) || !isValidColumn(column)) throw new ArgumentError('No such row or column: $row,$column.');
+    
+    _content[((row-1)*columns)+(column-1)] = color.clone();
+  }
+  
+  // sets given row to given color row
+  setRow(int row, List<vec3> colors) {
+    if (!isValidRow(row)) throw new ArgumentError('No such row: $row.');
+    
+    int startIndex = (row-1)*columns;
+    for (int i = 0; i<columns; i++) {
+      _content[((row-1)*columns)+i] = colors[i].clone();
+    }
+  }
+  
+  // returns the color of given pixel
+  vec3 getPixel(int row, int column) {
+    if (!isValidColumn(column)) throw new ArgumentError('No such column: $column.');
+    return _content[((row-1)*columns)+(column-1)];
+  }
+  
+  // returns a list of colors for given row
+  List<vec3> getRow(int row) => _content.getRange((row-1)*columns, columns);
+  
+  // returns an array containing all colors
+  // structured by row after row
+  List<vec3> getSerialized() => new List.from(_content);
+  
+  bool isValidColumn(int column) => (column>0 && column<=columns);
+  bool isValidRow(int row) => (row>0 && row<=columns);
 }
 
 class Renderer {
@@ -28,15 +88,18 @@ class Renderer {
   
   Renderer(this.sampler, this.camera);
    
-  void render() {
+  OutputMatrix render() {
     
     Collection<Sample> samples;
     Collection<Ray> primaryRays;
     
-    Collection<Primitive> primitives = [new InfinitePlane(new Point(0,-2,0),new vec3.raw(0, 1, 0)),
-                                        new Sphere(new Point(0,-10,0),4)];
+    //TODO hardcoded primitives
+    Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
+                                        new Sphere(new Point3D(0,-10,0),11)];
     
     Scene scene = new Scene(primitives);
+    
+    OutputMatrix om = new OutputMatrix(100, 100);
     
     // for each pixel..
     for (int x = 0; x<100; x++) {
@@ -50,12 +113,19 @@ class Renderer {
           // integrate..
           //TODO
           for (Ray r in primaryRays) {
+            //print ("Sending ${r}..");
             Intersection ret = scene.intersect(r, 99999);
-            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
+            if (ret.distance < 99999) {
+              print("HOOORAY.");
+              om.setPixel(y+1, x+1, new vec3.raw(255,0,0)); //TODO actual color
+            }
+//            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
           }
         }
       }
     }
+    
+    return om;
   }
 }
 
@@ -65,12 +135,12 @@ abstract class Camera {
 
 class PerspectiveCamera extends Camera {
   
-  Point center;
+  Point3D center;
   vec3 forward, up, right;
   vec3 topLeft, stepX, stepY;
   vec2 res;
   
-  PerspectiveCamera(Point this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this.res) {
+  PerspectiveCamera(Point3D this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this.res) {
     num resX = res.x.toDouble();
     num resY = res.y.toDouble();
     num aspectRatio = resX/resY;
@@ -83,7 +153,7 @@ class PerspectiveCamera extends Camera {
     this.up = upAxis;
     this.right = rightAxis;
     
-    // angle to radians
+    // angle from degree to radians
     num angleInRad = vertOpeningAngle * math.PI / 180;
     vec3 rowVector = rightAxis * (2 * tan(angleInRad*0.5) * aspectRatio);
     vec3 columnVector = upAxis * (2 * tan(angleInRad*0.5));
@@ -91,6 +161,16 @@ class PerspectiveCamera extends Camera {
     this.stepX = rowVector / resX;
     this.stepY = columnVector / resY;
     this.topLeft = forwardAxis - (rowVector / 2) - (columnVector / 2);
+    
+    print("Created new PerspectiveCamera:");
+    print(" - resolution: $res");
+    print(" - center: $center");
+    print(" - forward: $forward");
+    print(" - up: $up");
+    print(" - right: $right");
+    print(" - topLeft: $topLeft");
+    print(" - stepX: $stepX");
+    print(" - stepY: $stepY");
   }
   
   Collection<Ray> getPrimaryRays(int x, int y) {

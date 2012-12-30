@@ -15,13 +15,13 @@ main() {
 }
 
 final double EPS = 0.0001;
-Point p0,p1,p2;
+Point3D p0,p1,p2;
 vec3 v1,v2;
 
 initAlgebra() {
-  p0 = new Point.zero();
-  p1 = new Point(1,2,3);
-  p2 = new Point(4,-5,7);
+  p0 = new Point3D.zero();
+  p1 = new Point3D(1,2,3);
+  p2 = new Point3D(4,-5,7);
   v1 = new vec3.raw(1,-2,5);
   v2 = new vec3.raw(-1,0,-7);
 }
@@ -50,7 +50,7 @@ pointEquality() {
 
 pointSubtraction() {
   // unary minus
-  Point pMinus = -p0;
+  Point3D pMinus = -p0;
   expect(pMinus.x, equals(0));
   expect(pMinus.y, equals(0));
   expect(pMinus.z, equals(0));

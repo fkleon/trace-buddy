@@ -1,9 +1,9 @@
 part of rt_basics;
 
-// floating-point relative accuracy
+// floating-Point3D relative accuracy
 const num EPS = 0.000001; 
 
-// represents a ray/object intersection point
+// represents a ray/object intersection Point3D
 class Intersection {
   
   // the distance to the intersection
@@ -43,7 +43,7 @@ class Scene extends Primitive {
     num bestDistance = prevBestDistance;
     Primitive bestPrimitive = null;
     
-    print('Intersecting ${nonIdxPrimitives.length} primitives');
+    //print('Finding intersetion with ${nonIdxPrimitives.length} primitives..');
     
     // iterate over non-indexable primitives
     for (Primitive p in this.nonIdxPrimitives) {
@@ -74,7 +74,7 @@ class InfinitePlane extends Primitive {
   
   vec4 equation;
   
-  InfinitePlane(Point origin, vec3 normal) {
+  InfinitePlane(Point3D origin, vec3 normal) {
     num w = -normal.dot(origin.toVec3());
     equation = new vec4(normal,w);
   }
@@ -86,7 +86,7 @@ class InfinitePlane extends Primitive {
     if (div.abs() > EPS) {
       var dist = (-r.origin.toVec4().dot(equation)) / div;
       
-      // TODO encapsulate hit point?
+      // TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;
     }
@@ -98,10 +98,10 @@ class InfinitePlane extends Primitive {
 // a sphere
 class Sphere extends Primitive {
   
-  Point center;
+  Point3D center;
   num radius;
   
-  Sphere(Point this.center, num this.radius);
+  Sphere(Point3D this.center, num this.radius);
   
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
@@ -121,7 +121,7 @@ class Sphere extends Primitive {
       
       num dist = sol1 > EPS ? sol1 : sol2;
       
-      //TODO encapsulate hit point?
+      //TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;
     }
