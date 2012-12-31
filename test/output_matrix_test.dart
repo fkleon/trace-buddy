@@ -1,28 +1,20 @@
-import 'package:/unittest/unittest.dart';
-import 'package:vector_math/vector_math_console.dart';
+part of rt_test_suite;
 
-import '../rt/renderer.dart';
-
-main() {
-  group('Output Matrix Tests', () {
-    setUp(initMatrix);
-    test('Matrix Creation', matrixCreation);
-    test('Matrix Manipulation', matrixManipulation);
-    test('Matrix Clear', matrixClear);
-  });
-}
-
+// Contains methods to test the output matrix implementation
+  
 final int rows = 100, columns = 99;
 OutputMatrix om;
 vec3 black, white, red;
 
-initMatrix() {
+// Initialises the matrix and color vectors.
+void initMatrixTests() {
   om = new OutputMatrix(rows, columns);
   black = new vec3.zero();
   white = new vec3.raw(1,1,1);
   red = new vec3(1,0,0);
 }
 
+// Tests the expected state of the matrix after creation.
 matrixCreation() {
   // expect some errors on invalid access
   expect(() => om.getPixel(0, 0), throwsArgumentError);
@@ -62,6 +54,7 @@ bool isRed(vec3 color) {
   return color.x == 1 && color.y == 0 && color.z == 0;
 }
 
+// Tests the expected state of the matrix after pixel and row manipulations.
 matrixManipulation() {
   // expect a red pixel
   om.setPixel(2, 5, red);
@@ -87,6 +80,7 @@ matrixManipulation() {
   }
 }
 
+// Tests the expected state of the matrix after the clear operation.
 matrixClear() {
   om.clear();
   

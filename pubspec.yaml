@@ -11,4 +11,3 @@ dependencies:
   logging: 0.2.9+7
   vector_math: 0.9.2
   unittest: any
-  math: any

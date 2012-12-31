@@ -1,24 +1,14 @@
-import 'package:/unittest/unittest.dart';
-import 'package:vector_math/vector_math_console.dart';
+part of rt_test_suite;
 
-import '../rt/algebra.dart';
-
-main() {
-  group('Algebra Tests', () {
-    setUp(initAlgebra);
-    test('Point Creation', pointCreation);
-    test('Point Equality', pointEquality);
-    test('Point Subtraction', pointSubtraction);
-    test('Point Addition', pointAddition);
-    test('Point LERP', pointLerp);
-  });
-}
+// Contains methods to test the point algebra implementation
 
 final double EPS = 0.0001;
 Point3D p0,p1,p2;
 vec3 v1,v2;
 
-initAlgebra() {
+// Initialises the test points and vectors
+void initAlgebraTests() {
+  // do some funky stuff  
   p0 = new Point3D.zero();
   p1 = new Point3D(1,2,3);
   p2 = new Point3D(4,-5,7);
@@ -26,6 +16,7 @@ initAlgebra() {
   v2 = new vec3.raw(-1,0,-7);
 }
 
+// Tests the expected state after point creation.
 pointCreation() {
   expect(p0.x, equals(0));
   expect(p0.y, equals(0));
@@ -40,6 +31,7 @@ pointCreation() {
   expect(p2.z, equals(7));
 }
 
+// Tests the point equality operator.
 pointEquality() {
   expect(p0 == p0, isTrue);
   expect(p0 == p1, isFalse);
@@ -48,6 +40,7 @@ pointEquality() {
   expect(p2 == p2, isTrue);
 }
 
+// Tests the unary minus and point subtraction operators.
 pointSubtraction() {
   // unary minus
   Point3D pMinus = -p0;
@@ -77,6 +70,7 @@ pointSubtraction() {
   expect(diff.z, equals(p1.z-p2.z));
 }
 
+// Tests the point addition operator.
 pointAddition() {
   var add = p1+v1;
   expect(add.x, equals(p1.x+v1.x));
@@ -89,6 +83,7 @@ pointAddition() {
   expect(add.z, equals(v2.z));
 }
 
+// Tests the linear interpolation of points.
 pointLerp() {
   var coeff = 0.6;
   var lerped = p1.lerp(p0, coeff);
