@@ -5,9 +5,9 @@ import '../rt/algebra.dart';
 import 'package:vector_math/vector_math_console.dart';
 
 void main() {
-  CanvasElement image = query("#image");
-  image.width = 100;
-  image.height = 100;
+  CanvasElement imageCanvas = query("#image");
+  imageCanvas.width = 100;
+  imageCanvas.height = 100;
   
   Sampler sampler = new DefaultSampler();
   Camera camera = new PerspectiveCamera(
@@ -20,8 +20,11 @@ void main() {
   Renderer r = new Renderer(sampler,camera);
   OutputMatrix om = r.render();
   
-  ImageData id = image.context2d.createImageData(100, 100);
-  //ImageData id = image.context2d.getImageData(0, 0, 100, 100);
+  writeToCanvas2d(om, imageCanvas);
+}
+
+writeToCanvas2d(OutputMatrix om, CanvasElement canvas) {
+  ImageData id = canvas.context2d.createImageData(om.rows, om.columns);
   
   int i = 0;
   for (vec3 color in om.getSerialized()) {
@@ -32,6 +35,5 @@ void main() {
     id.data[i++] = 255;
   }
   
-  image.context2d.putImageData(id, 0, 0);
-//  image.context2d.stroke();
+  canvas.context2d.putImageData(id, 0, 0);
 }
