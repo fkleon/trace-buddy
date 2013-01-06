@@ -101,7 +101,9 @@ class Sphere extends Primitive {
   Point3D center;
   num radius;
   
-  Sphere(Point3D this.center, num this.radius);
+  Sphere(Point3D this.center, num this.radius){
+  if (radius<=0) throw new ArgumentError('Radius was zero or less');
+  }
   
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
