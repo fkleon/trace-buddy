@@ -6,10 +6,14 @@ import '../rt/ray.dart';
 
 import 'package:vector_math/vector_math_console.dart';
 
+int xRes, yRes;
+
 void main() {
+  xRes = yRes = 200;
+  
   CanvasElement imageCanvas = query("#image");
-  imageCanvas.width = 100;
-  imageCanvas.height = 100;
+  imageCanvas.width = xRes;
+  imageCanvas.height = yRes;
   
   Sampler sampler = new DefaultSampler();
   Camera camera = new PerspectiveCamera(
@@ -17,14 +21,14 @@ void main() {
       new vec3.raw(1,0,0),
       new vec3.raw(0,1,0),
       60,
-      new vec2.raw(100, 100));
+      new vec2.raw(xRes, yRes));
   
   Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
                                       new Sphere(new Point3D(10,0,0),2)];
   
   Scene scene = new Scene(primitives);
   
-  Renderer r = new Renderer(scene, sampler,camera);
+  Renderer r = new Renderer(scene, sampler, camera);
   OutputMatrix om = r.render();
   
   writeToCanvas2d(om, imageCanvas);
