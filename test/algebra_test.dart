@@ -2,7 +2,6 @@ part of rt_test_suite;
 
 // Contains methods to test the point algebra implementation
 
-final double EPS = 0.0001;
 Point3D p0,p1,p2;
 vec3 v1,v2;
 
