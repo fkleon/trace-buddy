@@ -20,7 +20,7 @@ abstract class Primitive {
   
   Intersection intersect(Ray ray, num previousBestDistance);
   
-  vec3 get color => new vec3.raw(100,100,100); // TODO
+  vec3 get color => new vec3.raw(1,1,1); // TODO
 }
 
 // basically a collection of primitives which together form the scene to be rendered
@@ -123,7 +123,7 @@ class Sphere extends Primitive {
       }
       
       num dist = sol1 > EPS ? sol1 : sol2;
-      
+
       //TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;

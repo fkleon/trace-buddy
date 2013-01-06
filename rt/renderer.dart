@@ -15,7 +15,12 @@ main() {
       60,
       new vec2.raw(10, 10));
   
-  Renderer r = new Renderer(sampler,camera);
+  Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
+                                      new Sphere(new Point3D(0,-10,0),11)];
+  
+  Scene scene = new Scene(primitives);
+  
+  Renderer r = new Renderer(scene, sampler,camera);
   r.render();
 }
 
@@ -83,22 +88,17 @@ class Renderer {
   
   Sampler sampler;
   Camera camera;
+  Scene scene;
   //Integrator integrator;
   //Image target;
   
-  Renderer(this.sampler, this.camera);
+  Renderer(this.scene, this.sampler, this.camera);
    
   OutputMatrix render() {
     
     Collection<Sample> samples;
     Collection<Ray> primaryRays;
-    
-    //TODO hardcoded primitives
-    Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
-                                        new Sphere(new Point3D(0,-10,0),11)];
-    
-    Scene scene = new Scene(primitives);
-    
+        
     OutputMatrix om = new OutputMatrix(100, 100);
     
     // for each pixel..
@@ -116,8 +116,13 @@ class Renderer {
             //print ("Sending ${r}..");
             Intersection ret = scene.intersect(r, 99999);
             if (ret.distance < 99999) {
-              print("HOOORAY.");
-              om.setPixel(y+1, x+1, new vec3.raw(255,0,0)); //TODO actual color
+              //TODO fix hardcoded colors
+              vec3 color = new vec3.raw(1,0,0);
+              if (ret.prim is Sphere) {
+//                print("HOOORAY, sphere");
+                color = new vec3.raw(0,1,0);
+              }
+              om.setPixel(y+1, x+1, color); //TODO actual color
             }
 //            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
           }
