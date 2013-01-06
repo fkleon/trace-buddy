@@ -20,7 +20,7 @@ abstract class Primitive {
   
   Intersection intersect(Ray ray, num previousBestDistance);
   
-  vec3 get color => new vec3.raw(100,100,100); // TODO
+  vec3 get color => new vec3.raw(1,1,1); // TODO
 }
 
 // basically a collection of primitives which together form the scene to be rendered
@@ -82,8 +82,11 @@ class InfinitePlane extends Primitive {
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
     
+    // perform calculations in homogeneous space
+    // check if ray is orthogonal to normal (= parallel to plane)
     var div = new vec4(r.direction).dot(equation);
     if (div.abs() > EPS) {
+      // calculate distance from ray origin to plane
       var dist = (-r.origin.toVec4().dot(equation)) / div;
       
       // TODO encapsulate hit Point3D?
@@ -122,7 +125,7 @@ class Sphere extends Primitive {
       }
       
       num dist = sol1 > EPS ? sol1 : sol2;
-      
+
       //TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;

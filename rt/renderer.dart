@@ -6,19 +6,6 @@ import 'algebra.dart';
 import 'samplers.dart';
 import 'package:vector_math/vector_math_console.dart';
 
-main() {
-  Sampler sampler = new DefaultSampler();
-  Camera camera = new PerspectiveCamera(
-      new Point3D.zero(),
-      new vec3.raw(0,1,0),
-      new vec3.raw(1,0,0),
-      60,
-      new vec2.raw(10, 10));
-  
-  Renderer r = new Renderer(sampler,camera);
-  r.render();
-}
-
 // contains the output colors set at every pixel
 // color is a RGB vec3, each component in the interval [0..1]
 class OutputMatrix {
@@ -83,27 +70,26 @@ class Renderer {
   
   Sampler sampler;
   Camera camera;
+  Scene scene;
+  int xRes, yRes;
   //Integrator integrator;
   //Image target;
   
-  Renderer(this.sampler, this.camera);
+  Renderer(this.scene, this.sampler, this.camera) {
+    xRes = camera.res.x.toInt();
+    yRes = camera.res.y.toInt(); 
+  }
    
   OutputMatrix render() {
     
     Collection<Sample> samples;
     Collection<Ray> primaryRays;
-    
-    //TODO hardcoded primitives
-    Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
-                                        new Sphere(new Point3D(0,-10,0),11)];
-    
-    Scene scene = new Scene(primitives);
-    
-    OutputMatrix om = new OutputMatrix(100, 100);
+        
+    OutputMatrix om = new OutputMatrix(xRes, yRes);
     
     // for each pixel..
-    for (int x = 0; x<100; x++) {
-      for (int y = 0; y<100; y++) {
+    for (int x = 0; x<xRes; x++) {
+      for (int y = 0; y<yRes; y++) {
         // generate samples
         samples = sampler.getSamples(x, y);
         
@@ -116,8 +102,13 @@ class Renderer {
             //print ("Sending ${r}..");
             Intersection ret = scene.intersect(r, 99999);
             if (ret.distance < 99999) {
-              print("HOOORAY.");
-              om.setPixel(y+1, x+1, new vec3.raw(255,0,0)); //TODO actual color
+              //TODO fix hardcoded colors
+              vec3 color = new vec3.raw(1,0,0);
+              if (ret.prim is Sphere) {
+//                print("HOOORAY, sphere");
+                color = new vec3.raw(0,1,0);
+              }
+              om.setPixel(y+1, x+1, color); //TODO actual color
             }
 //            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
           }
@@ -131,6 +122,7 @@ class Renderer {
 
 abstract class Camera {
   Collection<Ray> getPrimaryRays(int x, int y);
+  vec2 get res;
 }
 
 class PerspectiveCamera extends Camera {
@@ -138,11 +130,11 @@ class PerspectiveCamera extends Camera {
   Point3D center;
   vec3 forward, up, right;
   vec3 topLeft, stepX, stepY;
-  vec2 res;
+  vec2 _res;
   
-  PerspectiveCamera(Point3D this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this.res) {
-    num resX = res.x.toDouble();
-    num resY = res.y.toDouble();
+  PerspectiveCamera(Point3D this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this._res) {
+    num resX = _res.x.toDouble();
+    num resY = _res.y.toDouble();
     num aspectRatio = resX/resY;
     
     // calculate axis vectors
@@ -177,4 +169,6 @@ class PerspectiveCamera extends Camera {
     Ray ret = new Ray(center, stepX*x + stepY*y + topLeft);
     return [ret];
   }
+  
+  vec2 get res => new vec2.copy(_res);
 }
