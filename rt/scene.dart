@@ -82,8 +82,11 @@ class InfinitePlane extends Primitive {
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
     
+    // perform calculations in homogeneous space
+    // check if ray is orthogonal to normal (= parallel to plane)
     var div = new vec4(r.direction).dot(equation);
     if (div.abs() > EPS) {
+      // calculate distance from ray origin to plane
       var dist = (-r.origin.toVec4().dot(equation)) / div;
       
       // TODO encapsulate hit Point3D?
