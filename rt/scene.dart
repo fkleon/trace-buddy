@@ -129,7 +129,6 @@ class Sphere extends Primitive {
         minDist = sol1;
       }
       
-      
       num dist = minDist > EPS ? minDist : maxDist;
 
       //TODO encapsulate hit Point3D?
@@ -138,11 +137,5 @@ class Sphere extends Primitive {
     }
     
     return intersect;
-  }
-  
-  void swap(a, b) {
-    var temp = a;
-    a = b;
-    b = temp;
   }
 }
