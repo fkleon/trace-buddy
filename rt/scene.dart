@@ -120,11 +120,17 @@ class Sphere extends Primitive {
       num sol1 = (-B + sqrt(det)) / (2 * A);
       num sol2 = (-B - sqrt(det)) / (2 * A);
       
+      num minDist,maxDist;
       if (sol1 >= sol2) {
-        swap(sol1,sol2);
+        maxDist = sol1;
+        minDist = sol2;
+      }else{
+        maxDist = sol2;
+        minDist = sol1;
       }
       
-      num dist = sol1 > EPS ? sol1 : sol2;
+      
+      num dist = minDist > EPS ? minDist : maxDist;
 
       //TODO encapsulate hit Point3D?
       intersect.distance = dist;
