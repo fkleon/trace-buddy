@@ -32,7 +32,7 @@ class OutputMatrix {
   }
   
   // sets given pixel to given color
-  // x=width, y=height
+  // x=width=row, y=height=column
   setPixel(int row,int column,vec3 color) {
     if (!isValidRow(row) || !isValidColumn(column)) throw new ArgumentError('No such row or column: $row,$column.');
     
@@ -73,7 +73,6 @@ class Renderer {
   Scene scene;
   int xRes, yRes;
   //Integrator integrator;
-  //Image target;
   
   Renderer(this.scene, this.sampler, this.camera) {
     xRes = camera.res.x.toInt();
@@ -85,7 +84,7 @@ class Renderer {
     Collection<Sample> samples;
     Collection<Ray> primaryRays;
         
-    OutputMatrix om = new OutputMatrix(xRes, yRes);
+    OutputMatrix om = new OutputMatrix(yRes, xRes);
     
     // for each pixel..
     for (int x = 0; x<xRes; x++) {
@@ -108,6 +107,7 @@ class Renderer {
 //                print("HOOORAY, sphere");
                 color = new vec3.raw(0,1,0);
               }
+              
               om.setPixel(y+1, x+1, color); //TODO actual color
             }
 //            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
