@@ -1,7 +1,9 @@
-import '../rt/algebra.dart';
-import '../packages/vector_math/vector_math_console.dart';
 import 'dart:math' as math;
-import '../packages/benchmark_harness/benchmark_harness.dart';
+
+import 'package:vector_math/vector_math_console.dart';
+import 'package:benchmark_harness/benchmark_harness.dart';
+
+import '../rt/algebra.dart';
 
 class IntersectionBenchmark extends BenchmarkBase {
   

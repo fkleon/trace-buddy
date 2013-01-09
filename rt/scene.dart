@@ -9,16 +9,40 @@ class Intersection {
   // the distance to the intersection
   num distance;
   Primitive prim;
+  Point3D hitPoint;
   
   //TODO default values
   Intersection([num this.distance = -1, Primitive this.prim = null]); // intersection distance defaults to -1 (no intersetion)
+}
+
+class IdGen {
+  int _lastId;
+  
+  static IdGen _instance;
+ 
+  factory IdGen() {
+    if (_instance == null) {
+      _instance = new IdGen._internal();
+    }
+    return _instance;
+  }
+  
+  IdGen._internal() : _lastId=0;
+  
+  int get nextId => ++_lastId;
 }
 
 // an object which can be contained within a scene
 // - can be an arbitraty geometric shape, mathematical function, etc.
 abstract class Primitive {
   
+  int id;
+  
+  Primitive() : id = new IdGen().nextId;
+  
   Intersection intersect(Ray ray, num previousBestDistance);
+  
+  Point3D get origin => null;
   
   vec3 get color => new vec3.raw(1,1,1); // TODO
 }
@@ -26,7 +50,7 @@ abstract class Primitive {
 // basically a collection of primitives which together form the scene to be rendered
 class Scene extends Primitive {
   // non indexable primitives
-  Collection<Primitive> nonIdxPrimitives;
+  List<Primitive> nonIdxPrimitives;
   
   // creates a new scene, can be initialized with the given primitives
   Scene([Collection<Primitive> primitives]) {
@@ -34,6 +58,38 @@ class Scene extends Primitive {
       this.nonIdxPrimitives = primitives;
     } else {
       this.nonIdxPrimitives = new List<Primitive>();
+    }
+  }
+  
+  void add(Primitive p) {
+    this.nonIdxPrimitives.add(p);
+  }
+  
+  void remove(int primId) {
+    print ('remove $primId');
+    
+    int i = 0;
+    bool found = false;
+    for (Primitive prim in nonIdxPrimitives) {
+      if (prim.id == primId) {
+        found = true;
+        break;
+      }
+      i++;
+    }
+    
+    if (found) nonIdxPrimitives.removeAt(i);
+  }
+  
+  void removeCartesianCoordSystems() {
+    List<int> ids = new List<int>();
+    
+    for (int i = 0; i<nonIdxPrimitives.length; i++) {
+      if (nonIdxPrimitives[i] is CartesianCoordinateSystem) ids.add(i);
+    }
+    
+    for (int i in ids) {
+      nonIdxPrimitives.removeAt(i);
     }
   }
   
@@ -73,8 +129,9 @@ class Scene extends Primitive {
 class InfinitePlane extends Primitive {
   
   vec4 equation;
+  Point3D origin;
   
-  InfinitePlane(Point3D origin, vec3 normal) {
+  InfinitePlane(Point3D this.origin, vec3 normal) {
     num w = -normal.dot(origin.toVec3());
     equation = new vec4(normal,w);
   }
@@ -92,9 +149,56 @@ class InfinitePlane extends Primitive {
       // TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;
+      intersect.hitPoint = r.getPoint3D(dist);
+      //print('HitPoint is ${intersect.hitPoint}');
     }
     
     return intersect;
+  }
+}
+
+class CartesianCoordinateSystem extends Primitive {
+  
+  static Primitive _instance;
+  
+  factory CartesianCoordinateSystem() {
+    if (_instance == null) {
+      _instance = new CartesianCoordinateSystem._internal();
+    }
+    return _instance;
+  }
+  
+  CartesianCoordinateSystem._internal() {
+    var origin = new Point3D.zero();
+    this._xAxis = new InfinitePlane(origin, new vec3.raw(0, 1, 0));
+    this._yAxis = new InfinitePlane(origin, new vec3.raw(1, 0, 0));
+    this._zAxis = new InfinitePlane(origin, new vec3.raw(0, 1, 0));
+  }
+  
+  final double THRESH = 0.02;
+  InfinitePlane _xAxis, _yAxis, _zAxis;
+  
+  Intersection intersect(Ray r, num prevBestDistance) {
+    Intersection intRet = _xAxis.intersect(r, prevBestDistance);
+    // check if hitpoint is near x axis;
+    if (intRet.distance > 0 && abs(intRet.hitPoint.z) < THRESH && abs(intRet.hitPoint.y) < THRESH) {
+      return intRet;
+    }
+    
+    intRet = _yAxis.intersect(r, prevBestDistance);
+    // check if hitpoint is near y axis;
+    if (intRet.distance > 0 && abs(intRet.hitPoint.x) < THRESH && abs(intRet.hitPoint.z) < THRESH) {
+      return intRet;
+    }
+    
+    intRet = _zAxis.intersect(r, prevBestDistance);
+    // check if hitpoint is near z axis;
+    if (intRet.distance > 0 && abs(intRet.hitPoint.x) < THRESH && abs(intRet.hitPoint.y) < THRESH) {
+      return intRet;
+    }
+    
+    // no hit at all..
+    return new Intersection();
   }
 }
 
@@ -104,8 +208,10 @@ class Sphere extends Primitive {
   Point3D center;
   num radius;
   
-  Sphere(Point3D this.center, num this.radius){
-  if (radius<=0) throw new ArgumentError('Radius was zero or less');
+  Point3D get origin => center;
+  
+  Sphere(Point3D this.center, num this.radius) {
+    if (radius<=0) throw new ArgumentError('Radius of sphere must not be zero or less');
   }
   
   Intersection intersect(Ray r, num prevBestDistance) {

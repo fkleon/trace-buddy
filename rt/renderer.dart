@@ -104,10 +104,11 @@ class Renderer {
               //TODO fix hardcoded colors
               vec3 color = new vec3.raw(1,0,0);
               if (ret.prim is Sphere) {
-//                print("HOOORAY, sphere");
                 color = new vec3.raw(0,1,0);
               }
-              
+              if (ret.prim is InfinitePlane) {
+                color = new vec3.raw(0,0.5,0.5);
+              }
               om.setPixel(y+1, x+1, color); //TODO actual color
             }
 //            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
@@ -133,6 +134,35 @@ class PerspectiveCamera extends Camera {
   vec2 _res;
   
   PerspectiveCamera(Point3D this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this._res) {
+    init(up, vertOpeningAngle);
+    
+    print("Created new PerspectiveCamera:");
+    print(" - resolution: $res");
+    print(" - center: $center");
+    print(" - forward: $forward");
+    print(" - up: $up");
+    print(" - right: $right");
+    print(" - topLeft: $topLeft");
+    print(" - stepX: $stepX");
+    print(" - stepY: $stepY");
+  }
+  
+  PerspectiveCamera.lookAt(Point3D this.center, Point3D lookAt, vec3 up, num vertOpeningAngle, vec2 this._res) {
+    this.forward = lookAt-center;
+    init(up, vertOpeningAngle);
+    
+    print("Created new PerspectiveCamera:");
+    print(" - resolution: $res");
+    print(" - center: $center");
+    print(" - lookAt: $lookAt");
+    print(" - up: $up");
+    print(" - right: $right");
+    print(" - topLeft: $topLeft");
+    print(" - stepX: $stepX");
+    print(" - stepY: $stepY");
+  }
+  
+  void init(vec3 up, num vertOpeningAngle) {
     num resX = _res.x.toDouble();
     num resY = _res.y.toDouble();
     num aspectRatio = resX/resY;
@@ -153,18 +183,8 @@ class PerspectiveCamera extends Camera {
     this.stepX = rowVector / resX;
     this.stepY = columnVector / resY;
     this.topLeft = forwardAxis - (rowVector / 2) - (columnVector / 2);
-    
-    print("Created new PerspectiveCamera:");
-    print(" - resolution: $res");
-    print(" - center: $center");
-    print(" - forward: $forward");
-    print(" - up: $up");
-    print(" - right: $right");
-    print(" - topLeft: $topLeft");
-    print(" - stepX: $stepX");
-    print(" - stepY: $stepY");
   }
-  
+
   Collection<Ray> getPrimaryRays(int x, int y) {
     Ray ret = new Ray(center, stepX*x + stepY*y + topLeft);
     return [ret];
