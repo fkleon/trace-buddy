@@ -75,7 +75,7 @@ class Renderer {
   int xRes, yRes;
   //Integrator integrator;
   
-  final vec4 ambientLight = new vec4.raw(1.0,1.0,1.0,1.0);
+  final vec4 ambientLight = new vec4.raw(0.3,0.3,0.3,0.3);
   
   Renderer(this.scene, this.sampler, this.camera) {
     xRes = camera.res.x.toInt();
@@ -91,6 +91,9 @@ class Renderer {
     
     // for each pixel..
     for (int x = 0; x<xRes; x++) {
+      if (x%10 == 0) {
+        print('Rendering line ${x+1}..');
+      }
       for (int y = 0; y<yRes; y++) {
         // generate samples
         samples = sampler.getSamples(x, y);
@@ -126,7 +129,7 @@ class Renderer {
 //                color = new vec3.raw(0,0.5,0.5);
 //              }
               //TODO for all light sources, integrate indirect radiance.
-              //color += s.getReflectance(-r.direction, );
+              color += s.getReflectance(-r.direction, new Point3D(0, 20, 0) - ret.hitPoint);
               
               color += s.getIndirectRadiance();
               

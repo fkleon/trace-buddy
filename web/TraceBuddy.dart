@@ -78,11 +78,15 @@ class RenderController {
       Shader redShader = new AmbientShader(red);
       Shader greenShader = new AmbientShader(green);
       Shader turquisShader = new AmbientShader(turquis);
+      
+      Shader phongGreenShader = new PhongShader(green, green, 50.0, green);
+      Shader phongRedShader = new PhongShader(red, red, 50.0, red);
+      Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
 
-      Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), turquisShader),
+      Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), phongTurquisShader),
                                           new CartesianCoordinateSystem(),
-                                          new Sphere(new Point3D(10,0,0),2,greenShader),
-                                          new Sphere(new Point3D(-4,-1,1),0.2,redShader)];
+                                          new Sphere(new Point3D(10,0,0),2,phongGreenShader),
+                                          new Sphere(new Point3D(-4,-1,1),0.2,phongRedShader)];
       scene = new Scene(primitives);
     }
     

@@ -54,8 +54,10 @@ abstract class Shader {
  */
 abstract class PluggableShader extends Shader {
   Point3D position;
-  vec3 normal; // normalized
+  vec3 _normal; // normalized
   
+  set normal(vec3 normal) => _normal = normal.normalize();
+  get normal => _normal;
   //TODO vertex and texture support would go in here..
 }
 
@@ -78,12 +80,12 @@ class AmbientShader extends PluggableShader {
  * A [PhongShader] uses the phong reflection model to determine the surface
  * radiance.
  */
-class PhongShader extends PluggableShader {
+class PhongShader extends AmbientShader {
   
   final vec4 difCoeff, specCoeff;
-  double specExp;
+  final double specExp;
   
-  PhongShader(this.difCoeff, this.specCoeff, this.specExp);
+  PhongShader(this.difCoeff, this.specCoeff, this.specExp, vec4 ambCoeff) : super(ambCoeff);
   
   vec4 getReflectance(vec3 outDir, vec3 inDir) {
     vec4 Cs = this.specCoeff;
@@ -103,5 +105,5 @@ class PhongShader extends PluggableShader {
   Shader clone() =>
       new PhongShader(new vec4.copy(difCoeff),
                       new vec4.copy(specCoeff),
-                      specExp);
+                      specExp, ambCoeff);
 }
