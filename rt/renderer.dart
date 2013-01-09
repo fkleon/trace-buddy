@@ -1,10 +1,11 @@
 library rt_renderer;
 
-import 'dart:math' as math;
+import 'dart:math' as Math;
 import 'ray.dart';
-import 'algebra.dart';
-import 'samplers.dart';
-import 'package:vector_math/vector_math_console.dart';
+import 'algebra.dart' show Point3D;
+import 'samplers.dart' show Sample, Sampler;
+import 'shaders.dart' show Shader;
+import 'package:vector_math/vector_math_console.dart' show tan, vec2, vec3, vec4;
 
 // contains the output colors set at every pixel
 // color is a RGB vec3, each component in the interval [0..1]
@@ -74,6 +75,8 @@ class Renderer {
   int xRes, yRes;
   //Integrator integrator;
   
+  final vec4 ambientLight = new vec4.raw(1.0,1.0,1.0,1.0);
+  
   Renderer(this.scene, this.sampler, this.camera) {
     xRes = camera.res.x.toInt();
     yRes = camera.res.y.toInt(); 
@@ -99,17 +102,35 @@ class Renderer {
           //TODO
           for (Ray r in primaryRays) {
             //print ("Sending ${r}..");
-            Intersection ret = scene.intersect(r, 99999);
-            if (ret.distance < 99999) {
+            
+            // integrate radiance
+            vec4 color = new vec4.zero();
+            
+            //TODO count bounces for indirect radiance
+            
+            Intersection ret = scene.intersect(r, 99999); //TODO fix hardcoded distance
+            if (ret.distance >= EPS && ret.distance < 99999) {
+              
+              //print ('hit at ${ret.distance} with ${ret.prim} on ${ret.hitPoint}');
+              
+              // get shader
+              Shader s = scene.getShader(ret);
+              
+              color += s.getAmbientCoeff() * ambientLight;
               //TODO fix hardcoded colors
-              vec3 color = new vec3.raw(1,0,0);
-              if (ret.prim is Sphere) {
-                color = new vec3.raw(0,1,0);
-              }
-              if (ret.prim is InfinitePlane) {
-                color = new vec3.raw(0,0.5,0.5);
-              }
-              om.setPixel(y+1, x+1, color); //TODO actual color
+//              vec3 color = new vec3.raw(1,0,0);
+//              if (ret.prim is Sphere) {
+//                color = new vec3.raw(0,1,0);
+//              }
+//              if (ret.prim is InfinitePlane) {
+//                color = new vec3.raw(0,0.5,0.5);
+//              }
+              //TODO for all light sources, integrate indirect radiance.
+              //color += s.getReflectance(-r.direction, );
+              
+              color += s.getIndirectRadiance();
+              
+              om.setPixel(y+1, x+1, color.rgb);
             }
 //            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
           }
@@ -176,7 +197,7 @@ class PerspectiveCamera extends Camera {
     this.right = rightAxis;
     
     // angle from degree to radians
-    num angleInRad = vertOpeningAngle * math.PI / 180;
+    num angleInRad = vertOpeningAngle * Math.PI / 180;
     vec3 rowVector = rightAxis * (2 * tan(angleInRad*0.5) * aspectRatio);
     vec3 columnVector = upAxis * (2 * tan(angleInRad*0.5));
 

@@ -1,7 +1,8 @@
 library rt_basics;
 
-import 'algebra.dart';
 import 'package:vector_math/vector_math_console.dart';
+import 'algebra.dart';
+import 'shaders.dart';
 
 part 'scene.dart';
 

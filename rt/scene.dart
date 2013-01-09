@@ -12,7 +12,7 @@ class Intersection {
   Point3D hitPoint;
   
   //TODO default values
-  Intersection([num this.distance = -1, Primitive this.prim = null]); // intersection distance defaults to -1 (no intersetion)
+  Intersection([this.distance = -1, this.prim = null, this.hitPoint]); // intersection distance defaults to -1 (no intersetion)
 }
 
 class IdGen {
@@ -37,14 +37,20 @@ class IdGen {
 abstract class Primitive {
   
   int id;
+  Shader _shader;
   
-  Primitive() : id = new IdGen().nextId;
-  
+  Primitive([Shader this._shader]) : id = new IdGen().nextId {
+    if (_shader == null) {
+      _shader = new AmbientShader(new vec4.raw(1,0,0,0));
+    }
+  }
+
   Intersection intersect(Ray ray, num previousBestDistance);
   
   Point3D get origin => null;
   
-  vec3 get color => new vec3.raw(1,1,1); // TODO
+  //vec3 get color => new vec3.raw(1,1,1); // TODO
+  Shader getShader(Intersection intersect);
 }
 
 // basically a collection of primitives which together form the scene to be rendered
@@ -114,9 +120,11 @@ class Scene extends Primitive {
     // TODO iterate over indexable primitives
     
     // package everything nicely
-    Intersection bestHit = new Intersection(bestDistance, bestPrimitive);
+    Intersection bestHit = new Intersection(bestDistance, bestPrimitive, r.getPoint3D(bestDistance));
     return bestHit;
   }
+  
+  Shader getShader(Intersection intersect) => intersect.prim.getShader(intersect);
   
   // TODO indexable primitives
   // TODO acceleration structure?
@@ -129,7 +137,7 @@ class InfinitePlane extends Primitive {
   vec4 equation;
   Point3D origin;
   
-  InfinitePlane(Point3D this.origin, vec3 normal) {
+  InfinitePlane(Point3D this.origin, vec3 normal, [Shader shader]) : super(shader){
     num w = -normal.dot(origin.toVec3());
     equation = new vec4(normal,w);
   }
@@ -144,7 +152,6 @@ class InfinitePlane extends Primitive {
       // calculate distance from ray origin to plane
       var dist = (-r.origin.toVec4().dot(equation)) / div;
       
-      // TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;
       intersect.hitPoint = r.getPoint3D(dist);
@@ -152,6 +159,15 @@ class InfinitePlane extends Primitive {
     }
     
     return intersect;
+  }
+  
+  Shader getShader(Intersection intersect) {
+    PluggableShader ret = this._shader.clone();
+    
+    ret.position = intersect.hitPoint;
+    ret.normal = equation.xyz;
+    
+    return ret;
   }
 }
 
@@ -198,6 +214,14 @@ class CartesianCoordinateSystem extends Primitive {
     // no hit at all..
     return new Intersection();
   }
+  
+  Shader getShader(Intersection intersect) {
+    PluggableShader ret = this._shader.clone();
+    
+    ret.position = intersect.hitPoint;
+    
+    return ret;
+  }
 }
 
 // a sphere
@@ -208,7 +232,7 @@ class Sphere extends Primitive {
   
   Point3D get origin => center;
   
-  Sphere(Point3D this.center, num this.radius) {
+  Sphere(Point3D this.center, num this.radius, [Shader shader]) : super(shader) {
     if (radius<=0) throw new ArgumentError('Radius of sphere must not be zero or less');
   }
   
@@ -235,11 +259,20 @@ class Sphere extends Primitive {
       
       num dist = minDist > EPS ? minDist : maxDist;
 
-      //TODO encapsulate hit Point3D?
       intersect.distance = dist;
       intersect.prim = this;
+      intersect.hitPoint = r.getPoint3D(dist);
     }
     
     return intersect;
+  }
+  
+  Shader getShader(Intersection intersect) {
+    PluggableShader ret = this._shader.clone();
+    
+    ret.position = intersect.hitPoint;
+    ret.normal = intersect.hitPoint - this.origin;
+    
+    return ret;
   }
 }

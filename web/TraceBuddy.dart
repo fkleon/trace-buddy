@@ -7,6 +7,7 @@ import '../rt/renderer.dart';
 import '../rt/samplers.dart';
 import '../rt/algebra.dart';
 import '../rt/ray.dart';
+import '../rt/shaders.dart';
 
 var view;
 
@@ -70,10 +71,18 @@ class RenderController {
   void createRenderer() {
     // load scene
     if (scene == null) {
-      Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0)),
+      vec4 red = new vec4.raw(1,0,0,0);
+      vec4 green = new vec4.raw(0,1,0,0);
+      vec4 turquis = new vec4.raw(0,1,1,0);
+
+      Shader redShader = new AmbientShader(red);
+      Shader greenShader = new AmbientShader(green);
+      Shader turquisShader = new AmbientShader(turquis);
+
+      Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), turquisShader),
                                           new CartesianCoordinateSystem(),
-                                          new Sphere(new Point3D(10,0,0),2),
-                                          new Sphere(new Point3D(-4,-1,1),0.2)];
+                                          new Sphere(new Point3D(10,0,0),2,greenShader),
+                                          new Sphere(new Point3D(-4,-1,1),0.2,redShader)];
       scene = new Scene(primitives);
     }
     
