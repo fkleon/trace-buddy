@@ -63,7 +63,7 @@ class OutputMatrix {
   List<vec3> getSerialized() => new List.from(_content);
   
   bool isValidColumn(int column) => (column>0 && column<=columns);
-  bool isValidRow(int row) => (row>0 && row<=columns);
+  bool isValidRow(int row) => (row>0 && row<=rows);
 }
 
 class Renderer {

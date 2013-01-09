@@ -66,8 +66,6 @@ class Scene extends Primitive {
   }
   
   void remove(int primId) {
-    print ('remove $primId');
-    
     int i = 0;
     bool found = false;
     for (Primitive prim in nonIdxPrimitives) {
