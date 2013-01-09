@@ -1,19 +1,76 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta charset="utf-8">
     <title>TraceBuddy</title>
+    <link rel="stylesheet" href="TraceBuddy.css">
   </head>
   <body>
     <h1>TraceBuddy</h1>
     
-    <p>Canvas test.</p>
-    
     <div id="container">
-      <canvas id="image"></canvas>
+      <div id="imageDiv">
+        <canvas id="imageCanvas"></canvas>
+        <div id="renderInfo">{{view.renderInfo}}</div>
+      </div>
+      
+      <div id="controlsDiv">
+        <fieldset id="cameraControls">
+        <legend>Camera Controls</legend>
+          <div>
+            <button id="controlUp" disabled>Up</button>
+            <button id="controlRight" disabled>Right</button>
+            <button id="controlLeft" disabled>Left</button>
+            <button id="controlDown" disabled>Down</button>
+            <button id="controlForward" disabled>Forward</button>
+            <button id="controlBackward" disabled>Backward</button>
+          </div>
+          <div>
+            <label>Camera Origin</label>
+            <input type="text" id="xOrigin" bind-value="view.xOriginStr"/>
+            <input type="text" id="yOrigin" bind-value="view.yOriginStr"/>
+            <input type="text" id="zOrigin" bind-value="view.zOriginStr"/>
+          </div>
+          <div>
+            <label>Camera Resolution</label>
+            <input id="xRes" type="number" min="1" bind-value="view.xResStr" required/>
+            <input id="yRes" type="number" min="1" bind-value="view.yResStr" required/>
+          </div>
+        </fieldset>
+        
+        <fieldset id="renderControls">
+          <legend>Render Controls</legend>
+          <input type="checkbox" id="renderCoords" bind-checked="view.renderCoords"/>
+          <label for="renderCoords">Render coordinate system axes</label>
+          <div>
+            <button id="btnRender" on-click="view.render()">Render</button>
+          </div>
+        </fieldset>  
+        
+        <fieldset id="sceneInfo">
+          <legend>Scene Information</legend>
+          <div id="sceneInformation">{{view.sceneInformation}}</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Position [x,y,z]</th>
+              </tr>
+            </thead>
+            <tbody template iterate='prim in view.primitives'>
+              <tr>
+                <td>{{prim.id}}</td>
+                <td>{{prim}}</td>
+                <td>{{prim.origin}}</td>
+                <td><a href class="removeLink" data-item-id="{{prim.id}}" on-click="view.removePrimitive($event)">Remove</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
     </div>
-
+    
     <script type="application/dart" src="TraceBuddy.dart"></script>
     <script src="https://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>
