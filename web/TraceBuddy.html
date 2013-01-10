@@ -51,6 +51,7 @@
         <fieldset id="sceneInfo">
           <legend>Scene Information</legend>
           <div id="sceneInformation">{{view.sceneInformation}}</div>
+          <template if="view.primitives.length > 0">
           <table>
             <thead>
               <tr>
@@ -70,6 +71,7 @@
               </tr>
             </tbody>
           </table>
+          </template>
         </fieldset>
       </div>
     </div>

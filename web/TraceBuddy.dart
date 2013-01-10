@@ -12,19 +12,20 @@ import '../rt/shaders.dart';
 var view;
 var rc;
 
+// main entry point for application
 void main() {
-  print('init main');
   rc = new RenderController();
   view = new TraceBuddyView(rc);
   rc.view = view;
 
-  window.on.load.add((e) => view.updateColors());
+  window.on.load.add((e) => view.updateColors()); //TODO better solution
 }
 
-void col() {
-  
-}
-
+/**
+ * The [RenderController] is responsible for communicating
+ * with the render engine. It keeps references to the [Renderer],
+ * [Camera], [Sampler] and [OutputMatrix].
+ */
 class RenderController {
   // view
   TraceBuddyView view;
@@ -142,10 +143,12 @@ class RenderController {
   }
 }
 
-
+/**
+ * The [AsciiDumper] writes a given [OutputMatrix] to console as ASCII.
+ * It only supports white, black, red, green and blue.
+ */
 class AsciiDumper {
   static void dumpAsciiRGB(OutputMatrix om) {
-    //List<String> outputMatrixString = new List<String>(om.rows);
     for (int row = 1; row < om.rows; row++) {
       List<String> rowString = new List<String>();
       for (vec3 rgb in om.getRow(row)) {
@@ -168,7 +171,10 @@ class AsciiDumper {
   static bool isBlue(vec3 rgb) => rgb.x == 0 && rgb.y == 0 && rgb.z == 1;
 }
 
-
+/**
+ * A View on the HTML template, their data is kept synchronized.
+ * Delegates calls to the RenderController.
+ */
 class TraceBuddyView {
   RenderController rc;
   //get rc => _rc == null ? new RenderController(this) : _rc;
@@ -177,8 +183,8 @@ class TraceBuddyView {
   String renderInfo;
   
   // Scene information
-  get sceneInformation => '${primitives.length} primitives in scene.';
-  get primitives => rc.primitives;
+  String get sceneInformation => '${primitives.length} primitives in scene.';
+  List<Primitive> get primitives => rc.primitives;
 
   // Camera properties
   String xResStr, yResStr;
@@ -216,6 +222,9 @@ class TraceBuddyView {
    e.preventDefault();
  }
  
+ /*
+  * Triggers rendering process of the scene and draws the result afterwards.
+  */
  void render() {
    // TODO use isolate
    // TODO write method
@@ -230,6 +239,9 @@ class TraceBuddyView {
    drawImage(rc.om);
  }
  
+ /*
+  * Draws the given [OutputMatrix] into the Canvas.
+  */
  void drawImage(OutputMatrix om) {
    var timer = new Stopwatch();
    timer.start();
@@ -237,6 +249,9 @@ class TraceBuddyView {
    this.renderInfo = '${renderInfo} Drawn in ${timer.elapsedMilliseconds/1000} s.';
  }
  
+ /*
+  * Writes a given [OutputMatrix] to the 2d context of a given [CanvasElement].
+  */
  void _writeToCanvas2d(OutputMatrix om, CanvasElement canvas) {
    // make sure canvas is big enough
    canvas.width = om.columns;
@@ -257,8 +272,11 @@ class TraceBuddyView {
    canvas.context2d.putImageData(id, 0, 0);
  }
  
+ /*
+  * Updates the colors of the primitives in the GUI list.
+  */
  void updateColors() {
-   print('update colors');
+   print('update colors'); //TODO
    for (Primitive p in rc.scene.nonIdxPrimitives) {
      CanvasElement canvas = query('canvas[data-item-id=\'${p.id}\']') as CanvasElement;
 
@@ -278,10 +296,18 @@ class TraceBuddyView {
    }
  }
  
+ /*
+  * Converts a double [0..1] to a RGB int [0..255].
+  */
  int asRgbInt(num value) {
    return (value*255).toInt();
  }
  
+ /*
+  * Parses a string to int.
+  * 
+  * Returns 0 if input is illegal.
+  */
  int _parseInt(String value) {
    try {
      return int.parse(value);
@@ -291,6 +317,11 @@ class TraceBuddyView {
    }
  }
  
+ /*
+  * Parses a string to double.
+  * 
+  * Returns 0.0 if input is illegal.
+  */
  double _parseDouble(String value) {
    try {
      return double.parse(value);
