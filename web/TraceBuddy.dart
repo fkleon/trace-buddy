@@ -10,12 +10,19 @@ import '../rt/ray.dart';
 import '../rt/shaders.dart';
 
 var view;
+var rc;
 
 void main() {
   print('init main');
-  var rc = new RenderController();
+  rc = new RenderController();
   view = new TraceBuddyView(rc);
   rc.view = view;
+
+  window.on.load.add((e) => view.updateColors());
+}
+
+void col() {
+  
 }
 
 class RenderController {
@@ -241,13 +248,38 @@ class TraceBuddyView {
    int i = 0;
    for (vec3 color in om.getSerialized()) {
      // set RGBA
-     id.data[i++] = (color[0]*255).toInt();
-     id.data[i++] = (color[1]*255).toInt();
-     id.data[i++] = (color[2]*255).toInt();
+     id.data[i++] = asRgbInt(color[0]*255);
+     id.data[i++] = asRgbInt(color[1]*255);
+     id.data[i++] = asRgbInt(color[2]*255);
      id.data[i++] = 255;
    }
    
    canvas.context2d.putImageData(id, 0, 0);
+ }
+ 
+ void updateColors() {
+   print('update colors');
+   for (Primitive p in rc.scene.nonIdxPrimitives) {
+     CanvasElement canvas = query('canvas[data-item-id=\'${p.id}\']') as CanvasElement;
+
+     if(canvas==null) {
+       print('no elem for ${p.id}');
+       continue;
+     }
+      
+     vec4 c = p.color;
+
+     canvas.width = 15;
+     canvas.height = 15;
+     canvas.context2d.fillStyle = 'rgb(${(c.r*255).toInt()},${(c.g*255).toInt()},${(c.b*255).toInt()})';
+     canvas.context2d.fillRect(0, 0, 15, 15);
+      
+     canvas.hidden = false;
+   }
+ }
+ 
+ int asRgbInt(num value) {
+   return (value*255).toInt();
  }
  
  int _parseInt(String value) {

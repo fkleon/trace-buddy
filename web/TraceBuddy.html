@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>TraceBuddy</title>
     <link rel="stylesheet" href="TraceBuddy.css">
+    <link rel="components" href="components.html">
   </head>
   <body>
     <h1>TraceBuddy</h1>
@@ -18,7 +19,7 @@
         <fieldset id="cameraControls">
         <legend>Camera Controls</legend>
           <div>
-            <button id="controlUp" disabled>Up</button>
+            <button id="controlUp" on-click="print(query('canvas[data-item-id=\'1\']'))">Up</button>
             <button id="controlRight" disabled>Right</button>
             <button id="controlLeft" disabled>Left</button>
             <button id="controlDown" disabled>Down</button>
@@ -56,13 +57,15 @@
                 <th>Id</th>
                 <th>Type</th>
                 <th>Position [x,y,z]</th>
+                <th>Color</th>
               </tr>
             </thead>
-            <tbody template iterate='prim in view.primitives'>
-              <tr>
+            <tbody template iterate='prim in view.primitives' on-mouse-up="view.updateColors()">
+              <tr data-item-id="{{prim.id}}">
                 <td>{{prim.id}}</td>
                 <td>{{prim}}</td>
                 <td>{{prim.origin}}</td>
+                <td><canvas class="colorCanvas" data-item-id="{{prim.id}}" hidden></canvas></td>
                 <td><a href class="removeLink" data-item-id="{{prim.id}}" on-click="view.removePrimitive($event)">Remove</a></td>
               </tr>
             </tbody>

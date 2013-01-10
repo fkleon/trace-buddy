@@ -49,7 +49,7 @@ abstract class Primitive {
   
   Point3D get origin => null;
   
-  //vec3 get color => new vec3.raw(1,1,1); // TODO
+  vec4 get color => _shader == null ? new vec4.zero() : _shader.getAmbientCoeff();
   Shader getShader(Intersection intersect);
 }
 
