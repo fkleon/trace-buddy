@@ -248,9 +248,9 @@ class TraceBuddyView {
    int i = 0;
    for (vec3 color in om.getSerialized()) {
      // set RGBA
-     id.data[i++] = asRgbInt(color[0]*255);
-     id.data[i++] = asRgbInt(color[1]*255);
-     id.data[i++] = asRgbInt(color[2]*255);
+     id.data[i++] = asRgbInt(color[0]);
+     id.data[i++] = asRgbInt(color[1]);
+     id.data[i++] = asRgbInt(color[2]);
      id.data[i++] = 255;
    }
    
@@ -271,7 +271,7 @@ class TraceBuddyView {
 
      canvas.width = 15;
      canvas.height = 15;
-     canvas.context2d.fillStyle = 'rgb(${(c.r*255).toInt()},${(c.g*255).toInt()},${(c.b*255).toInt()})';
+     canvas.context2d.fillStyle = 'rgb(${asRgbInt(c.r)},${asRgbInt(c.g)},${asRgbInt(c.b)})';
      canvas.context2d.fillRect(0, 0, 15, 15);
       
      canvas.hidden = false;

@@ -73,7 +73,6 @@ class Renderer {
   Camera camera;
   Scene scene;
   int xRes, yRes;
-  //Integrator integrator;
   
   final vec4 ambientLight = new vec4.raw(0.3,0.3,0.3,0.3);
   
@@ -95,22 +94,25 @@ class Renderer {
         print('Rendering line ${x+1}..');
       }
       for (int y = 0; y<yRes; y++) {
+        // color information for this pixel
+        vec4 color = new vec4.zero();
+
         // generate samples
         samples = sampler.getSamples(x, y);
-        
+
         // for each sample
         for (Sample s in samples) {
+          // temporary color vector for this sample
+          vec4 tempColor = new vec4.zero();
+
           primaryRays = camera.getPrimaryRays(x, y);
-          // integrate..
-          //TODO
+          
+          // integrate rays..
           for (Ray r in primaryRays) {
-            //print ("Sending ${r}..");
-            
+          
             // integrate radiance
-            vec4 color = new vec4.zero();
-            
             //TODO count bounces for indirect radiance
-            
+
             Intersection ret = scene.intersect(r, 99999); //TODO fix hardcoded distance
             if (ret.distance >= EPS && ret.distance < 99999) {
               
@@ -119,24 +121,27 @@ class Renderer {
               // get shader
               Shader s = scene.getShader(ret);
               
-              color += s.getAmbientCoeff() * ambientLight;
-              //TODO fix hardcoded colors
-//              vec3 color = new vec3.raw(1,0,0);
-//              if (ret.prim is Sphere) {
-//                color = new vec3.raw(0,1,0);
-//              }
-//              if (ret.prim is InfinitePlane) {
-//                color = new vec3.raw(0,0.5,0.5);
-//              }
+              // get ambience, reflectance and indirect radiance
+              tempColor += s.getAmbientCoeff() * ambientLight;
               //TODO for all light sources, integrate indirect radiance.
-              color += s.getReflectance(-r.direction, new Point3D(0, 20, 0) - ret.hitPoint);
+              tempColor += s.getReflectance(-r.direction, new Point3D(0, 20, 0) - ret.hitPoint); //TODO dummy light source
               
-              color += s.getIndirectRadiance();
-              
-              om.setPixel(y+1, x+1, color.rgb);
+              tempColor += s.getIndirectRadiance();
             }
-//            print ("Ret ${ret.distance} distance and ${ret.prim} primitive.");
           }
+
+          // weight ray
+          double rayWeight = 1.0 / primaryRays.length;
+          tempColor.scale(rayWeight);
+          
+          // weight sample
+          tempColor.scale(s.weight);
+          
+          // add to overall pixel color
+          color += tempColor;
+          
+          // set pixel in output matrix
+          om.setPixel(y+1, x+1, color.rgb);
         }
       }
     }
@@ -145,11 +150,20 @@ class Renderer {
   }
 }
 
+/**
+ * A [Camera] is defined by its resolution.
+ * The camera generates [Ray]s for every pixel of the image.
+ */
 abstract class Camera {
   Collection<Ray> getPrimaryRays(int x, int y);
   vec2 get res;
 }
 
+/**
+ * The [PerspectiveCamera] generates rays for a perspective projection.
+ * It is defined by its center, viweing direction, up vector,
+ * vertical opening angle of the image and resolution.
+ */
 class PerspectiveCamera extends Camera {
   
   Point3D center;
