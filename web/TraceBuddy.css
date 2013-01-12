@@ -33,3 +33,7 @@ p {
 
 #imageDiv{float:left;width:50%;}
 #controlsDiv{float:right;width:50%;}
+
+.primitive_color_box{
+  width: 15px;
+  height: 15px;}

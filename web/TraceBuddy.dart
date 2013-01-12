@@ -17,8 +17,6 @@ void main() {
   rc = new RenderController();
   view = new TraceBuddyView(rc);
   rc.view = view;
-
-  window.on.load.add((e) => view.updateColors()); //TODO better solution
 }
 
 /**
@@ -275,26 +273,7 @@ class TraceBuddyView {
  /*
   * Updates the colors of the primitives in the GUI list.
   */
- void updateColors() {
-   print('update colors'); //TODO
-   for (Primitive p in rc.scene.nonIdxPrimitives) {
-     CanvasElement canvas = query('canvas[data-item-id=\'${p.id}\']') as CanvasElement;
 
-     if(canvas==null) {
-       print('no elem for ${p.id}');
-       continue;
-     }
-      
-     vec4 c = p.color;
-
-     canvas.width = 15;
-     canvas.height = 15;
-     canvas.context2d.fillStyle = 'rgb(${asRgbInt(c.r)},${asRgbInt(c.g)},${asRgbInt(c.b)})';
-     canvas.context2d.fillRect(0, 0, 15, 15);
-      
-     canvas.hidden = false;
-   }
- }
  
  /*
   * Converts a double [0..1] to a RGB int [0..255].

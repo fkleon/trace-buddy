@@ -50,6 +50,7 @@ abstract class Primitive {
   Point3D get origin => null;
   
   vec4 get color => _shader == null ? new vec4.zero() : _shader.getAmbientCoeff();
+  String get colorString => 'rgba(${(color.r*255).toInt()},${(color.g*255).toInt()},${(color.b*255).toInt()},1)';
   Shader getShader(Intersection intersect);
 }
 
