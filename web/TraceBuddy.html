@@ -11,7 +11,7 @@
     
     <div id="container">
       <div id="imageDiv">
-        <canvas id="imageCanvas"></canvas>
+        <canvas id="imageCanvas" class="loader"></canvas>
         <div id="renderInfo">{{view.renderInfo}}</div>
       </div>
       
@@ -61,12 +61,12 @@
                 <th>Color</th>
               </tr>
             </thead>
-            <tbody template iterate='prim in view.primitives' onchange="view.updateColors()">
-              <tr data-item-id="{{prim.id}}">
+            <tbody template iterate='prim in view.primitives'>
+              <tr>
                 <td>{{prim.id}}</td>
                 <td>{{prim}}</td>
                 <td>{{prim.origin}}</td>
-                <td><div class="primitive_color_box" data-item-id="{{prim.id}}" style="background-color:{{prim.colorString}}"></div></td>
+                <td><div class="primitive_color_box" style="background-color:{{prim.colorString}}"></div></td>
                 <td><a href class="removeLink" data-item-id="{{prim.id}}" on-click="view.removePrimitive($event)">Remove</a></td>
               </tr>
             </tbody>
@@ -76,6 +76,7 @@
       </div>
     </div>
     
+    <div id="glassplate" class="loader"></div>
     <script type="application/dart" src="TraceBuddy.dart"></script>
     <script src="https://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>

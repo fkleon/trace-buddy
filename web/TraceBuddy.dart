@@ -17,6 +17,8 @@ void main() {
   rc = new RenderController();
   view = new TraceBuddyView(rc);
   rc.view = view;
+  
+  window.on.load.add((e) => query('#glassplate').style.display='none');
 }
 
 /**
@@ -269,11 +271,6 @@ class TraceBuddyView {
    
    canvas.context2d.putImageData(id, 0, 0);
  }
- 
- /*
-  * Updates the colors of the primitives in the GUI list.
-  */
-
  
  /*
   * Converts a double [0..1] to a RGB int [0..255].

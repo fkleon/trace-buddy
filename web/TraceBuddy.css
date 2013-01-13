@@ -31,9 +31,33 @@ p {
   margin-top: 140px;
 }
 
-#imageDiv{float:left;width:50%;}
-#controlsDiv{float:right;width:50%;}
+#imageDiv {
+  float:left;
+  width:50%;
+}
 
-.primitive_color_box{
+#controlsDiv {
+  float:right;
+  width:50%;
+}
+
+.primitive_color_box {
   width: 15px;
-  height: 15px;}
+  height: 15px;
+}
+  
+#glassplate {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+.loader {
+  background-color: rgba(0,0,0,0.6);
+  background-image: url(ajax-loader.gif);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 15%
+}
