@@ -52,7 +52,7 @@
           <legend>Scene Information</legend>
           <div id="sceneInformation">{{view.sceneInformation}}</div>
           <template if="view.primitives.length > 0">
-          <table>
+          <table id="theTable">
             <thead>
               <tr>
                 <th>Id</th>
@@ -61,12 +61,12 @@
                 <th>Color</th>
               </tr>
             </thead>
-            <tbody template iterate='prim in view.primitives' on-mouse-up="view.updateColors()">
+            <tbody template iterate='prim in view.primitives' onchange="view.updateColors()">
               <tr data-item-id="{{prim.id}}">
                 <td>{{prim.id}}</td>
                 <td>{{prim}}</td>
                 <td>{{prim.origin}}</td>
-                <td><canvas class="colorCanvas" data-item-id="{{prim.id}}" hidden></canvas></td>
+                <td><div class="primitive_color_box" data-item-id="{{prim.id}}" style="background-color:{{prim.colorString}}"></div></td>
                 <td><a href class="removeLink" data-item-id="{{prim.id}}" on-click="view.removePrimitive($event)">Remove</a></td>
               </tr>
             </tbody>
