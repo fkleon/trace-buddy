@@ -1,4 +1,4 @@
-library rt_shaders;
+library rt_shader;
 
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math_console.dart' show vec3, vec4;
@@ -13,18 +13,21 @@ import 'algebra.dart' show Point3D;
  */
 abstract class Shader {
   
-  /*
-   * Returns the reflectance for the associatesd [Primitive] at the associated
+  /**
+   * Returns the reflectance for the associated [Primitive] at the associated
    * hitpoint and and for the given direction vectors.
-   * The [vec3] outDir is //TODO
-   * The [vec3] inDir is //TODO
+   * 
+   * The parameter outDir is the vector from the hit point in direction of its
+   * origin. The parameter inDir is vector from the hit point in direction of
+   * the light source.
+   * 
    * Returns the zero vector, if the shader does not support reflectance.
    */
   vec4 getReflectance(vec3 outDir, vec3 inDir) {
     return new vec4.zero();
   }
   
-  /*
+  /**
    * Returns the ambient coefficient of the primitive at the hit point.
    * Returns the zero vector, if shader does not support ambient lighting.
    */
@@ -32,16 +35,16 @@ abstract class Shader {
     return new vec4.zero();
   }
   
-  /*
+  /**
    * Returns the radiance which comes from indirect illumination.
    * This is the case for a reflected ray on a mirror.
-   * Returns the zero vector. if shader dies not support indirect radiance.
+   * Returns the zero vector, if shader does not support indirect radiance.
    */
   vec4 getIndirectRadiance() {
     return new vec4.zero();
   }
   
-  /*
+  /**
    * Returns a hard copy (clone) of the current shader.
    */
   Shader clone();
@@ -53,11 +56,17 @@ abstract class Shader {
  * the proper radiance.
  */
 abstract class PluggableShader extends Shader {
+  
+  /// The position of the hit point.
   Point3D position;
+  
   vec3 _normal; // normalized
   
   set normal(vec3 normal) => _normal = normal.normalize();
+  
+  /// The normal vector at the hit point. Must be stored in normalized form.
   get normal => _normal;
+  
   //TODO vertex and texture support would go in here..
 }
 
@@ -65,13 +74,16 @@ abstract class PluggableShader extends Shader {
  * A [AmbientShader] returns radiance based on its ambient coefficient.
  */
 class AmbientShader extends PluggableShader {
+  
+  /// The ambient coefficient of this shader.
   final vec4 ambCoeff;
   
+  /**
+   * Createa a new AmbientShader.
+   */
   AmbientShader(this.ambCoeff);
   
-  vec4 getAmbientCoeff() {
-    return ambCoeff;
-  }
+  vec4 getAmbientCoeff() => ambCoeff;
   
   Shader clone() => new AmbientShader(new vec4.copy(ambCoeff));
 }
@@ -79,12 +91,22 @@ class AmbientShader extends PluggableShader {
 /**
  * A [PhongShader] uses the phong reflection model to determine the surface
  * radiance.
+ * 
+ * For a more detailed description of the mechanism see the article on the
+ * [Phong Reflection Model](https://en.wikipedia.org/wiki/Phong_reflection_model).
  */
 class PhongShader extends AmbientShader {
   
+  /// The diffuse and specular coefficient of this phong shader.
   final vec4 difCoeff, specCoeff;
+  
+  /// The specular exponent of this phong shader.
   final double specExp;
   
+  /**
+   * Creates a new Phong Shader with the given diffuse, specular and ambient
+   * coefficients as well as the given specular exponent.
+   */
   PhongShader(this.difCoeff, this.specCoeff, this.specExp, vec4 ambCoeff) : super(ambCoeff);
   
   vec4 getReflectance(vec3 outDir, vec3 inDir) {

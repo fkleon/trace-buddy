@@ -7,15 +7,23 @@ import 'samplers.dart' show Sample, Sampler;
 import 'shaders.dart' show Shader;
 import 'package:vector_math/vector_math_console.dart' show tan, vec2, vec3, vec4;
 
-// contains the output colors set at every pixel
-// color is a RGB vec3, each component in the interval [0..1]
+/**
+ * Matrix containing the output colors at every pixel of the final image
+ * set by the renderer. The color information are stored as RGB vectors,
+ * with each component in the interval [0..1].
+ */
 class OutputMatrix {
   
   final int rows, columns;
-  List<vec3> _content; // [(row1_col1, row1_col2, .. row1_colN), .. , (rowN_col1, ..)]
   
-  // initializes matrix of size rows*columns,
-  // sets all colors to black.
+  /// Color information of every pixel. Stored in a serialized form:
+  /// `[(row1_col1, row1_col2, .. row1_colN), .. , (rowN_col1, ..)]`
+  List<vec3> _content;
+  
+  /**
+   * Initializes a output matrix of size rows*columns and initially set all
+   * color information to black.
+   */
   OutputMatrix(int this.rows, int this.columns) {
     // init the array (serialized matrix)
     _content = new List<vec3>(rows*columns);
@@ -24,63 +32,109 @@ class OutputMatrix {
     clear();
   }
   
-  // clears image to black
-  clear() {
+  /**
+   * Clears the matrix to black.
+   */
+  void clear() {
     vec3 black = new vec3.zero();
     for (int i = 0; i<rows*columns; i++) {
       _content[i] = black;
     }
   }
   
-  // sets given pixel to given color
-  // x=width=row, y=height=column
-  setPixel(int row,int column,vec3 color) {
-    if (!isValidRow(row) || !isValidColumn(column)) throw new ArgumentError('No such row or column: $row,$column.');
+  /**
+   * Sets the given pixel to given color.
+   * 
+   * Note:
+   * width = row,
+   * heigth = column. //TODO: really? this sounds wrong..
+   * 
+   * Throws an argument error, if either row or column does not exist.
+   * 
+   */
+  setPixel(int row, int column, vec3 color) {
+    if (!_isValidRow(row) || !_isValidColumn(column)) throw new ArgumentError('No such row or column: $row,$column.');
     
-    _content[((row-1)*columns)+(column-1)] = color.clone();
+    _content[((row - 1) * columns) + (column - 1)] = color.clone();
   }
   
-  // sets given row to given color row
+  /**
+   * Sets the colors of the given row.
+   * 
+   * Throws an argument error, if row is invalid.
+   */
   setRow(int row, List<vec3> colors) {
-    if (!isValidRow(row)) throw new ArgumentError('No such row: $row.');
+    if (!_isValidRow(row)) throw new ArgumentError('No such row: $row.');
     
     int startIndex = (row-1)*columns;
     for (int i = 0; i<columns; i++) {
-      _content[((row-1)*columns)+i] = colors[i].clone();
+      _content[((row - 1) * columns) + i] = colors[i].clone();
     }
   }
   
-  // returns the color of given pixel
+  /**
+   * Returns the color of a pixel.
+   * 
+   * Throws an argument error, if column is invalid.
+   */
   vec3 getPixel(int row, int column) {
-    if (!isValidColumn(column)) throw new ArgumentError('No such column: $column.');
-    return _content[((row-1)*columns)+(column-1)];
+    if (!_isValidColumn(column)) throw new ArgumentError('No such column: $column.');
+    
+    return _content[((row - 1) * columns) + (column - 1)];
   }
   
-  // returns a list of colors for given row
-  List<vec3> getRow(int row) => _content.getRange((row-1)*columns, columns);
+  /**
+   * Returns a list of colors for given row.
+   */
+  List<vec3> getRow(int row) => _content.getRange((row - 1) * columns, columns);
   
-  // returns an array containing all colors
-  // structured by row after row
+  /**
+   * Returns an array containing all colors in serialized form,
+   * structured by row after row.
+   */
   List<vec3> getSerialized() => new List.from(_content);
   
-  bool isValidColumn(int column) => (column>0 && column<=columns);
-  bool isValidRow(int row) => (row>0 && row<=rows);
+  bool _isValidColumn(int column) => (column > 0 && column <= columns);
+  bool _isValidRow(int row) => (row > 0 && row <= rows);
 }
 
+/**
+ * The [Renderer] takes a [Sampler], [Camera] and [Scene] and can render
+ * an image based on this information.
+ * 
+ * It iterates over each pixel of the image, generates samples and primary rays
+ * and performs intersection tests with the scene.
+ * It also acts as integrator to collect the radiance information.
+ */
 class Renderer {
   
+  /// Sampler used to generate samples.
   Sampler sampler;
+  
+  /// Camera used to generate primary rays.
   Camera camera;
+  
+  /// Scene to be rendered.
   Scene scene;
+  
+  /// Resolution of the camera and final image.
   int xRes, yRes;
   
-  final vec4 ambientLight = new vec4.raw(0.3,0.3,0.3,0.3);
+  /// The ambient light available in the scene.
+  final vec4 ambientLight = new vec4.raw(0.3, 0.3, 0.3, 0.3);
   
+  /**
+   * Creates a new [Renderer] with the given scene, sampler and camera.
+   */
   Renderer(this.scene, this.sampler, this.camera) {
     xRes = camera.res.x.toInt();
     yRes = camera.res.y.toInt(); 
   }
-   
+  
+  /**
+   * Renders the Scene and returns an [OutputMatrix] containing the pixels
+   * of the final image.
+   */
   OutputMatrix render() {
     
     Collection<Sample> samples;
@@ -90,9 +144,9 @@ class Renderer {
     
     // for each pixel..
     for (int x = 0; x<xRes; x++) {
-      if (x%10 == 0) {
-        print('Rendering line ${x+1}..');
-      }
+      
+      if (x%10 == 0) {print('Rendering line ${x+1}..');} //TODO
+      
       for (int y = 0; y<yRes; y++) {
         // color information for this pixel
         vec4 color = new vec4.zero();
@@ -155,7 +209,14 @@ class Renderer {
  * The camera generates [Ray]s for every pixel of the image.
  */
 abstract class Camera {
+  
+  /**
+   * Returns a collection of primary rays generated for the given pixel
+   * by this camera.
+   */
   Collection<Ray> getPrimaryRays(int x, int y);
+  
+  /// The resolution of this camera.
   vec2 get res;
 }
 
@@ -171,8 +232,12 @@ class PerspectiveCamera extends Camera {
   vec3 topLeft, stepX, stepY;
   vec2 _res;
   
+  /**
+   * Creates a new [PerspectiveCamera].
+   * Uses a forward vector.
+   */
   PerspectiveCamera(Point3D this.center, vec3 this.forward, vec3 up, num vertOpeningAngle, vec2 this._res) {
-    init(up, vertOpeningAngle);
+    _init(up, vertOpeningAngle);
     
     print("Created new PerspectiveCamera:");
     print(" - resolution: $res");
@@ -185,9 +250,13 @@ class PerspectiveCamera extends Camera {
     print(" - stepY: $stepY");
   }
   
+  /**
+   * Creates a new [PerspectiveCamera].
+   * Calculates forward vector based on given look-at point.
+   */
   PerspectiveCamera.lookAt(Point3D this.center, Point3D lookAt, vec3 up, num vertOpeningAngle, vec2 this._res) {
     this.forward = lookAt-center;
-    init(up, vertOpeningAngle);
+    _init(up, vertOpeningAngle);
     
     print("Created new PerspectiveCamera:");
     print(" - resolution: $res");
@@ -200,7 +269,7 @@ class PerspectiveCamera extends Camera {
     print(" - stepY: $stepY");
   }
   
-  void init(vec3 up, num vertOpeningAngle) {
+  void _init(vec3 up, num vertOpeningAngle) {
     num resX = _res.x.toDouble();
     num resY = _res.y.toDouble();
     num aspectRatio = resX/resY;

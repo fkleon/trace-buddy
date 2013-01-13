@@ -1,32 +1,46 @@
 library rt_algebra;
 
 import 'dart:math' as Math;
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math_console.dart' show vec3, vec4;
 
-// represents a Point3D in 3-dimensional space
+/**
+ * A point in 3-dimensional space.
+ * This implementation supplies common mathematical operations on points.
+ */
 class Point3D {
   
   num x,y,z;
   
-  // creates a new Point3D with given coordinates
+  /**
+   * Creates a new Point3D with the given coordinates.
+   */
   Point3D(num this.x, num this.y, num this.z);
   
-  // creates a new Point3D at the origin
+  /**
+   * Creates a new Point3D at the coordinate origin.
+   */
   Point3D.zero(): x=0, y=0, z=0;
   
-  // moves the Point3D to new position determined by given vector
+  /**
+   * Returns a new point which position is determined by moving the old point
+   * along the given vector.
+   */
   Point3D operator+(vec3 v) => new Point3D(this.x + v.x, this.y + v.y, this.z + v.z);
-  
-  // moves the Point3D to new position determined by given vector
-  //Point3D operator-(vec3 v) => new Point3D(this.x - v.x, this.y - v.y, this.z - v.z);
-  
-  // returns the vector Point3Ding from given Point3D to this Point3D
+
+  /**
+   * Returns the [vec3] pointing from the given point to this point.
+   */
   vec3 operator-(Point3D p2) => new vec3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
   
-  // unary minus, negates Point3D components
+  /**
+   * Negates the point's components.
+   */
   Point3D operator-() => new Point3D(-this.x, -this.y, -this.z);
   
-  // equality
+  /**
+   * Checks for equality. Two points are considered equal, if their coordinates
+   * match.
+   */
   bool operator==(Object o) {
     if (o is Point3D) {
       return this.x == o.x && this.y == o.y && this.z == o.z;
@@ -35,7 +49,9 @@ class Point3D {
     }
   }
   
-  // linear interpolation between 2 Point3Ds
+  /**
+   * Performs a linear interpolation bewtween two points.
+   */
   Point3D lerp(Point3D p2, num coeff) {
     return new Point3D(
         this.x * coeff + p2.x * (1-coeff),
@@ -45,8 +61,15 @@ class Point3D {
   }
   // TODO 3d lerp?
 
-  // transformation to 3d and 4d vectors
+  /**
+   * Transforms the point to its vector representation.
+   */
   vec3 toVec3() => new vec3.raw(this.x, this.y, this.z);
+  
+  /**
+   * Transforms the point to its homogeneous vector4 representation.
+   * The w component is set to 1.
+   */
   vec4 toVec4() => new vec4.raw(this.x, this.y, this.z, 1);
   
   String toString() => "$x,$y,$z";
@@ -56,41 +79,75 @@ class Point3D {
  * An [Interval] is defined by its minimum and maximum values.
  * 
  * It supports basic interval arithmetic operations like addition,
- * subtraction, multiplication and division.
+ * subtraction, multiplication and division. Operations return a new
+ * interval and will not modify the existing ones.
  */
 class Interval {
   
   num min, max;
   
+  /**
+   * Creates a new interval with given borders.
+   * 
+   * The parameter min must be smaller or equal than max for the interval
+   * to work properly.
+   */
   Interval(this.min, this.max);
   
-  operator+(Interval i) {
-    this.min += i.min;
-    this.max += i.max;
-  }
+  /**
+   * Performs an interval addition.
+   * 
+   *     [a, b] + [c, d] = [a + c, b + d]
+   */
+  operator+(Interval i) => new Interval(this.min + i.min, this.max + i.max);
   
-  operator-(Interval i) {
-    this.min -= i.min;
-    this.max -= i.max;
-  }
+  /**
+   * Performs an interval subtraction.
+   * 
+   *     [a, b] + [c, d] = [a - d, b - c]
+   */
+  operator-(Interval i) => new Interval(this.min - i.max, this.max - i.min);
   
+  /**
+   * Performs an interval multiplication.
+   * 
+   *     [a, b] * [c, d] = [min(ac, ad, bc, bd), max(ac, ad, bc, bd)]
+   */
   operator*(Interval i) {
-    this.min = _min(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
-    this.max = _max(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
+    num min = _min(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
+    num max = _max(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
+    return new Interval(min, max);
   }
   
+  /**
+   * Performs an interval division.
+   * 
+   *     [a, b] * [c, d] = [a, b] * (1/[c, d]) = [a, b] * [1/d, 1/c]
+   *     
+   * Note: Does not handle division by zero and throws an ArgumentError instead.
+   */
   operator/(Interval i) {
     if (i.containsZero()) {
       // fuck. somebody is dividing by zero, the world is going to end.
       throw new ArgumentError('Can not divide by 0');
     }
     
-    this * new Interval(1.0/i.max, 1.0/i.min);
+    return this * new Interval(1.0/i.max, 1.0/i.min);
   }
   
+  /**
+   * Returns true, if the interval contains zero (min <= 0 <= max).
+   */
   bool containsZero() => (this.min <= 0 && this.max >= 0);
   
+  /**
+   * Returns the minimal value of four given values.
+   */
   num _min(num a, num b, num c, num d) => Math.min(Math.min(a ,b), Math.min(c, d));
+  
+  /**
+   * Returns the maximum value of four given values.
+   */
   num _max(num a, num b, num c, num d) => Math.max(Math.max(a ,b), Math.max(c, d));
   
   String toString() => '[${this.min},${this.max}]';
