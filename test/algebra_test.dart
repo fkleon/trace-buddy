@@ -1,6 +1,7 @@
 part of rt_test_suite;
 
 // Contains methods to test the point algebra implementation
+// TODO interval arithmetic tests
 
 Point3D p0,p1,p2;
 vec3 v1,v2;

@@ -50,7 +50,7 @@ class Point3D {
   }
   
   /**
-   * Performs a linear interpolation bewtween two points.
+   * Performs a linear interpolation between two points.
    */
   Point3D lerp(Point3D p2, num coeff) {
     return new Point3D(

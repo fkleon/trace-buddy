@@ -222,7 +222,7 @@ abstract class Camera {
 
 /**
  * The [PerspectiveCamera] generates rays for a perspective projection.
- * It is defined by its center, viweing direction, up vector,
+ * It is defined by its center, viewing direction, up vector,
  * vertical opening angle of the image and resolution.
  */
 class PerspectiveCamera extends Camera {

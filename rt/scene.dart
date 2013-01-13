@@ -85,7 +85,7 @@ class IdGen {
 abstract class Primitive {
   
   /// Unique id of the primitive.
-  int id;
+  final int id;
   
   /// The shader is responsible for the primitive's appearance.
   Shader _shader;
