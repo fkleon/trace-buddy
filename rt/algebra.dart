@@ -1,5 +1,6 @@
 library rt_algebra;
 
+import 'dart:math' as Math;
 import 'package:vector_math/vector_math_console.dart';
 
 // represents a Point3D in 3-dimensional space
@@ -49,4 +50,48 @@ class Point3D {
   vec4 toVec4() => new vec4.raw(this.x, this.y, this.z, 1);
   
   String toString() => "$x,$y,$z";
+}
+
+/**
+ * An [Interval] is defined by its minimum and maximum values.
+ * 
+ * It supports basic interval arithmetic operations like addition,
+ * subtraction, multiplication and division.
+ */
+class Interval {
+  
+  num min, max;
+  
+  Interval(this.min, this.max);
+  
+  operator+(Interval i) {
+    this.min += i.min;
+    this.max += i.max;
+  }
+  
+  operator-(Interval i) {
+    this.min -= i.min;
+    this.max -= i.max;
+  }
+  
+  operator*(Interval i) {
+    this.min = _min(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
+    this.max = _max(this.min*i.min, this.min*i.max, this.max*i.min, this.max*i.max);
+  }
+  
+  operator/(Interval i) {
+    if (i.containsZero()) {
+      // fuck. somebody is dividing by zero, the world is going to end.
+      throw new ArgumentError('Can not divide by 0');
+    }
+    
+    this * new Interval(1.0/i.max, 1.0/i.min);
+  }
+  
+  bool containsZero() => (this.min <= 0 && this.max >= 0);
+  
+  num _min(num a, num b, num c, num d) => Math.min(Math.min(a ,b), Math.min(c, d));
+  num _max(num a, num b, num c, num d) => Math.max(Math.max(a ,b), Math.max(c, d));
+  
+  String toString() => '[${this.min},${this.max}]';
 }

@@ -255,7 +255,9 @@ class InfinitePlane extends Primitive {
 
 /**
  * A [CartesianCoordinateSystem] is a special primitive,
- * it represents the x,y and z-axes.
+ * it represents the x,y and z-axes. Only one instance of the
+ * CartesianCoordinateSystem can exist per scene, therefore
+ * it is implemented as singleton.
  */
 class CartesianCoordinateSystem extends Primitive {
   
@@ -327,7 +329,22 @@ class Sphere extends Primitive {
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intersect = new Intersection();
     
-    //TODO more efficient algorithm
+    /*
+    vec3 distance = r.origin-this.center;
+    double B = distance.dot(r.direction);
+    double C = B*B - distance.length2 + (this.radius*this.radius);
+    double l1 = C >= 0.0 ? -B - sqrt(C) : -1.0;
+    
+    if (l1 < 0) {
+      return intersect;
+    } else {
+      intersect.distance = l1;
+      intersect.hitPoint = r.getPoint3D(l1);
+      intersect.prim = this;
+      return intersect;
+    }
+    */
+    
     num A = r.direction.dot(r.direction);
     num B = (r.origin - this.center).dot(r.direction) * 2;
     num C = (r.origin - this.center).dot(r.origin - this.center) - (this.radius * this.radius);
@@ -363,5 +380,80 @@ class Sphere extends Primitive {
     ret.normal = intersect.hitPoint - this.origin;
     
     return ret;
+  }
+}
+
+/**
+ * A [ImplicitFunction] is defined by a Function.
+ * 
+ * Its intersect uses Interval arithmetic and Newton's method to determine
+ * roots.
+ */
+class ImplicitFunction extends Primitive {
+  
+  final num maxDistance = 100;
+  Function f;
+  
+  ImplicitFunction(Function this.f) : super();
+  
+  Intersection intersect(Ray r, num prevBestDistance) {
+    // Composition G(t) = F(x,y,z) o r(t)
+    Function g = compose(f, r);
+    
+    // Replace all numbers with intervals
+    g.replace();
+    
+    // Starting interval [0, maxDistance]
+    Interval i = new Interval(0, maxDistance);
+    
+    findRoot(g, i);
+  }
+  
+  num findRoot(Function g, Interval i) {
+    // Calculate value of the function at interval borders
+    // G(i.min), G(i.max)
+    Interval gEval = g.evaluate(i);
+    
+    // If interval contains 0, derive G(t)
+    if (gEval.containsZero()) {
+      Function gDerived = g.derive();
+      Interval gDerivedEval = gDerived.evaluate(i);
+      
+      if (gDerivedEval.containsZero()) {
+        // Monotonous part of function.
+        // -> calculate root
+        newtonRoot(g, i);
+      } else {
+        // Recursively split.
+        num r1 = findRoot(new Interval(i.min, (i.min+i.max)/2.0));
+        num r2 = findRoot(new Interval((i.min+i.max)/2.0, i.max));
+        return Math.min(r1,r2); // Return root ar minimal distance.
+      }
+    } else {
+      // No root.
+      // Return negative value for no hit.
+      return -1;
+    }
+  }
+  
+  double EPS = 0.001;
+  
+  num newtonRoot(Function f, num startValue) {
+    Function g = f.derive();
+    return _newtonRoot(f, g, startValue);
+  }
+  
+  num _newtonRoot(Function f, Function g, num startValue) {
+    num x_i = startValue - (f.evaluate(startValue)/g(evaluate(startValue)));
+    
+    if ((x_i - startValue).abs() < EPS) {
+      return x_i;
+    } else {
+      return _newtonRoot(f, g, x_i);
+    }
+  }
+  
+  Shader getShader(Intersection intersect) {
+    return this._shader;
   }
 }
