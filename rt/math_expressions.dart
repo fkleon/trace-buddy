@@ -3,7 +3,7 @@ import 'dart:math' as Math;
 
 /**
  * Any Expression supports basic mathematical operations like
- * addition, subtraction, multiplication, division and power.
+ * addition, subtraction, multiplication, division, power and negate.
  * 
  * Furthermore, any expression can be differentiated with respect to
  * a given variable.
@@ -30,6 +30,7 @@ abstract class Expression {
   Expression operator*(Expression exp) => new Times(this, exp);
   Expression operator/(Expression exp) => new Divide(this, exp);
   Expression operator^(Expression exp) => new Power(this, exp);
+  Expression operator-() => new UnaryMinus(this);
   
   /**
    * Derives this expression with respect to the given variable.
@@ -793,6 +794,9 @@ void main() {
   print('root: ${root.toString()}');
   print('rootD: ${root.derive('x').toString()}');
   print('rootDsimpl: ${root.derive('x').simplify().toString()}');
+  
+  Expression negate = -exp;
+  print(negate);
 }
 
 class Tokenizer {
