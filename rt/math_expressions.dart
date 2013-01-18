@@ -6,7 +6,7 @@ import 'dart:math' as Math;
  * addition, subtraction, multiplication, division, power and negate.
  * 
  * Furthermore, any expression can be differentiated with respect to
- * a given variable.
+ * a given variable. Also expressions know how to simplify themselves.
  * 
  * There are different classes of expressions:
  * 
@@ -21,10 +21,15 @@ import 'dart:math' as Math;
  *     * Binary Operators (see [BinaryOperator])
  * * Functions (see [MathFunction])
  * 
- * Default functions are [Exponential], [Log], [Ln], nth-[Root] and [Sqrt].
+ *     * Pre-defined Functions (see [DefaultFunction])
+ *     * Custom Functions (see [CustomFunction])
+ * 
+ * Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
+ * [Sin] and [Cos].
  */
 abstract class Expression {
   
+  // Basic operations.
   Expression operator+(Expression exp) => new Plus(this, exp);
   Expression operator-(Expression exp) => new Minus(this, exp);
   Expression operator*(Expression exp) => new Times(this, exp);
@@ -36,6 +41,7 @@ abstract class Expression {
    * Derives this expression with respect to the given variable.
    */
   Expression derive(String toVar);
+  //TODO return simplified version on of derivation in each expression
   
   /**
    * Returns a simplified version of this expression.
@@ -50,6 +56,8 @@ abstract class Expression {
    * 
    * Returns the argument, if it is already an expression.
    * Else wraps the argument in a [Number] or [Variable] Literal.
+   * 
+   * Throws ArgumentError, if given arg is not an Expression, num oder String.
    * 
    * Note: Does not handle negative numbers, will treat them as positives!
    */
@@ -71,10 +79,30 @@ abstract class Expression {
   }
   
   /**
-   * Returns true, if the given expression is a number literal and its value
+   * Returns true, if the given expression is a constant literal and its value
    * matches the given value.
    */
-  bool _isNumber(Expression exp, [num value = 0]) => exp is Number && (exp as Number).value == value;
+  bool _isNumber(Expression exp, [num value = 0]) {
+    // Check for literal.
+    if (exp is Literal && (exp as Literal).isConstant()) {
+      return exp.getConstantValue() == value;
+    }
+    
+    //TODO Remove this rubbish if we stick to BoundVariable
+    /*
+    // Check for number literal
+    if (exp is Number) {
+      return (exp as Number).value == value;
+    }
+    
+    // Check for BoundVariable
+    if (exp is BoundVariable) {
+      return _isNumber(exp.value, value);
+    }
+    */
+    
+    return false;
+  }
 }
 
 /**
@@ -149,6 +177,7 @@ class UnaryMinus extends UnaryOperator {
   
   /**
    * Possible simplifications:
+   * 
    * 1. -(-a) = a
    * 2. -0 = 0
    */
@@ -210,7 +239,6 @@ class Plus extends BinaryOperator {
     }
     
     return new Plus(firstOp, secondOp);
-    
     //TODO -a + b = b - a 
     //TODO -a - b = - (a+b)
   }
@@ -256,7 +284,6 @@ class Minus extends BinaryOperator {
     }
     
     return new Minus(firstOp, secondOp);
-    
     //TODO -a + b = b - a
     //TODO -a - b = - (a + b)
   }
@@ -325,12 +352,12 @@ class Times extends BinaryOperator {
     if (_isNumber(secondOp, 1)) {
       tempResult = firstOp;
     }
-    
+
     // if temp result is not set, we return a multiplication
     if (tempResult == null) {
       return new Times(firstOp, secondOp);
     }
-    
+
     // else we return the only constant and just check for sign before
     return negative ? new UnaryMinus(tempResult) : tempResult;
   }
@@ -367,7 +394,8 @@ class Divide extends BinaryOperator {
    * 5. 0 / a = 0
    * 6. a / 1 = a
    * 
-   * This method throws an error, if a divide by zero is encountered.
+   * This method throws an IntegerDivisionByZeroException,
+   * if a divide by zero is encountered.
    */
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -391,7 +419,7 @@ class Divide extends BinaryOperator {
     }
     
     if (_isNumber(secondOp, 0)) {
-      throw new ArgumentError('Divide by zero.');
+      throw new IntegerDivisionByZeroException();
     }
     
     if (_isNumber(secondOp, 1)) {
@@ -401,8 +429,7 @@ class Divide extends BinaryOperator {
     }
     
     return negative ? new UnaryMinus(tempResult) : tempResult;
-    
-    // TODO cancel down/out? - needs equals on literals!
+    // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
   
   String toString() => '(${first.toString()} / ${second.toString()})';
@@ -441,7 +468,6 @@ class Power extends BinaryOperator {
     //TODO unboxing
     /*
     bool baseNegative = false, expNegative = false;
-    
     
     // unbox unary minuses
     if (baseOp is UnaryMinus) {
@@ -494,7 +520,11 @@ abstract class MathFunction extends Expression {
   String name;
   
   /// List of arguments of this function.
-  List<Expression> args;
+  /// Must be a variable.
+  List<Variable> args;
+  
+  //TODO
+  // isComplete() => all bound?
   
   /**
    * Creates a new function with the given name and arguments.
@@ -502,46 +532,242 @@ abstract class MathFunction extends Expression {
   MathFunction(this.name, this.args);
   
   /**
-   * Creates a new unary function with one argument.
+   * Creates a new function with the given name.
+   * 
+   * __Note__:
+   * Must only be used internally by subclasses, as it does not define any
+   * arguments.
    */
-  MathFunction.unary(this.name, Expression arg): this.args = [arg];
+  MathFunction._empty(this.name);
   
   /**
-   * Creates a new binary function with two arguments.
+   * Creates a new composite function.
+   * 
+   * __Note__:
+   * Must only be used internally for pre-defined functions, as it does not
+   * contain any arguments or expression. The Evaluator needs to know how to
+   * handle this.
    */
-  MathFunction.binary(this.name, Expression arg1, Expression arg2): this.args = [arg1, arg2];
-  
+  MathFunction._composite(this.name, Expression arg1, Expression arg2): this.args = [arg1, arg2];
+    
   /**
    * Returns the i-th parameter of this function.
    */
   Expression getParam(int i) => args[i];
+  
+  /// The dimension of the domain of definition of this function.
+  int get domainDimension => args.length;
+  
+  String toString() => '$name($args)';
+}
+
+/**
+ * A composition of two given [MathFunctions].
+ */
+class CompositeFunction extends MathFunction {
+  /// Members `f` and `g` of the composite function.
+  MathFunction f, g;
+  
+  /**
+   * Creates a function composition.
+   * 
+   * For example, given `f(x): R -> R^3` and `g(x,y,z): R^3 -> R`
+   * the composition yields `(g ° f)(x): R -> R^3 -> R`. First
+   * `f` is applied, then `g` is applied.
+   * 
+   * Given some requirements
+   *     x = new Variable('x');
+   *     xPlus = new Plus(x, 1);
+   *     xMinus = new Minus(x, 1);
+   *     
+   *     fExpr = new Vector([x, xPlus, xMinus]);        // Transforms x to 3-dimensional vector
+   *     f = new CustomFunction('f', [x], fExpr);       // Creates a function R -> R^3 from fExpr
+   *     
+   *     y = new Variable('z');
+   *     z = new Variable('y');
+   *     
+   *     gExpr = x + y + z;                             // Transforms 3-dimensional input to real value
+   *     g = new CustomFunction('g', [x, y, z], gExpr)  // Creates a function R^3 -> R from gExpr
+   *     
+   * a composition can be created as follows:
+   *     composite = new CompositeFunction(f, g); // R -> R
+   *                                              // composite(2) = 6
+   */
+  CompositeFunction(MathFunction f, MathFunction g):
+    super('comp(${f.name},${g.name})', f.args) {
+    this.f = f;
+    this.g = g;
+  }
+    
+  /// The domain of the 'second' function, which should match the range
+  /// of the 'first function.
+  int get gDomainDimension => g.domainDimension;
+  
+  /// The domain of the 'first' function.
+  int get domainDimension => f.domainDimension;
+  
+  Expression derive(String toVar) {
+    MathFunction gDF;
+    Expression gD = g.derive(toVar);
+    
+    if (!(gD is MathFunction)) {
+    // Build function again..
+      gDF = new CustomFunction('d${g.name}', g.args, gD);
+    } else {
+      gDF = (gD as MathFunction);
+    }
+    
+    // Chain rule.
+    return new CompositeFunction(f, gDF) * f.derive(toVar);
+  }
+  
+  /**
+   * Simplifies both component functions.
+   */
+  Expression simplify() {
+    MathFunction fSimpl = f.simplify();
+    MathFunction gSimpl = g.simplify();
+    
+    return new CompositeFunction(fSimpl, gSimpl);
+  }
+}
+
+/**
+ * Any user-created function is a CustomFunction.
+ */
+class CustomFunction extends MathFunction {
+  /// Function expression of this function.
+  /// Used for non-default or user-defined functions.
+  Expression expression;
+  
+  /**
+   * Create a custom function with the given name, argument variables,
+   * and expression.
+   */
+  CustomFunction(String name, List<Variable> args, Expression this.expression): super(name, args);
+  
+  Expression derive(String toVar) => new CustomFunction(name, args, expression.derive(toVar));
+  
+  Expression simplify() => new CustomFunction(name, args, expression.simplify());
+  
+  //TODO einsetzen?
+  //TODO ersetzen?
+  
+  String toFullString() => '$name($args) = ${expression.toString()}';
+}
+
+/**
+ * A default function is predefined in this library.
+ * It contains no expression, because the appropriate [Evaluator] knows
+ * how to handle them.
+ * 
+ * __Note__:
+ * User-defined custom functions should derive from [CustomFunction], which
+ * supports arbitrary expressions.
+ */
+abstract class DefaultFunction extends MathFunction {
+
+  /**
+   * Creates a new unary function with given name and argument.
+   * If the argument is not a variable, it will be wrapped into an anonymous
+   * variable, which binds the given expression.
+   * 
+   * __Note__:
+   * Must only be used internally for pre-defined functions, as it does not
+   * contain any expression. The Evaluator needs to know how to handle this.
+   */
+  DefaultFunction._unary(String name, Expression arg) : super._empty(name) {
+    Variable bindingVariable = _wrapIntoVariable(arg);
+    this.args = [bindingVariable];
+  }
+  
+  /**
+   * Creates a new binary function with given name and two arguments.
+   * If the arguments are not variables, they will be wrapped into anonymous
+   * variables, which bind the given expressions.
+   * 
+   * __Note__:
+   * Must only be used internally for pre-defined functions, as it does not
+   * contain any expression. The Evaluator needs to know how to handle this.
+   */
+  DefaultFunction._binary(String name, Expression arg1, Expression arg2): super._empty(name) {
+    Variable bindingVariable1 = _wrapIntoVariable(arg1);
+    Variable bindingVariable2 = _wrapIntoVariable(arg2);
+    this.args = [bindingVariable1, bindingVariable2];
+  }
+  
+  /**
+   * Returns a variable, bound to the given [Expression].
+   * Returns the parameter itself, if it is already a variable.
+   */
+  Variable _wrapIntoVariable(Expression e) {
+    if (e is Variable) {
+      // Good to go..
+      return e as Variable;
+    } else {
+      // Need to wrap..
+     return new BoundVariable(e);
+    }
+  }
 }
 
 /**
  * The exponential function.
  */
-class Exponential extends MathFunction {
+class Exponential extends DefaultFunction {
 
   /**
    * Creates a exponential operation on the given expressions.
    * 
    * For example, to create e^4:
-   *     exp = new Exponential(new Number(4));
+   *     four = new Number(4);
+   *     exp = new Exponential(four);
+   *     
+   * You also can use variables or arbitrary expressions:
+   *     x = new Variable('x');
+   *     exp = new Exponential(x);
+   *     exp = new Exponential(x + 4);
    */
-  Exponential(exp): super.unary("exp", exp);
+  Exponential(exp): super._unary("exp", exp);
   
   /// The exponent of this exponential function.
   Expression get exp => getParam(0);
   
   Expression derive(String toVar) => new Times(this, exp.derive(toVar));
+  
+  /**
+   * Possible simplifications:
+   * 
+   * 1. e^0 = 1
+   * 2. e^1 = e
+   * 3. e^(x*ln(y)) = y^x (usually easier to read for humans)
+   */
+  Expression simplify() {
+    Expression expSimpl = exp.simplify();
     
+    if (_isNumber(expSimpl,0)) {
+      return new Number(1); // e^0 = 1
+    }
+    
+    if (_isNumber(expSimpl,1)) {
+      return new Number(Math.E); // e^1 = e
+    }
+    
+    if (expSimpl is Times && (expSimpl as Times).second is Ln) {
+     Ln ln = expSimpl.second;
+     return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
+    }
+    
+    return new Exponential(expSimpl);
+  }
+  
   String toString() => 'e^(${exp.toString()})';
 }
 
 /**
  * The logarithm function.
  */
-class Log extends MathFunction {
+class Log extends DefaultFunction {
   
   /**
    * Creates a logarithm function with given base and argument.
@@ -553,13 +779,13 @@ class Log extends MathFunction {
    *     
    * To create a naturally based logarithm, see [Ln].
    */
-  Log(Expression base, Expression arg): super.binary("log", base, arg);
+  Log(Expression base, Expression arg): super._binary("log", base, arg);
   
   /**
    * Creates a natural logarithm.
    * Must only be used internally by the Ln class.
    */
-  Log._ln(arg): super.binary("ln", new Number(Math.E), arg);
+  Log._ln(arg): super._binary("ln", new Number(Math.E), arg);
   
   /// The base of this logarithm.
   Expression get base => getParam(0);
@@ -569,6 +795,13 @@ class Log extends MathFunction {
   
   Expression derive(String toVar) => this.asNaturalLogarithm().derive(toVar);
     
+  /**
+   * Simplifies base and argument.
+   */
+  Expression simplify() {
+    return new Log(base.simplify(), arg.simplify());
+  }
+  
   String toString() => 'log_${base.toString()}(${arg.toString()})';
   
   /**
@@ -599,13 +832,28 @@ class Ln extends Log {
   
   Expression derive(String toVar) => arg.derive(toVar) / arg;
   
+  /**
+   * Possible simplifications:
+   * 
+   * 1. ln(1) = 0
+   */
+  Expression simplify() {
+    Expression argSimpl = arg.simplify();
+    
+    if (_isNumber(argSimpl, 1)) {
+      return new Number(0); // ln(1) = 0
+    }
+    
+    return new Ln(argSimpl);
+  }
+  
   String toString() => 'ln(${arg.toString()})';
 }
 
 /**
- * The n-th root function.
+ * The n-th root function. n needs to be a natural number.
  */
-class Root extends MathFunction {
+class Root extends DefaultFunction {
   
   /// N-th root.
   int n;
@@ -616,7 +864,7 @@ class Root extends MathFunction {
    * For example, to create the 5th root of x:
    *     root = new Root(5, new Variable('x'));
    */
-  Root(int this.n, arg): super.unary('root', arg);
+  Root(int this.n, arg): super._unary('root', arg);
   
   /**
    * Creates the square root of arg.
@@ -626,11 +874,18 @@ class Root extends MathFunction {
    *     
    * Note: For better simplification and display, use the [Sqrt] class.
    */
-  Root.sqrt(arg): super.unary('sqrt', arg), n = 2;
+  Root.sqrt(arg): super._unary('sqrt', arg), n = 2;
   
   Expression get arg => getParam(0);
   
   Expression derive(String toVar) => this.asPower().derive(toVar);
+  
+  /**
+   * Simplify argument.
+   */
+  Expression simplify() {
+    new Root(n, arg.simplify());
+  }
   
   String toString() => 'nrt_$n(${arg.toString()})';
   
@@ -657,12 +912,12 @@ class Sqrt extends Root {
    */
   Sqrt(arg): super.sqrt(arg);
 
-  String toString() => 'sqrt(${arg.toString()})';
-  
   /**
    * Possible simplifications:
    * 
    * 1. sqrt(x^2) = x
+   * 2. sqrt(0) = 0
+   * 3. sqrt(1) = 1
    * 
    * Note: This simplification works _only_ for real numbers and 
    * _not_ for complex numbers.
@@ -674,14 +929,26 @@ class Sqrt extends Root {
       Expression exponent = argSimpl.second;
       if (exponent is Number) {
         if (exponent.value == 2) {
-          return argSimpl.first; // sqrt(x^2)
+          return argSimpl.first; // sqrt(x^2) = x
         }
       }
     }
     
+    if (_isNumber(argSimpl, 0)) {
+      return new Number(0); // sqrt(0) = 0
+    }
+    
+    if (_isNumber(argSimpl, 1)) {
+      return new Number(1); // sqrt(1) = 1
+    }
+    
     return new Sqrt(argSimpl);
   }
+  
+  String toString() => 'sqrt(${arg.toString()})';
 }
+
+//TODO sin, cos, etc.
 
 /**
  * A literal can be a number, a constant or a variable.
@@ -695,11 +962,25 @@ abstract class Literal extends Expression {
    */
   Literal([var this.value]);
   
+  /**
+   * Returns true, if this literal is a constant.
+   */
+  bool isConstant() => false;
+  
+  /**
+   * Returns the constant value of this literal.
+   * Throws StateError if literal is not constant, check before usage with
+   * isConstant().
+   */
+  num getConstantValue() {
+    throw new StateError('Literal ${this} is not constant.');
+  }
+  
   String toString() => value.toString();
 }
 
 /**
- * A Number is a number literal.
+ * A number is a constant number literal.
  */
 class Number extends Literal {
     
@@ -708,36 +989,109 @@ class Number extends Literal {
    */
   Number(num value): super(value);
   
-  num evaluate() => value; //TODO rename
+  bool isConstant() => true;
+  
+  num getConstantValue() => value;
   
   Expression derive(String toVar) => new Number(0);
 }
 
 /**
- * A Variable is a named literal.
+ * A vector of arbitrary size.
+ */
+class Vector extends Literal {
+  
+  /**
+   * Creates a vector with the given element expressions.
+   * 
+   * For example, to create a 3-dimensional vector:
+   *     x = y = z = new Number(1);
+   *     vec3 = new Vector([x, y, z]);
+   */
+  Vector(List<Expression> elements): super(elements);
+  
+  /// The elements of this vector.
+  List<Expression> get elements => value;
+  
+  /// The length of this vector.
+  int get length => elements.length;
+  
+  Expression derive(String toVar) {
+    List<Expression> elementDerivatives = new List<Expression>(length);
+    
+    // Derive each element.
+    for (int i = 0; i < length; i++) {
+      elementDerivatives[i] = elements[i].derive(toVar);
+    }
+    
+    return new Vector(elementDerivatives);
+  }
+  
+  /**
+   * Simplifies all elements of this vector.
+   */
+  Expression simplify() {
+    List<Expression> simplifiedElements = new List<Expression>(length);
+    
+    // Simplify each element.
+    for (int i = 0; i < length; i++) {
+      simplifiedElements[i] = elements[i].simplify();
+    }
+    
+    return new Vector(simplifiedElements);
+  }
+  
+  //TODO isConstant / getConstantValue
+}
+
+/**
+ * A variable is a named literal.
  */
 class Variable extends Literal {
   String name;
-  
+    
   /**
    * Creates a variable literal with given name.
    */
   Variable(String this.name);
   
-  void bindTo(Expression binding) {
-    this.value = binding;
-  }
-  
-  //TODO how to evaluate?
-  //num evaluate() => value == null ? throw new ArgumentError('Variable ${value} is not bound.') : value.evaluate();
-  
   Expression derive(String toVar) => name == toVar ? new Number(1) : new Number(0);
-  
-  String toString() => name;
+    
+  String toString() => '$name';
 }
 
 /**
- * //TODO
+ * A bound variable is an anonymous variable, e.g. a variable without name,
+ * which is bound to an expression.
+ */
+//TODO This is only used for DefaultFunctions, might as well use an expression
+//      directly then and remove some complexity.. leaving this in use right now,
+//      since it might be useful some time - maybe for composite functions? (FL)
+class BoundVariable extends Variable {
+  /**
+   * Creates an anonymous variable which is bound to the given expression.
+   */
+  BoundVariable(Expression expr): super('anon') {
+    this.value = expr;
+  }
+  
+  //TODO check again
+  //TODO isConstant on every expression -> recursion?
+  bool isConstant() => value is Number ? true : false;
+  
+  //TODO getConstantValie on every expression -> recursion?
+  num getConstantValue() => value.value;
+  
+  // Anonymous, bound variable, derive content and unbox.
+  Expression derive(String toVar) => value.derive(toVar); //TODO Needs boxing?
+  
+  Expression simplify() => value.simplify(); //TODO Might need boxing in another variable? How to reassign anonymous variables to functions?
+  
+  String toString() => '{$value}';
+}
+
+/**
+ * //TODO needs interval evaluator..
  */
 class Interval extends Literal {
   Interval(num min, num max) : super(new Alg.Interval(min, max)); //TODO this does not work
@@ -745,6 +1099,8 @@ class Interval extends Literal {
   num evaluate() => value; //TODO whis will break
   
   Expression derive(String toVar) => new Number(0); //TODO this is wrong
+  
+  //TODO constant / getConstant
 }
 
 void main() {
@@ -758,6 +1114,7 @@ void main() {
   
   Expression exp = new Power('x', 2);
   Expression mul = new Times('x', 'x');
+  
   
   print('exp: ${exp.toString()}');
   print('expD: ${exp.derive('x').toString()}');
@@ -774,12 +1131,14 @@ void main() {
   print('div: ${div.toString()}');
   print('divD: ${div.derive('x').toString()}');
   print('divDSimp: ${div.derive('x').simplify().toString()}');
-
+  
+  
   Expression log = new Log(new Number(10), exp);
   print('log: ${log.toString()}');
   print('logD: ${log.derive('x').toString()}');
   print('logDSimp: ${log.derive('x').simplify().toString()}');
-
+  
+  
   Expression expXY = x^a;
   print('expXY: ${expXY.toString()}');
   print('expXYD: ${expXY.derive('x').toString()}');
@@ -797,6 +1156,29 @@ void main() {
   
   Expression negate = -exp;
   print(negate);
+  
+  Expression vector = new Vector([x*new Number(1), div, exp]);
+  print('vector: ${vector}');
+  print('vectorS: ${vector.simplify()}');
+  print('vectorSD: ${vector.simplify().derive('x')}');
+  
+  Expression logVar = new Log(new Number(11), new Variable('x'));
+  print('logVar: ${logVar.toString()}');
+  print('logVarD: ${logVar.derive('x').toString()}');
+  
+  Expression composite = new CompositeFunction(logVar, sqrt);
+  print('composite: ${composite.toString()}');
+  print('compositeD: ${composite.derive('x').toString()}');
+  print('compositeDS: ${composite.derive('x').simplify().toString()}');
+
+  Expression fExpr = new Vector([x, new Plus(x,1), new Minus(x,1)]); // Transforms x to 3-dimensional vector
+  MathFunction f = new CustomFunction('f', [x], fExpr);     // R -> R^3
+  Expression gExpr = x + a + b;
+  MathFunction g = new CustomFunction('g', [x, a, b], gExpr);      // R^3 -> R
+  composite = new CompositeFunction(f, g); // R -> R
+  
+  print('composite2: ${composite.toString()}');
+  
 }
 
 class Tokenizer {
