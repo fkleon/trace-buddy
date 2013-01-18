@@ -1,5 +1,4 @@
-//import 'algebra.dart' as Alg show Interval;
-import 'dart:math' as Math;
+part of math_expressions;
 
 /**
  * Any Expression supports basic mathematical operations like
@@ -562,7 +561,7 @@ abstract class MathFunction extends Expression {
 }
 
 /**
- * A composition of two given [MathFunctions].
+ * A composition of two given [MathFunction]s.
  */
 class CompositeFunction extends MathFunction {
   /// Members `f` and `g` of the composite function.
@@ -1091,104 +1090,24 @@ class BoundVariable extends Variable {
 }
 
 /**
- * //TODO needs interval evaluator..
+ * An interval literal.
  */
 class Interval extends Literal {
-  Interval(num min, num max) : super(new Alg.Interval(min, max)); //TODO this does not work
+  Expression min, max;
   
-  num evaluate() => value; //TODO whis will break
+  /**
+   * Creates a new interval with given borders.
+   */
+  Interval(Expression this.min, Expression this.max);
+    
+  Expression derive(String toVar) {
+    // Can not derive this yet..
+    throw new UnsupportedError('Interval differentiation not supported yet.');
+  }
   
-  Expression derive(String toVar) => new Number(0); //TODO this is wrong
+  Expression simplify() {
+    return new Interval(min.simplify(), max.simplify());
+  }
   
   //TODO constant / getConstant
-}
-
-void main() {
-  Expression x = new Variable('x'), a = new Variable('a'), b = new Variable('b'), c = new Variable('c');
-  //Expression pow = new Power(x, new Number(2));
-  //Expression e = a+b;
-  //Expression e = a*pow+b*x+c;
-  //Expression e = a*x*x+b*x+c;
-  //print(e);
-  //print(e.derive('x'));
-  
-  Expression exp = new Power('x', 2);
-  Expression mul = new Times('x', 'x');
-  
-  
-  print('exp: ${exp.toString()}');
-  print('expD: ${exp.derive('x').toString()}');
-  print('expDSimp: ${exp.derive('x').simplify().toString()}');
-  print('expDSimpDSimp: ${exp.derive('x').simplify().derive('x').simplify().toString()}');
-  print('expDD: ${exp.derive('x').derive('x').toString()}');
-  print('expDDSimp: ${exp.derive('x').derive('x').simplify().toString()}');
-
-  print('mul: ${mul.toString()}');
-  print('mulD: ${mul.derive('x').toString()}');
-  print('mulDSimp: ${mul.derive('x').simplify().toString()}');
-
-  Expression div = new Divide(exp, 'x');
-  print('div: ${div.toString()}');
-  print('divD: ${div.derive('x').toString()}');
-  print('divDSimp: ${div.derive('x').simplify().toString()}');
-  
-  
-  Expression log = new Log(new Number(10), exp);
-  print('log: ${log.toString()}');
-  print('logD: ${log.derive('x').toString()}');
-  print('logDSimp: ${log.derive('x').simplify().toString()}');
-  
-  
-  Expression expXY = x^a;
-  print('expXY: ${expXY.toString()}');
-  print('expXYD: ${expXY.derive('x').toString()}');
-  print('expXYDsimp: ${expXY.derive('x').simplify().toString()}');
-
-  Expression sqrt = new Sqrt(exp);
-  print('sqrt: ${sqrt.toString()}');
-  print('sqrtD: ${sqrt.derive('x').toString()}');
-  print('sqrtDsimpl: ${sqrt.derive('x').simplify().toString()}');
-  
-  Expression root = new Root(5, exp);
-  print('root: ${root.toString()}');
-  print('rootD: ${root.derive('x').toString()}');
-  print('rootDsimpl: ${root.derive('x').simplify().toString()}');
-  
-  Expression negate = -exp;
-  print(negate);
-  
-  Expression vector = new Vector([x*new Number(1), div, exp]);
-  print('vector: ${vector}');
-  print('vectorS: ${vector.simplify()}');
-  print('vectorSD: ${vector.simplify().derive('x')}');
-  
-  Expression logVar = new Log(new Number(11), new Variable('x'));
-  print('logVar: ${logVar.toString()}');
-  print('logVarD: ${logVar.derive('x').toString()}');
-  
-  Expression composite = new CompositeFunction(logVar, sqrt);
-  print('composite: ${composite.toString()}');
-  print('compositeD: ${composite.derive('x').toString()}');
-  print('compositeDS: ${composite.derive('x').simplify().toString()}');
-
-  Expression fExpr = new Vector([x, new Plus(x,1), new Minus(x,1)]); // Transforms x to 3-dimensional vector
-  MathFunction f = new CustomFunction('f', [x], fExpr);     // R -> R^3
-  Expression gExpr = x + a + b;
-  MathFunction g = new CustomFunction('g', [x, a, b], gExpr);      // R^3 -> R
-  composite = new CompositeFunction(f, g); // R -> R
-  
-  print('composite2: ${composite.toString()}');
-  
-}
-
-class Tokenizer {
-  //TODO
-}
-
-class Parser {
-  //TODO
-}
-
-class Evaluator {
-  // TODO
 }
