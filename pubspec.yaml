@@ -6,6 +6,7 @@ description:  A sample application
 #  unittest: any
 
 dependencies:
+  browser: any
   vector_math: 0.9.2
   unittest: any
   benchmark_harness: ">=1.0.0 <2.0.0"

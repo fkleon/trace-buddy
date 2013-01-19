@@ -9,6 +9,8 @@ import '../rt/algebra.dart';
 import '../rt/ray.dart';
 import '../rt/shaders.dart';
 
+import '../math/math_expressions.dart';
+
 var view;
 var rc;
 
@@ -101,10 +103,11 @@ class RenderController {
     // add coordinate system
     
     //TODO this is a ugly hack
-    scene.removeCartesianCoordSystems();
-    if (view == null ? true : view.renderCoords) {
-      scene.add(new CartesianCoordinateSystem());
-    }
+    scene.displayCCS(view.renderCoords);
+//    scene.removeCartesianCoordSystems();
+//    if (view == null ? true : view.renderCoords) {
+//      scene.add(new CartesianCoordinateSystem());
+//    }
     
     // load sampler
     if (sampler == null) {
