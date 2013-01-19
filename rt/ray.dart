@@ -2,7 +2,7 @@ library rt_basics;
 
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math_console.dart';
-import 'algebra.dart';
+import '../math/algebra.dart';
 import 'shaders.dart';
 
 part 'scene.dart';
