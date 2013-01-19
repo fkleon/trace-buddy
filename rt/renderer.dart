@@ -2,7 +2,7 @@ library rt_renderer;
 
 import 'dart:math' as Math;
 import 'ray.dart';
-import 'algebra.dart' show Point3D;
+import '../math/algebra.dart' show Point3D;
 import 'samplers.dart' show Sample, Sampler;
 import 'shaders.dart' show Shader;
 import 'package:vector_math/vector_math_console.dart' show tan, vec2, vec3, vec4;

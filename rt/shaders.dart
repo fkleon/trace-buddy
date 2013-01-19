@@ -2,7 +2,7 @@ library rt_shader;
 
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math_console.dart' show vec3, vec4;
-import 'algebra.dart' show Point3D;
+import '../math/algebra.dart' show Point3D;
 
 /**
  * A [Shader] determines the appearance of a [Primitive] at
