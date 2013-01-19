@@ -8,23 +8,24 @@
   </head>
   <body>
     <h1>TraceBuddy</h1>
-    
+
     <div id="container">
       <div id="imageDiv">
         <canvas id="imageCanvas" class="loader"></canvas>
+        <canvas id="hiddenCanvas" style="display:none"></canvas>
         <div id="renderInfo">{{view.renderInfo}}</div>
       </div>
-      
+
       <div id="controlsDiv">
         <fieldset id="cameraControls">
         <legend>Camera Controls</legend>
           <div>
-            <button id="controlUp" on-click="print(query('canvas[data-item-id=\'1\']'))">Up</button>
+            <button id="controlUp" on-click="rc.rotate(0,-10)">Up</button>
+            <button id="controlDown" on-click="rc.rotate(0,10)">Down</button>
             <button id="controlLeft" on-click="rc.rotate(-10,0)">Left</button>
             <button id="controlRight" on-click="rc.rotate(10,0)" >Right</button>
-            <button id="controlDown" disabled>Down</button>
-            <button id="controlForward" disabled>Forward</button>
-            <button id="controlBackward" disabled>Backward</button>
+            <button id="controlForward" on-click="rc.zoom(2)">Forward</button>
+            <button id="controlBackward" on-click="rc.zoom(-2)">Backward</button>
           </div>
           <div>
             <label>Camera Origin</label>
@@ -38,16 +39,18 @@
             <input id="yRes" type="number" min="1" bind-value="view.yResStr" required/>
           </div>
         </fieldset>
-        
+
         <fieldset id="renderControls">
           <legend>Render Controls</legend>
+          <input type="checkbox" id="renderPreview" bind-checked="view.renderPreview"/>
+          <label for="renderPreview">Render preview</label>
           <input type="checkbox" id="renderCoords" bind-checked="view.renderCoords"/>
           <label for="renderCoords">Render coordinate system axes</label>
           <div>
             <button id="btnRender" on-click="view.render()">Render</button>
           </div>
-        </fieldset>  
-        
+        </fieldset>
+
         <fieldset id="sceneInfo">
           <legend>Scene Information</legend>
           <div id="sceneInformation">{{view.sceneInformation}}</div>
@@ -75,7 +78,7 @@
         </fieldset>
       </div>
     </div>
-    
+
     <div id="glassplate" class="loader"></div>
     <script type="application/dart" src="TraceBuddy.dart"></script>
     <script src="packages/browser/dart.js"></script>

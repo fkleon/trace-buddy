@@ -5,6 +5,7 @@ pubspec.lock
 
 # Symlinks #
 packages
+*.lnk
 
 # Folders #
 packages/

@@ -223,6 +223,10 @@ abstract class Camera {
    */
   void rotate(num horAngle, num verAngle);
 
+  /**
+   * Zooms in or out depending if the distance is positive or negativ.
+   */
+  void zoom(num distance);
   /// The resolution of this camera.
   vec2 get res;
 }
@@ -301,26 +305,42 @@ class PerspectiveCamera extends Camera {
     this.topLeft = forwardAxis - (rowVector / 2) - (columnVector / 2);
   }
 
-  /**
-   * Rotates the camera around the origin of the coordinate system.
-   * TODO Implement rotation around vertical axis.
-   */
+
   void rotate(num horAngle, num verAngle){
 
     num horRadiance = horAngle * (Math.PI / 180);
-    num varRadiance = verAngle * (Math.PI / 180);
+    num verRadiance = verAngle * (Math.PI / 180);
 
-    if(verAngle == 0 && horAngle != 0){
-      print("center.x");
-      print(center.x);
-      num x = center.x * Math.cos(horRadiance) + center.z * Math.sin(horRadiance);
-      num y = center.y;
-      num z = center.x * -(Math.sin(horRadiance)) + center.z * Math.cos(horRadiance);
-      center = new Point3D(x, y, z);
-    } else {
-      print("Stop bugging me and hack some portals");
-    }
+    //rotates around the y axis
+    print("center.x");
+    print(center.x);
+    num x = center.x * Math.cos(horRadiance) + center.z * Math.sin(horRadiance);
+    num y = center.y;
+    num z = center.x * -(Math.sin(horRadiance)) + center.z * Math.cos(horRadiance);
+    center = new Point3D(x, y, z);
+    //rotates up and down around origin
+    num myAxisX = right.x;
+    num myAxisY = right.y;
+    num myAxisZ = right.z;
+    print("right:");
+    print(right);
+    num rotX = (myAxisX * myAxisX * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))* center.x + (myAxisX * myAxisY *(1 - Math.cos(verRadiance)) - myAxisZ * Math.sin(verRadiance))*center.y + (myAxisX * myAxisZ *(1 - Math.cos(verRadiance)) + myAxisY * Math.sin(verRadiance))*center.z;
+    num rotY = (myAxisY * myAxisX * (1 - Math.cos(verRadiance)) + myAxisZ * Math.sin(verRadiance))*center.x + (myAxisY * myAxisY * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.y + (myAxisY * myAxisZ * (1 - Math.cos(verRadiance)) - myAxisX * Math.sin(verRadiance))*center.z;
+    num rotZ = (myAxisZ * myAxisX * (1 - Math.cos(verRadiance)) - myAxisY * Math.sin(verRadiance))*center.x + (myAxisZ * myAxisY * (1 - Math.cos(verRadiance)) + myAxisX * Math.sin(verRadiance))*center.y + (myAxisZ * myAxisZ * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.z;
+    center = new Point3D(rotX, rotY, rotZ);
 
+
+  }
+
+
+  void zoom(distance){
+
+    //move the camera origin along the forward direction
+    num newCenterX = center.x + distance * forward.x;
+    num newCenterY = center.y + distance * forward.y;
+    num newCenterZ = center.z + distance * forward.z;
+
+    center = new Point3D(newCenterX, newCenterY, newCenterZ);
   }
 
   Collection<Ray> getPrimaryRays(int x, int y) {

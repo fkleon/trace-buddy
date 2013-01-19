@@ -41,7 +41,7 @@ class RenderController {
 
   RenderController() {
     // initialize renderer
-    createRenderer();
+    createRenderer(1);
   }
 
   get primitives => scene.nonIdxPrimitives;
@@ -53,11 +53,11 @@ class RenderController {
     });
   }
 
-  void renderScene() {
+  void renderScene([num scale = 1]) {
     if (view == null) {
       throw new ArgumentError('Did not define a view.'); //TODO remove this non-sense
     }
-    createRenderer();
+    createRenderer(scale);
 
     this.view.renderInfo = 'rendering..';
 
@@ -78,7 +78,8 @@ class RenderController {
     this.view.renderInfo = 'Done. Rendered in ${timeForRender/1000.0} s.';
   }
 
-  void createRenderer() {
+
+  void createRenderer(num scale) {
     // load scene
     if (scene == null) {
       vec4 red = new vec4.raw(1,0,0,0);
@@ -118,10 +119,13 @@ class RenderController {
       sampler = new DefaultSampler();
     }
 
+    //reset imageCanvas
+
+
     // load camera
     if (camera == null) {
       Point3D cameraOrigin = view == null ? new Point3D(-5,2,-5) : this.view.cameraOrigin;
-      vec2 res = view == null ? new vec2.raw(300,200) : this.view.res;
+      vec2 res = view == null ? new vec2.raw(300,200) : this.view.res.scale(1/scale);
 
       camera = new PerspectiveCamera.lookAt(
           cameraOrigin,
@@ -148,6 +152,9 @@ class RenderController {
     renderer = new Renderer(scene, sampler, camera);
   }
 
+  /**
+   * rotates the camera around the origin and rerenders the image.
+   */
   void rotate(num horAngle, num verAngle){
     this.camera.rotate(horAngle, verAngle);
     view.xOriginStr = camera.center.x.toString();
@@ -156,6 +163,13 @@ class RenderController {
     view.render();
   }
 
+  void zoom(num distance){
+    this.camera.zoom(distance);
+    view.xOriginStr = camera.center.x.toString();
+    view.yOriginStr = camera.center.y.toString();
+    view.zOriginStr = camera.center.z.toString();
+    view.render();
+  }
 
 }
 
@@ -203,27 +217,47 @@ class TraceBuddyView {
   List<Primitive> get primitives => rc.primitives;
 
   // Camera properties
-  String xResStr, yResStr;
+  String _xResStr, _yResStr;
   String xOriginStr, yOriginStr, zOriginStr;
 
   // Rendering properties
   bool renderCoords;
+  bool renderPreview;
+
+  //scale factor
+  num currentScale;
 
   get imageCanvas => query('#imageCanvas');
-
+  get hiddenCanvas => query('#hiddenCanvas');
   TraceBuddyView(RenderController this.rc) {
     renderInfo = '';
-    xResStr = '400';
-    yResStr = '300';
+    initializeImageCanvas(400, 300);
+    _xResStr = '400';
+    _yResStr = '300';
     xOriginStr = zOriginStr = '-5.0';
     yOriginStr = '5.0';
     renderCoords = true;
-    imageCanvas.width = xRes;
-    imageCanvas.height = yRes;
+    renderPreview = false;
+    currentScale = calculateScaleFactor(xRes, yRes);
   }
 
- int get xRes => _parseInt(xResStr);
- int get yRes => _parseInt(yResStr);
+ void set xResStr(String str){
+   _xResStr = str;
+   currentScale = calculateScaleFactor(xRes, yRes);
+   initializeImageCanvas(xRes, yRes);
+ }
+
+ String get xResStr => _xResStr;
+
+ void set yResStr(String str){
+   _yResStr = str;
+   currentScale = calculateScaleFactor(xRes, yRes);
+   initializeImageCanvas(xRes, yRes);
+ }
+
+ String get yResStr => _yResStr;
+ int get xRes => _parseInt(_xResStr);
+ int get yRes => _parseInt(_yResStr);
  vec2 get res => new vec2.raw(xRes, yRes);
 
  Point3D get cameraOrigin =>
@@ -238,15 +272,32 @@ class TraceBuddyView {
    e.preventDefault();
  }
  //TODO delete later
+  final int lowX = 120;
+ num calculateScaleFactor(num resX, num resY){
+   double ratio = resX / resY;
+   num lowY = lowX/ratio;
+   num scaleFactor = resX / lowX;
+   return scaleFactor;
+ }
 
-
+ void initializeImageCanvas(num xRes, num yRes){
+   imageCanvas.width = xRes;
+   imageCanvas.height = yRes;
+ }
 
  /*
   * Triggers rendering process of the scene and draws the result afterwards.
   */
  void render() {
+
+ if(renderPreview){
+   rc.camera = null; //TODO find nifty solution
+   print(currentScale);
+   rc.renderScene(currentScale);
+   drawImage(rc.om,currentScale);
    // TODO use isolate
    // TODO write method
+ } else {
    rc.camera = null; //TODO find nifty solution
 
 //   SendPort renderer = spawnFunction(rc.renderSceneIsolate);
@@ -256,29 +307,32 @@ class TraceBuddyView {
    //AsciiDumper.dumpAsciiRGB(rc.om);
 
    drawImage(rc.om);
+   }
  }
 
  /*
   * Draws the given [OutputMatrix] into the Canvas.
   */
- void drawImage(OutputMatrix om) {
+ void drawImage(OutputMatrix om, [num scale = 1]) {
    var timer = new Stopwatch();
    timer.start();
-   _writeToCanvas2d(om, imageCanvas);
+   _writeToCanvas2d(om, imageCanvas, hiddenCanvas, scale);
    this.renderInfo = '${renderInfo} Drawn in ${timer.elapsedMilliseconds/1000} s.';
  }
 
  /*
   * Writes a given [OutputMatrix] to the 2d context of a given [CanvasElement].
   */
- void _writeToCanvas2d(OutputMatrix om, CanvasElement canvas) {
+ void _writeToCanvas2d(OutputMatrix om, CanvasElement imageCanvas, CanvasElement hiddenCanvas, num scale) {
    // make sure canvas is big enough
-   canvas.width = om.columns;
-   canvas.height = om.rows;
+   hiddenCanvas.width = om.columns;
+   hiddenCanvas.height = om.rows;
 
    // convert OM infomration to canvas information
-   ImageData id = canvas.context2d.createImageData(om.columns, om.rows);
+   ImageData id = hiddenCanvas.context2d.createImageData(om.columns, om.rows);
 
+
+   CanvasRenderingContext2D destCon = imageCanvas.context2d;
    int i = 0;
    for (vec3 color in om.getSerialized()) {
      // set RGBA
@@ -288,7 +342,10 @@ class TraceBuddyView {
      id.data[i++] = 255;
    }
 
-   canvas.context2d.putImageData(id, 0, 0);
+   hiddenCanvas.context2d.putImageData(id,0,0);
+   destCon.setTransform(1, 0, 0, 1, 0, 0);
+   destCon.scale(scale, scale);
+   destCon.drawImage(hiddenCanvas,0,0);
  }
 
  /*
