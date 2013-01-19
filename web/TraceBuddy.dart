@@ -19,7 +19,7 @@ void main() {
   rc = new RenderController();
   view = new TraceBuddyView(rc);
   rc.view = view;
-  
+
   window.on.load.add((e) => query('#glassplate').style.display='none');
 }
 
@@ -31,53 +31,53 @@ void main() {
 class RenderController {
   // view
   TraceBuddyView view;
-  
+
   // rendering stuff
   Scene scene;
   Camera camera;
   Sampler sampler;
   Renderer renderer;
   OutputMatrix om;
-  
+
   RenderController() {
     // initialize renderer
     createRenderer();
   }
-  
+
   get primitives => scene.nonIdxPrimitives;
-  
+
   void renderSceneIsolate() {
     port.receive((_,__) {
       renderScene();
       print('done');
     });
   }
-  
+
   void renderScene() {
     if (view == null) {
       throw new ArgumentError('Did not define a view.'); //TODO remove this non-sense
     }
     createRenderer();
-    
+
     this.view.renderInfo = 'rendering..';
-    
+
     // time the process
     var timer = new Stopwatch();
     timer.start();
-    
+
     // render the scene
     om = renderer.render();
     //AsciiDumper.dumpAsciiRGB(om);
-    
+
     num timeForRender = timer.elapsedMilliseconds;
-    
+
     // write the image to canvas element
     //TODO use view
 //    writeToCanvas2d(om, imageCanvasElement);
-    
+
     this.view.renderInfo = 'Done. Rendered in ${timeForRender/1000.0} s.';
   }
-  
+
   void createRenderer() {
     // load scene
     if (scene == null) {
@@ -88,38 +88,31 @@ class RenderController {
       Shader redShader = new AmbientShader(red);
       Shader greenShader = new AmbientShader(green);
       Shader turquisShader = new AmbientShader(turquis);
-      
+
       Shader phongGreenShader = new PhongShader(green, green, 50.0, green);
       Shader phongRedShader = new PhongShader(red, red, 50.0, red);
       Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
 
       Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), phongTurquisShader),
-                                          new CartesianCoordinateSystem(),
                                           new Sphere(new Point3D(10,0,0),2,phongGreenShader),
                                           new Sphere(new Point3D(-4,-1,1),0.2,phongRedShader)];
       scene = new Scene(primitives);
     }
-    
+
     // add coordinate system
-    
-    //TODO this is a ugly hack
-    scene.displayCCS(view.renderCoords);
-//    scene.removeCartesianCoordSystems();
-//    if (view == null ? true : view.renderCoords) {
-//      scene.add(new CartesianCoordinateSystem());
-//    }
-    
+    scene.displayCCS(view == null ? true : view.renderCoords);
+
     // load sampler
     if (sampler == null) {
       //TODO apply quality settings?
       sampler = new DefaultSampler();
     }
-    
+
     // load camera
     if (camera == null) {
       Point3D cameraOrigin = view == null ? new Point3D(-5,2,-5) : this.view.cameraOrigin;
       vec2 res = view == null ? new vec2.raw(300,200) : this.view.res;
-      
+
       camera = new PerspectiveCamera.lookAt(
           cameraOrigin,
           new Point3D(0,0,0),
@@ -132,7 +125,7 @@ class RenderController {
   //        new vec3.raw(0,1,0),
   //        60,
   //        new vec2.raw(xRes, yRes));
-      
+
 //      camera = new PerspectiveCamera.lookAt(
 //          new Point3D(-5,2,-5),
 //          new Point3D(0,0,0),
@@ -140,11 +133,11 @@ class RenderController {
 //          60,
 //          new vec2.raw(xRes, yRes));
     }
-    
+
     // create renderer
     renderer = new Renderer(scene, sampler, camera);
   }
-  
+
   void rotate(num horAngle, num verAngle){
     this.camera.rotate(horAngle, verAngle);
     view.xOriginStr = camera.center.x.toString();
@@ -172,7 +165,7 @@ class AsciiDumper {
         else if (isBlue(rgb)) rowString.add('B');
         else rowString.add(rgb.toString());
       }
-      
+
       print('ROW $row: $rowString');
     }
   }
@@ -191,10 +184,10 @@ class AsciiDumper {
 class TraceBuddyView {
   RenderController rc;
   //get rc => _rc == null ? new RenderController(this) : _rc;
-  
+
   // Render information
   String renderInfo;
-  
+
   // Scene information
   String get sceneInformation => '${primitives.length} primitives in scene.';
   List<Primitive> get primitives => rc.primitives;
@@ -202,12 +195,12 @@ class TraceBuddyView {
   // Camera properties
   String xResStr, yResStr;
   String xOriginStr, yOriginStr, zOriginStr;
-  
+
   // Rendering properties
   bool renderCoords;
-  
+
   get imageCanvas => query('#imageCanvas');
-  
+
   TraceBuddyView(RenderController this.rc) {
     renderInfo = '';
     xResStr = '400';
@@ -218,16 +211,16 @@ class TraceBuddyView {
     imageCanvas.width = xRes;
     imageCanvas.height = yRes;
   }
- 
+
  int get xRes => _parseInt(xResStr);
  int get yRes => _parseInt(yResStr);
  vec2 get res => new vec2.raw(xRes, yRes);
- 
+
  Point3D get cameraOrigin =>
       new Point3D(_parseDouble(xOriginStr),
                   _parseDouble(yOriginStr),
                   _parseDouble(zOriginStr));
- 
+
  void removePrimitive(Event e) {
    Element target = (e.target as Element);
    int elementId = int.parse(target.attributes['data-item-id']);
@@ -236,8 +229,8 @@ class TraceBuddyView {
  }
  //TODO delete later
 
- 
- 
+
+
  /*
   * Triggers rendering process of the scene and draws the result afterwards.
   */
@@ -245,16 +238,16 @@ class TraceBuddyView {
    // TODO use isolate
    // TODO write method
    rc.camera = null; //TODO find nifty solution
-   
+
 //   SendPort renderer = spawnFunction(rc.renderSceneIsolate);
 //   renderer.send('test');
-   
+
    rc.renderScene();
    //AsciiDumper.dumpAsciiRGB(rc.om);
-   
+
    drawImage(rc.om);
  }
- 
+
  /*
   * Draws the given [OutputMatrix] into the Canvas.
   */
@@ -264,7 +257,7 @@ class TraceBuddyView {
    _writeToCanvas2d(om, imageCanvas);
    this.renderInfo = '${renderInfo} Drawn in ${timer.elapsedMilliseconds/1000} s.';
  }
- 
+
  /*
   * Writes a given [OutputMatrix] to the 2d context of a given [CanvasElement].
   */
@@ -272,10 +265,10 @@ class TraceBuddyView {
    // make sure canvas is big enough
    canvas.width = om.columns;
    canvas.height = om.rows;
-   
+
    // convert OM infomration to canvas information
    ImageData id = canvas.context2d.createImageData(om.columns, om.rows);
-   
+
    int i = 0;
    for (vec3 color in om.getSerialized()) {
      // set RGBA
@@ -284,20 +277,20 @@ class TraceBuddyView {
      id.data[i++] = asRgbInt(color[2]);
      id.data[i++] = 255;
    }
-   
+
    canvas.context2d.putImageData(id, 0, 0);
  }
- 
+
  /*
   * Converts a double [0..1] to a RGB int [0..255].
   */
  int asRgbInt(num value) {
    return (value*255).toInt();
  }
- 
+
  /*
   * Parses a string to int.
-  * 
+  *
   * Returns 0 if input is illegal.
   */
  int _parseInt(String value) {
@@ -308,10 +301,10 @@ class TraceBuddyView {
      return 0;
    }
  }
- 
+
  /*
   * Parses a string to double.
-  * 
+  *
   * Returns 0.0 if input is illegal.
   */
  double _parseDouble(String value) {

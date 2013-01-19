@@ -1,9 +1,5 @@
 name:  TraceBuddy
-description:  A sample application
-
-#dependencies:
-#  js: any
-#  unittest: any
+description:  A raytracer to render implicit functions.
 
 dependencies:
   browser: any
