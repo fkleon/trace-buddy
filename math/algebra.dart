@@ -150,5 +150,10 @@ class Interval {
    */
   num _max(num a, num b, num c, num d) => Math.max(Math.max(a ,b), Math.max(c, d));
 
+  /**
+   * Returns the length of this interval.
+   */
+  num length() => max - min;
+
   String toString() => '[${this.min},${this.max}]';
 }

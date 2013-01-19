@@ -669,33 +669,36 @@ class CompositeFunction extends MathFunction {
   evaluate(EvaluationType type, ContextModel context) {
     //TODO check if necessary variables have been bound to context.
     //TODO type checks.
-
-    var fEval = f.evaluate(type, context);
+    var fEval;
 
     // We expect result to be of dimension gDomainDimension.
     if (gDomainDimension == 1) {
+      fEval = f.evaluate(EvaluationType.REAL, context);
       // Should be a real. Bind (single) input of g to fEval.
-      context.bindGlobalVariable(g.getParam(0), fEval);
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
       // and try to evaluate..
       return g.evaluate(type, context);
     }
 
     if (gDomainDimension == 2) {
+      fEval = f.evaluate(EvaluationType.VECTOR, context);
       // Should be a 2 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), fEval.x);
-      context.bindGlobalVariable(g.getParam(1), fEval.y);
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
+      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval));
       return g.evaluate(type, context);
     }
 
     if (gDomainDimension == 3) {
+      fEval = f.evaluate(EvaluationType.VECTOR, context);
       // Should be a 3 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), fEval.x);
-      context.bindGlobalVariable(g.getParam(1), fEval.y);
-      context.bindGlobalVariable(g.getParam(2), fEval.z);
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
+      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval));
+      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval));
       return g.evaluate(type, context);
     }
 
     if (gDomainDimension == 4) {
+      fEval = f.evaluate(EvaluationType.VECTOR, context);
       // Should be a 4 dimensional vector then.
       context.bindGlobalVariable(g.getParam(0), fEval.x);
       context.bindGlobalVariable(g.getParam(1), fEval.y);
@@ -1132,7 +1135,7 @@ class Number extends Literal {
 
     if (type == EvaluationType.INTERVAL) {
       // interpret number as interval
-      Interval intLit = new Interval.fromSingle(value);
+      Interval intLit = new Interval.fromSingle(this);
       return intLit.evaluate(type, context);
     }
 

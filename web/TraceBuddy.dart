@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math_console.dart';
 
 import '../rt/renderer.dart';
 import '../rt/samplers.dart';
-import '../rt/algebra.dart';
+import '../math/algebra.dart';
 import '../rt/ray.dart';
 import '../rt/shaders.dart';
 
@@ -96,6 +96,16 @@ class RenderController {
       Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), phongTurquisShader),
                                           new Sphere(new Point3D(10,0,0),2,phongGreenShader),
                                           new Sphere(new Point3D(-4,-1,1),0.2,phongRedShader)];
+
+      Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
+      Number two = new Number(2);
+      Expression expr = (x*x) + (y*y) + (z*z) - new Number(1);
+      expr = ((x*x)/two) - ((y*y)/two) + ((z*z)/two);
+      //expr = ((x*x)/two) + (y*y) + ((z*z)/two) - new Number(1);
+
+      MathFunction f = new CustomFunction('f', [x, y ,z], expr);
+
+      primitives = [new ImplicitFunction(f, phongGreenShader)];
       scene = new Scene(primitives);
     }
 

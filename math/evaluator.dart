@@ -49,19 +49,19 @@ class EvaluationType {
   /// Public constructor for REAL types. Always returns the same instance of a REAL type.
   static EvaluationType get REAL => new EvaluationType._private(REAL_INT, 'REAL');
 
-  /// Puvlic constructor for VECTOR types. Always returns the same instance of a VECTOR type.
+  /// Public constructor for VECTOR types. Always returns the same instance of a VECTOR type.
   static EvaluationType get VECTOR => new EvaluationType._private(VECTOR_INT, 'VECTOR');
 
-  /// Puvlic constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.
+  /// Public constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.
   static EvaluationType get INTERVAL => new EvaluationType._private(INTERVAL_INT, 'INTERVAL');
 
-  /// Internal integer value fpr REAL type.
+  /// Internal integer value for REAL type.
   static final int REAL_INT = 1;
 
-  /// Internal integer value fpr VECTOR type.
+  /// Internal integer value for VECTOR type.
   static final int VECTOR_INT = 2;
 
-  /// Internal integer value fpr INTERVAL type.
+  /// Internal integer value for INTERVAL type.
   static final int INTERVAL_INT = 3;
 
   /**
@@ -127,6 +127,13 @@ class ContextModel {
    */
   void bindGlobalVariable(Variable v, Expression e) {
     variables[v.name] = e;
+  }
+
+  /**
+   * Binds a variable name to an expression in this context.
+   */
+  void bindGlobalVariableName(String vName, Expression e) {
+    variables[vName] = e;
   }
 
   /**
