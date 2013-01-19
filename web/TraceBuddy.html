@@ -20,8 +20,8 @@
         <legend>Camera Controls</legend>
           <div>
             <button id="controlUp" on-click="print(query('canvas[data-item-id=\'1\']'))">Up</button>
-            <button id="controlRight" disabled>Right</button>
-            <button id="controlLeft" disabled>Left</button>
+            <button id="controlLeft" on-click="rc.rotate(-10,0)">Left</button>
+            <button id="controlRight" on-click="rc.rotate(10,0)" >Right</button>
             <button id="controlDown" disabled>Down</button>
             <button id="controlForward" disabled>Forward</button>
             <button id="controlBackward" disabled>Backward</button>

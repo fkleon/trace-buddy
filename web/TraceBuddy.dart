@@ -141,6 +141,16 @@ class RenderController {
     // create renderer
     renderer = new Renderer(scene, sampler, camera);
   }
+  
+  void rotate(num horAngle, num verAngle){
+    this.camera.rotate(horAngle, verAngle);
+    view.xOriginStr = camera.center.x.toString();
+    view.yOriginStr = camera.center.y.toString();
+    view.zOriginStr = camera.center.z.toString();
+    view.render();
+  }
+
+
 }
 
 /**
@@ -221,6 +231,9 @@ class TraceBuddyView {
    rc.scene.remove(elementId);
    e.preventDefault();
  }
+ //TODO delete later
+
+ 
  
  /*
   * Triggers rendering process of the scene and draws the result afterwards.
