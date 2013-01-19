@@ -2,7 +2,7 @@
  * math_expressions
  * 
  * Copyright (c) 2013 Frederik Leonhardt <frederik.leonhardt@gmail.com>,
- *                    Michael Frey
+ *                    Michael Frey <asakash117@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

@@ -139,6 +139,9 @@ abstract class Primitive {
  */
 class Scene extends Primitive {
   
+  /// The cartesian coordinate system of this scene.
+  CartesianCoordinateSystem ccs;
+  
   /// A list of non-indexable primitives in the scene.
   List<Primitive> nonIdxPrimitives;
   
@@ -153,6 +156,8 @@ class Scene extends Primitive {
     } else {
       this.nonIdxPrimitives = new List<Primitive>();
     }
+    
+    ccs = new CartesianCoordinateSystem();
   }
   
   /**
@@ -180,20 +185,19 @@ class Scene extends Primitive {
   }
   
   /**
-   * Removes the cartesian coordiante system from this scene.
-   * //TODO hack
+   * Given parameter determines if the cartesian coordinate system will be
+   * rendered in this scene.
    */
-  void removeCartesianCoordSystems() {
-    List<int> ids = new List<int>();
-    
-    for (int i = 0; i<nonIdxPrimitives.length; i++) {
-      if (nonIdxPrimitives[i] is CartesianCoordinateSystem) ids.add(i);
+  void displayCCS(bool displayCCS) {
+    if (displayCCS && !nonIdxPrimitives.contains(ccs)) {
+      nonIdxPrimitives.add(ccs);
     }
     
-    for (int i in ids) {
-      nonIdxPrimitives.removeAt(i);
+    if (!displayCCS) {
+      remove(ccs.id);
     }
   }
+  
   
   /**
    * Performs a ray - scene intersection.
