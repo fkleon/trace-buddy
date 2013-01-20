@@ -309,10 +309,17 @@ class Exponential extends DefaultFunction {
     var expEval = exp.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
+      // Expect exponent to be real number.
       return Math.exp(expEval);
     }
 
-    throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
+    if (type == EvaluationType.INTERVAL) {
+      // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
+      // Expect exponent to be interval.
+      return new Algebra.Interval(Math.exp(expEval.min), Math.exp(expEval.max));
+    }
+
+    throw new UnimplementedError('Can not evaluate exp on ${type} yet.');
   }
 
   String toString() => 'e^(${exp.toString()})';
@@ -360,6 +367,10 @@ class Log extends DefaultFunction {
     if (type == EvaluationType.REAL) {
       // Be lazy, convert to Ln.
       return asNaturalLogarithm().evaluate(type, context);
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      //TODO
     }
 
     throw new UnimplementedError('Can not evaluate log on ${type} yet.');
