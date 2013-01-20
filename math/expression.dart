@@ -590,11 +590,11 @@ abstract class MathFunction extends Expression {
   int get domainDimension => args.length;
 
   String toString() => '$name($args)';
-  
+
   /**
    * Returns the full string representation of this function.
    * This could include the name, variables and expression.
-   * 
+   *
    * Any subclass should decide whether to override this method.
    */
   String toFullString() => toString();
@@ -1008,10 +1008,11 @@ class Root extends DefaultFunction {
    * Simplify argument.
    */
   Expression simplify() {
-    new Root(n, arg.simplify());
+    return new Root(n, arg.simplify());
   }
 
   evaluate(EvaluationType type, ContextModel context) {
+    //TODO
     throw new UnimplementedError('Can not evaluate n-th root yet.');
   }
 
@@ -1081,7 +1082,7 @@ class Sqrt extends Root {
     }
 
     if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vetcor elements
+      //TODO apply function to all vector elements
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
@@ -1091,7 +1092,150 @@ class Sqrt extends Root {
   String toString() => 'sqrt(${arg.toString()})';
 }
 
-//TODO sin, cos, etc.
+/**
+ * The sine function.
+ */
+class Sin extends DefaultFunction {
+
+  /**
+   * Creates a new sine function with given argument expression.
+   */
+  Sin(arg): super._unary('sin', arg);
+
+  /// The argument of this sine function.
+  Expression get arg => getParam(0);
+
+  Expression derive(String toVar) => new UnaryMinus(new Cos(arg));
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. sin(0) = 0
+   */
+  Expression simplify() {
+    Expression argSimpl = arg.simplify();
+
+    if (_isNumber(argSimpl, 0)) {
+      return new Number(0); // sin(0) = 0
+    }
+
+    return new Sin(argSimpl);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return Math.sin(argEval);
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    throw new UnimplementedError('Can not evaluate sin on ${type} yet.');
+  }
+}
+
+/**
+ * The cosine function.
+ */
+class Cos extends DefaultFunction {
+
+  /**
+   * Creates a new cosine function with given argument expression.
+   */
+  Cos(arg): super._unary('cos', arg);
+
+  /// The argument of this sine function.
+  Expression get arg => getParam(0);
+
+  Expression derive(String toVar) => new Sin(arg);
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. cos(0) = 1
+   */
+  Expression simplify() {
+    Expression argSimpl = arg.simplify();
+
+    if (_isNumber(argSimpl, 0)) {
+      return new Number(1); // cos(0) = 1
+    }
+
+    return new Cos(argSimpl);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return Math.cos(argEval);
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    throw new UnimplementedError('Can not evaluate cos on ${type} yet.');
+  }
+}
+
+/**
+ * The tangens function.
+ */
+class Tan extends DefaultFunction {
+
+  /**
+   * Creates a new cosine function with given argument expression.
+   */
+  Tan(arg): super._unary('tan', arg);
+
+  /// The argument of this sine function.
+  Expression get arg => getParam(0);
+
+  Expression derive(String toVar) => asSinCos().derive(toVar);
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. tan(0) = 0
+   */
+  Expression simplify() {
+    Expression argSimpl = arg.simplify();
+
+    if (_isNumber(argSimpl, 0)) {
+      return new Number(0); // tan(0) = 0
+    }
+
+    return new Tan(argSimpl);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return Math.tan(argEval);
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    throw new UnimplementedError('Can not evaluate tan on ${type} yet.');
+  }
+
+  /**
+   * Returns this tangens as sine and cosine representation.
+   *
+   * `tan(x) = sin(x) / cos(x)`
+   */
+  Expression asSinCos() => new Sin(arg) / new Cos(arg);
+}
 
 /**
  * A literal can be a number, a constant or a variable.
