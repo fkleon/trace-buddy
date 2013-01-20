@@ -590,6 +590,14 @@ abstract class MathFunction extends Expression {
   int get domainDimension => args.length;
 
   String toString() => '$name($args)';
+  
+  /**
+   * Returns the full string representation of this function.
+   * This could include the name, variables and expression.
+   * 
+   * Any subclass should decide whether to override this method.
+   */
+  String toFullString() => toString();
 }
 
 /**

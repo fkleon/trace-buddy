@@ -2,17 +2,18 @@ library rt_test_suite;
 
 import 'package:/unittest/unittest.dart';
 import 'package:vector_math/vector_math_console.dart';
+import '../math/algebra.dart';
 
-import '../rt/algebra.dart';
-import '../rt/ray.dart';
+import '../rt/basics.dart';
 import '../rt/renderer.dart';
 
 part 'algebra_test.dart';
 part 'ray_test.dart';
 part 'output_matrix_test.dart';
 
-final double EPS = 0.0001;
-
+/**
+ * Executes the test suite.
+ */
 void main() {
   group('Algebra Tests', () {
     setUp(initAlgebraTests);

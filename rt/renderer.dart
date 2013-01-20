@@ -1,11 +1,14 @@
 library rt_renderer;
 
 import 'dart:math' as Math;
-import 'ray.dart';
-import '../math/algebra.dart' show Point3D;
-import 'samplers.dart' show Sample, Sampler;
-import 'shaders.dart' show Shader;
+
 import 'package:vector_math/vector_math_console.dart' show tan, vec2, vec3, vec4;
+import '../math/algebra.dart' show Point3D;
+
+import 'basics.dart' show EPS, Ray, Intersection;
+import 'samplers.dart' show Sample, Sampler;
+import 'scene.dart' show Scene;
+import 'shaders.dart' show Shader;
 
 /**
  * Matrix containing the output colors at every pixel of the final image
@@ -143,11 +146,11 @@ class Renderer {
     OutputMatrix om = new OutputMatrix(yRes, xRes);
 
     // for each pixel..
-    for (int x = 0; x<xRes; x++) {
+    for (int x = 0; x < xRes; x++) {
 
-      if (x%10 == 0) {print('Rendering line ${x+1}..');} //TODO
+      if ((x+1) % 10 == 0) {print('Rendering column ${x+1}..');} //TODO
 
-      for (int y = 0; y<yRes; y++) {
+      for (int y = 0; y < yRes; y++) {
         // color information for this pixel
         vec4 color = new vec4.zero();
 
@@ -218,8 +221,7 @@ abstract class Camera {
   Collection<Ray> getPrimaryRays(int x, int y);
 
   /**
-   * Rotates this camera around the given angles.
-   *
+   * Rotates this camera around the given horizontal and vertical angles.
    */
   void rotate(num horAngle, num verAngle);
 
@@ -227,6 +229,7 @@ abstract class Camera {
    * Zooms in or out depending if the distance is positive or negativ.
    */
   void zoom(num distance);
+  
   /// The resolution of this camera.
   vec2 get res;
 }
@@ -237,7 +240,6 @@ abstract class Camera {
  * vertical opening angle of the image and resolution.
  */
 class PerspectiveCamera extends Camera {
-
 
   vec3 forward, up, right;
   vec3 topLeft, stepX, stepY;
@@ -283,6 +285,7 @@ class PerspectiveCamera extends Camera {
 
   void _init(Point3D center, vec3 up, num vertOpeningAngle) {
     this.center = center;
+    
     num resX = _res.x.toDouble();
     num resY = _res.y.toDouble();
     num aspectRatio = resX/resY;
@@ -305,37 +308,31 @@ class PerspectiveCamera extends Camera {
     this.topLeft = forwardAxis - (rowVector / 2) - (columnVector / 2);
   }
 
-
-  void rotate(num horAngle, num verAngle){
-
+  void rotate(num horAngle, num verAngle) {
     num horRadiance = horAngle * (Math.PI / 180);
     num verRadiance = verAngle * (Math.PI / 180);
 
-    //rotates around the y axis
-    print("center.x");
-    print(center.x);
+    // First rotate around the y axis
     num x = center.x * Math.cos(horRadiance) + center.z * Math.sin(horRadiance);
     num y = center.y;
     num z = center.x * -(Math.sin(horRadiance)) + center.z * Math.cos(horRadiance);
+    
     center = new Point3D(x, y, z);
-    //rotates up and down around origin
+    
+    // Then rotate up and down around origin
     num myAxisX = right.x;
     num myAxisY = right.y;
     num myAxisZ = right.z;
-    print("right:");
-    print(right);
+    
     num rotX = (myAxisX * myAxisX * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))* center.x + (myAxisX * myAxisY *(1 - Math.cos(verRadiance)) - myAxisZ * Math.sin(verRadiance))*center.y + (myAxisX * myAxisZ *(1 - Math.cos(verRadiance)) + myAxisY * Math.sin(verRadiance))*center.z;
     num rotY = (myAxisY * myAxisX * (1 - Math.cos(verRadiance)) + myAxisZ * Math.sin(verRadiance))*center.x + (myAxisY * myAxisY * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.y + (myAxisY * myAxisZ * (1 - Math.cos(verRadiance)) - myAxisX * Math.sin(verRadiance))*center.z;
     num rotZ = (myAxisZ * myAxisX * (1 - Math.cos(verRadiance)) - myAxisY * Math.sin(verRadiance))*center.x + (myAxisZ * myAxisY * (1 - Math.cos(verRadiance)) + myAxisX * Math.sin(verRadiance))*center.y + (myAxisZ * myAxisZ * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.z;
+    
     center = new Point3D(rotX, rotY, rotZ);
-
-
   }
 
-
-  void zoom(distance){
-
-    //move the camera origin along the forward direction
+  void zoom(num distance) {
+    // Move the camera origin along the forward direction
     num newCenterX = center.x + distance * forward.x;
     num newCenterY = center.y + distance * forward.y;
     num newCenterZ = center.z + distance * forward.z;

@@ -1,8 +1,11 @@
+import 'dart:math' as Math;
+
 import 'package:/unittest/unittest.dart';
 import 'package:vector_math/vector_math_console.dart';
-import '../rt/algebra.dart';
-import '../rt/ray.dart';
-import 'dart:math' as math;
+import '../math/algebra.dart';
+
+import '../rt/basics.dart';
+import '../rt/scene.dart';
 
 Sphere s1,s2;
 InfinitePlane p1,p2;
@@ -39,7 +42,7 @@ void sphereIntersection(){
   expect(i1.prim,equals(s1));
   
   print('${s1.center}, ${s1.radius}');
-  print(r2.getPoint3D(math.sqrt(101)));
+  print(r2.getPoint3D(Math.sqrt(101)));
   print(r2.getPoint3D(9.85086818307881));
 
   Intersection i2 = s1.intersect(r2, 999999999);
