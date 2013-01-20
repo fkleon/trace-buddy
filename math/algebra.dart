@@ -9,7 +9,7 @@ import 'package:vector_math/vector_math_console.dart' show vec3, vec4;
  */
 class Point3D {
 
-  num x,y,z;
+  num x, y, z;
 
   /**
    * Creates a new Point3D with the given coordinates.
@@ -17,9 +17,19 @@ class Point3D {
   Point3D(num this.x, num this.y, num this.z);
 
   /**
+   * Creates a new Point3D from given vector3 / vector4.
+   */
+  Point3D.vec(var vec): this.x = vec.x, this.y = vec.y, this.z = vec.z;
+
+  /**
+   * Creates a new Point3D and "splats" the given value to each coordinate.
+   */
+  Point3D.splat(num val): this.x = val, this.y = val, this.z = val;
+
+  /**
    * Creates a new Point3D at the coordinate origin.
    */
-  Point3D.zero(): x=0, y=0, z=0;
+  Point3D.zero(): x = 0, y = 0, z = 0;
 
   /**
    * Returns a new point which position is determined by moving the old point

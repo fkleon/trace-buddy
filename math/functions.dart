@@ -576,7 +576,7 @@ class Sin extends DefaultFunction {
   /// The argument of this sine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => new UnaryMinus(new Cos(arg));
+  Expression derive(String toVar) => -new Cos(arg);
 
   /**
    * Possible simplifications:
