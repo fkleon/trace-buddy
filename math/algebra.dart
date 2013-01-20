@@ -76,13 +76,19 @@ class Point3D {
 }
 
 /**
- * An [Interval] is defined by its minimum and maximum values.
+ * An [Interval] is defined by its minimum and maximum values, where min <= max.
  *
  * It supports basic interval arithmetic operations like addition,
  * subtraction, multiplication and division. Operations return a new
  * interval and will not modify the existing ones.
+ *
+ * __Note__: This implementaion does not offer a complete set of operations:
+ *
+ * - Unbounded intervals, intervals containing +/- infinity or the empty set
+ * are not represented.
+ * - Therefore, interval division by zero is not supported as well.
  */
-class Interval {
+class Interval implements Comparable {
 
   num min, max;
 
@@ -100,6 +106,13 @@ class Interval {
    *     [a, b] + [c, d] = [a + c, b + d]
    */
   operator+(Interval i) => new Interval(this.min + i.min, this.max + i.max);
+
+  /**
+   * Unary minus on intervals.
+   *
+   *     -[a, b] = [-b, -a]
+   */
+  operator-() => new Interval(-max, -min);
 
   /**
    * Performs an interval subtraction.
@@ -136,6 +149,71 @@ class Interval {
   }
 
   /**
+   * Equals operator on intervals.
+   *
+   *     [a, b] == [c, d], if a == c && b == d
+   */
+  operator==(Interval i) => this.min == i.min && this.max == i.max;
+
+  /**
+   * Less than operator on intervals.
+   *
+   *     [a, b] < [c, d], if a < c && b < d
+   */
+  operator<(Interval i) => this.min < i.min && this.max < i.max;
+
+  /**
+   * Less or equal than operator on intervals.
+   *
+   *     [a, b] <= [c, d], if a <= c && b <= d
+   */
+  operator<=(Interval i) => this.min <= i.min && this.max <= i.max;
+
+  /**
+   * Greater than operator on intervals.
+   *
+   *     [a, b] > [c, d], if a > c && b > d
+   */
+  operator>(Interval i) => this.min > i.min && this.max > i.max;
+
+  /**
+   * Greater or equal than operator on intervals.
+   *
+   *     [a, b] >= [c, d], if a >= c && b >= d
+   */
+  operator>=(Interval i) => this.min >= i.min && this.max >= i.max;
+
+  /**
+   * Returns the greatest lower bound.
+   */
+  Interval glb(Interval i) =>
+      new Interval(Math.min(min, i.min), Math.min(max, i.max));
+
+  /**
+   * Returns the least upper bound.
+   */
+  Interval lub(Interval i) =>
+      new Interval(Math.max(min, i.min), Math.max(max, i.max));
+
+  /**
+   * Inclusion relation. Returns true, if the given interval is included
+   * in this itnerval.
+   *
+   *     [a, b] subset of [c, d] <=> c <= a && b >= d
+   */
+  bool includes(Interval i) =>
+      this.min <= i.min && i.max <= this.max;
+
+  /**
+   * Element-of relation. Returns true, if given element is included
+   * in this interval.
+   * Defined on a real number i and an interval:
+   *
+   *     i element of [a, b] <=> a <= i && i <= b
+   */
+  bool contains(num element) => this.min <= element && element <= this.max;
+
+  /**
    * Returns true, if the interval contains zero (min <= 0 <= max).
    */
   bool containsZero() => (this.min <= 0 && this.max >= 0);
@@ -156,4 +234,16 @@ class Interval {
   num length() => max - min;
 
   String toString() => '[${this.min},${this.max}]';
+
+  int compareTo(Comparable other) {
+    // For now, only allow compares to other intervals.
+    if (other is Interval) {
+      // Equality, less and greater tests.
+      if (this == other) return 0;
+      if (this < other) return -1;
+      if (this > other) return 1;
+    } else {
+      throw new ArgumentError('$other is not comparable to Interval.');
+    }
+  }
 }
