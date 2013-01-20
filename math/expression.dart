@@ -460,8 +460,6 @@ class Divide extends BinaryOperator {
     var firstEval = first.evaluate(type, context);
     var secondEval = second.evaluate(type, context);
 
-    if (secondEval == 0) throw new IntegerDivisionByZeroException(); //TODO: 0-vector, 0-interval
-
     return firstEval / secondEval;
   }
 
@@ -828,6 +826,14 @@ class Interval extends Literal {
       num maxEval = max.evaluate(EvaluationType.REAL, context);
 
       return new Algebra.Interval(minEval, maxEval);
+    }
+
+    if (type == EvaluationType.REAL) {
+      // If min == max, we can interpret an interval as real.
+      //TODO But should we?
+      if (min == max) {
+        return min;
+      }
     }
 
     throw new UnsupportedError('Interval can not be interpreted as: ${type}');

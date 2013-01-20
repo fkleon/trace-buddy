@@ -370,7 +370,8 @@ class Log extends DefaultFunction {
     }
 
     if (type == EvaluationType.INTERVAL) {
-      //TODO
+      // log_a([x, y]) = [log_a(x), log_a(y)] for [x, y] positive and a > 1
+      return asNaturalLogarithm().evaluate(type, context);
     }
 
     throw new UnimplementedError('Can not evaluate log on ${type} yet.');
@@ -428,6 +429,11 @@ class Ln extends Log {
       return Math.log(argEval);
     }
 
+    if (type == EvaluationType.INTERVAL) {
+      // Expect argument of type interval
+      return new Algebra.Interval(Math.log(argEval.min), Math.log(argEval.max));
+    }
+
     throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
   }
 
@@ -472,7 +478,7 @@ class Root extends DefaultFunction {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO
+    //TODO use asPower
     throw new UnimplementedError('Can not evaluate n-th root yet.');
   }
 
@@ -546,6 +552,11 @@ class Sqrt extends Root {
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
+    if (type == EvaluationType.INTERVAL) {
+      // Piecewiese sqrting.
+      return new Algebra.Interval(Math.sqrt(argEval.min), Math.sqrt(argEval.max));
+    }
+
     throw new UnimplementedError('Can not evaluate sqrt on ${type} yet.');
   }
 
@@ -594,6 +605,11 @@ class Sin extends DefaultFunction {
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
+    if (type == EvaluationType.INTERVAL) {
+      // TODO evaluate endpoints and critical points ((1/2 + n) * pi)
+      // or just return [-1, 1] if half a period is in the given interval
+    }
+
     throw new UnimplementedError('Can not evaluate sin on ${type} yet.');
   }
 }
@@ -638,6 +654,11 @@ class Cos extends DefaultFunction {
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      // TODO evaluate endpoints and critical points (n * pi)
+      // or just return [-1, 1] if half a period is in the given interval
     }
 
     throw new UnimplementedError('Can not evaluate cos on ${type} yet.');
