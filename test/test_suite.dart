@@ -1,6 +1,6 @@
 library rt_test_suite;
 
-import 'package:/unittest/unittest.dart';
+import 'package:unittest/unittest.dart';
 import 'package:vector_math/vector_math_console.dart';
 import '../math/algebra.dart';
 
