@@ -649,7 +649,7 @@ class Number extends Literal {
       return intLit.evaluate(type, context);
     }
 
-    throw new UnsupportedError('Number can not be interpreted as: ${type}');
+    throw new UnsupportedError('Number $this can not be interpreted as: ${type}');
   }
 
   Expression derive(String toVar) => new Number(0);
@@ -738,7 +738,7 @@ class Vector extends Literal {
       return elements[0].evaluate(type, context);
     }
 
-    throw new UnsupportedError('Vector with length ${length} can not be interpreted as: ${type}');
+    throw new UnsupportedError('Vector $this with length $length can not be interpreted as: ${type}');
   }
 
   //TODO isConstant / getConstantValue
@@ -836,7 +836,7 @@ class Interval extends Literal {
       }
     }
 
-    throw new UnsupportedError('Interval can not be interpreted as: ${type}');
+    throw new UnsupportedError('Interval $this can not be interpreted as: ${type}');
   }
 
   String toString() => 'I[$min, $max]';
