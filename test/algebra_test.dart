@@ -3,7 +3,6 @@ part of math_test_suite;
 /**
  * Contains methods to test the math algebra implementation.
  */
-// TODO interval arithmetic tests
 class AlgebraTests extends TestSet {
 
   get name => 'Algebra Tests';
@@ -13,15 +12,17 @@ class AlgebraTests extends TestSet {
     'Point Equality': pointEquality,
     'Point Subtraction': pointSubtraction,
     'Point Addition': pointAddition,
-    'Point LERP': pointLerp
+    'Point LERP': pointLerp,
+    'Interval Creation': intervalCreation,
+    'Interval Arithmetic': intervalArithmetic,
   };
 
   // Initialises the test points and vectors
   void initTests() {
     // do some funky stuff
-    p0 = new Point3D.zero();
-    p1 = new Point3D(1,2,3);
-    p2 = new Point3D(4,-5,7);
+    p0 = new Alg.Point3D.zero();
+    p1 = new Alg.Point3D(1,2,3);
+    p2 = new Alg.Point3D(4,-5,7);
     v1 = new vec3.raw(1,-2,5);
     v2 = new vec3.raw(-1,0,-7);
   }
@@ -29,7 +30,7 @@ class AlgebraTests extends TestSet {
   /*
    *  Tests and variables.
    */
-  Point3D p0,p1,p2;
+  Alg.Point3D p0,p1,p2;
   vec3 v1,v2;
 
   // Tests the expected state after point creation.
@@ -59,7 +60,7 @@ class AlgebraTests extends TestSet {
   // Tests the unary minus and point subtraction operators.
   pointSubtraction() {
     // unary minus
-    Point3D pMinus = -p0;
+    Alg.Point3D pMinus = -p0;
     expect(pMinus.x, equals(0));
     expect(pMinus.y, equals(0));
     expect(pMinus.z, equals(0));
@@ -112,5 +113,14 @@ class AlgebraTests extends TestSet {
     expect(lerped.x, closeTo(2.77, EPS));
     expect(lerped.y, closeTo(-2.13, EPS));
     expect(lerped.z, closeTo(5.36, EPS));
+  }
+
+  //TODO interval tests
+  intervalCreation() {
+    throw new UnimplementedError();
+  }
+
+  intervalArithmetic() {
+    throw new UnimplementedError();
   }
 }

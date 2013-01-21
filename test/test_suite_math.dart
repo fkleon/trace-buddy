@@ -1,10 +1,12 @@
 library math_test_suite;
 
+import 'dart:math' as Math;
+
 import 'package:unittest/unittest.dart';
 import 'package:vector_math/vector_math_console.dart';
 
 import 'test_framework.dart';
-import '../math/algebra.dart';
+import '../math/algebra.dart' as Alg;
 import '../math/math_expressions.dart';
 
 part 'algebra_test.dart';
