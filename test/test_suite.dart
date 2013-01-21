@@ -22,9 +22,10 @@ void main() {
   TestSet at = new AlgebraTests();
   TestSet pt = new PrimTests();
   TestSet rt = new RayTests();
+  TestSet bbt = new BBoxTests();
   TestSet omt = new OutputMatrixTests();
 
-  testSets.addAll([at, rt, pt, omt]);
+  testSets.addAll([at, rt, bbt, pt, omt]);
 
   runTests();
 }

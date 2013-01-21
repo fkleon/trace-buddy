@@ -1,6 +1,8 @@
 library rt_basics;
 
-import 'package:vector_math/vector_math_console.dart';
+import 'dart:math' as Math;
+
+import 'package:vector_math/vector_math_console.dart';// show vec2, vec3, vec4;
 import '../math/algebra.dart' show Point3D, Interval;
 import '../math/math_expressions.dart' as Expr;
 
@@ -61,6 +63,68 @@ class Intersection {
    * Default values are distance = -1, prim = null.
    */
   Intersection([this.distance = -1, this.prim = null, this.hitPoint]);
+}
+
+/**
+ * A 3-dimensional bounding box.
+ */
+class BoundingBox {
+  /// Corner points of this bounding box.
+  Point3D minCorner, maxCorner;
+
+  /**
+   * Creates a bounding box with the given corners.
+   * The sonstructor assumes minCorner to be smaller than maxCorner.
+   */
+  BoundingBox(this.minCorner, this.maxCorner);
+
+  /**
+   * Creates a new empty bounding box.
+   */
+  BoundingBox.empty():  this.minCorner = new Point3D.splat(double.MAX_FINITE),
+                        this.maxCorner = new Point3D.splat(-double.MAX_FINITE);
+
+  /**
+   * Intersects this box with the given ray and returns a vec2 containing
+   * the distances to the intersections.
+   *
+   * If the v.x > v.y there is no hit point.
+   */
+  vec2 intersect(Ray r) {
+    //TODO 0-direction or 0-divisor yield in NaN and +/- Infinity
+    vec3 t1 = (minCorner - r.origin) / r.direction;
+    vec3 t2 = (maxCorner - r.origin) / r.direction;
+
+    vec3 tMin = min(t1, t2);
+    vec3 tMax = max(t1, t2);
+
+    num hit1 = Math.max(Math.max(tMin.x, tMin.y), tMin.z);
+    num hit2 = Math.min(Math.min(tMin.x, tMin.y), tMin.z);
+
+    return new vec2.raw(hit1, hit2);
+  }
+
+  /**
+   * Extends this bounding box with the given point.
+   */
+  void extend(Point3D point) {
+    vec3 newMin = min(minCorner.toVec3(), point.toVec3());
+    vec3 newMax = max(maxCorner.toVec3(), point.toVec3());
+    minCorner = new Point3D.vec(newMin);
+    maxCorner = new Point3D.vec(newMax);
+  }
+
+  /**
+   * Extends this bounding box with the given bounding box.
+   */
+  void extendBB(BoundingBox bbox) {
+    vec3 newMin = min(minCorner.toVec3(), bbox.minCorner.toVec3());
+    vec3 newMax = max(maxCorner.toVec3(), bbox.maxCorner.toVec3());
+    minCorner = new Point3D.vec(newMin);
+    maxCorner = new Point3D.vec(newMax);
+  }
+
+  // TODO area and volume for acceleration structures
 }
 
 /**

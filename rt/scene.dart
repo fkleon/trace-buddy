@@ -473,7 +473,7 @@ class ImplicitFunction extends Primitive {
       return -1;
     }
   }
-  
+
   num newtonRoot(Function f, num startValue) {
     Function g = f.derive();
     return _newtonRoot(f, g, startValue);
@@ -489,7 +489,7 @@ class ImplicitFunction extends Primitive {
     }
   }
   */
-  
+
   Shader getShader(Intersection intersect) {
     PluggableShader ret = this._shader.clone();
 

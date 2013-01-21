@@ -181,7 +181,7 @@ class Renderer {
               // get ambience, reflectance and indirect radiance
               tempColor += s.getAmbientCoeff() * ambientLight;
               //TODO for all light sources, integrate indirect radiance.
-              tempColor += s.getReflectance(-r.direction, new Point3D(0, 20, 0) - ret.hitPoint); //TODO dummy light source
+              tempColor += s.getReflectance(-r.direction, r.origin - ret.hitPoint); //TODO dummy light source at camera
 
               tempColor += s.getIndirectRadiance();
             }
@@ -229,7 +229,7 @@ abstract class Camera {
    * Zooms in or out depending if the distance is positive or negativ.
    */
   void zoom(num distance);
-  
+
   /// The resolution of this camera.
   vec2 get res;
 }
@@ -285,7 +285,7 @@ class PerspectiveCamera extends Camera {
 
   void _init(Point3D center, vec3 up, num vertOpeningAngle) {
     this.center = center;
-    
+
     num resX = _res.x.toDouble();
     num resY = _res.y.toDouble();
     num aspectRatio = resX/resY;
@@ -316,18 +316,18 @@ class PerspectiveCamera extends Camera {
     num x = center.x * Math.cos(horRadiance) + center.z * Math.sin(horRadiance);
     num y = center.y;
     num z = center.x * -(Math.sin(horRadiance)) + center.z * Math.cos(horRadiance);
-    
+
     center = new Point3D(x, y, z);
-    
+
     // Then rotate up and down around origin
     num myAxisX = right.x;
     num myAxisY = right.y;
     num myAxisZ = right.z;
-    
+
     num rotX = (myAxisX * myAxisX * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))* center.x + (myAxisX * myAxisY *(1 - Math.cos(verRadiance)) - myAxisZ * Math.sin(verRadiance))*center.y + (myAxisX * myAxisZ *(1 - Math.cos(verRadiance)) + myAxisY * Math.sin(verRadiance))*center.z;
     num rotY = (myAxisY * myAxisX * (1 - Math.cos(verRadiance)) + myAxisZ * Math.sin(verRadiance))*center.x + (myAxisY * myAxisY * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.y + (myAxisY * myAxisZ * (1 - Math.cos(verRadiance)) - myAxisX * Math.sin(verRadiance))*center.z;
     num rotZ = (myAxisZ * myAxisX * (1 - Math.cos(verRadiance)) - myAxisY * Math.sin(verRadiance))*center.x + (myAxisZ * myAxisY * (1 - Math.cos(verRadiance)) + myAxisX * Math.sin(verRadiance))*center.y + (myAxisZ * myAxisZ * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.z;
-    
+
     center = new Point3D(rotX, rotY, rotZ);
   }
 

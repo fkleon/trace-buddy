@@ -460,8 +460,6 @@ class Divide extends BinaryOperator {
     var firstEval = first.evaluate(type, context);
     var secondEval = second.evaluate(type, context);
 
-    if (secondEval == 0) throw new IntegerDivisionByZeroException(); //TODO: 0-vector, 0-interval
-
     return firstEval / secondEval;
   }
 
@@ -535,6 +533,50 @@ class Power extends BinaryOperator {
   evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
       return Math.pow(first.evaluate(type, context), second.evaluate(type, context));
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      // Expect base to be interval.
+      Algebra.Interval interval = first.evaluate(type, context);
+
+      // Expect exponent to be a natural number.
+      var exponent = second.evaluate(EvaluationType.REAL, context);
+
+      if (exponent is double) {
+        print('Warning, expected natural exponent but is real. Interpreting as int: ${this}');
+        exponent = exponent.toInt();
+      }
+
+      num evalMin, evalMax;
+      // Distinction of cases depending on oddity of exponent.
+      if (exponent.isOdd) {
+        // [x, y]^n = [x^n, y^n] for n = odd
+        evalMin = Math.pow(interval.min, exponent);
+        evalMax = Math.pow(interval.max, exponent);
+      } else {
+        // [x, y]^n = [x^n, y^n] for x >= 0
+        if (interval.min >= 0) {
+          // Positive interval.
+          evalMin = Math.pow(interval.min, exponent);
+          evalMax = Math.pow(interval.max, exponent);
+        }
+
+        // [x, y]^n = [y^n, x^n] for y < 0
+        if (interval.min >= 0) {
+          // Positive interval.
+          evalMin = Math.pow(interval.max, exponent);
+          evalMax = Math.pow(interval.min, exponent);
+        }
+
+        // [x, y]^n = [0, max(x^n, y^n)] otherwise
+        evalMin = 0;
+        evalMax = Math.max( Math.pow(interval.min, exponent),
+                            Math.pow(interval.min, exponent));
+      }
+
+      assert(evalMin <= evalMax);
+
+      return new Algebra.Interval(evalMin, evalMax);
     }
 
     throw new UnimplementedError('Evaluate Power with type ${type} not supported yet.');
@@ -784,6 +826,14 @@ class Interval extends Literal {
       num maxEval = max.evaluate(EvaluationType.REAL, context);
 
       return new Algebra.Interval(minEval, maxEval);
+    }
+
+    if (type == EvaluationType.REAL) {
+      // If min == max, we can interpret an interval as real.
+      //TODO But should we?
+      if (min == max) {
+        return min;
+      }
     }
 
     throw new UnsupportedError('Interval can not be interpreted as: ${type}');

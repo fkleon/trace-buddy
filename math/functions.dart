@@ -309,10 +309,17 @@ class Exponential extends DefaultFunction {
     var expEval = exp.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
+      // Expect exponent to be real number.
       return Math.exp(expEval);
     }
 
-    throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
+    if (type == EvaluationType.INTERVAL) {
+      // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
+      // Expect exponent to be interval.
+      return new Algebra.Interval(Math.exp(expEval.min), Math.exp(expEval.max));
+    }
+
+    throw new UnimplementedError('Can not evaluate exp on ${type} yet.');
   }
 
   String toString() => 'e^(${exp.toString()})';
@@ -359,6 +366,11 @@ class Log extends DefaultFunction {
   evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
       // Be lazy, convert to Ln.
+      return asNaturalLogarithm().evaluate(type, context);
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      // log_a([x, y]) = [log_a(x), log_a(y)] for [x, y] positive and a > 1
       return asNaturalLogarithm().evaluate(type, context);
     }
 
@@ -417,6 +429,11 @@ class Ln extends Log {
       return Math.log(argEval);
     }
 
+    if (type == EvaluationType.INTERVAL) {
+      // Expect argument of type interval
+      return new Algebra.Interval(Math.log(argEval.min), Math.log(argEval.max));
+    }
+
     throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
   }
 
@@ -461,7 +478,7 @@ class Root extends DefaultFunction {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO
+    //TODO use asPower
     throw new UnimplementedError('Can not evaluate n-th root yet.');
   }
 
@@ -535,6 +552,11 @@ class Sqrt extends Root {
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
+    if (type == EvaluationType.INTERVAL) {
+      // Piecewiese sqrting.
+      return new Algebra.Interval(Math.sqrt(argEval.min), Math.sqrt(argEval.max));
+    }
+
     throw new UnimplementedError('Can not evaluate sqrt on ${type} yet.');
   }
 
@@ -554,7 +576,7 @@ class Sin extends DefaultFunction {
   /// The argument of this sine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => new UnaryMinus(new Cos(arg));
+  Expression derive(String toVar) => -new Cos(arg);
 
   /**
    * Possible simplifications:
@@ -581,6 +603,11 @@ class Sin extends DefaultFunction {
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      // TODO evaluate endpoints and critical points ((1/2 + n) * pi)
+      // or just return [-1, 1] if half a period is in the given interval
     }
 
     throw new UnimplementedError('Can not evaluate sin on ${type} yet.');
@@ -627,6 +654,11 @@ class Cos extends DefaultFunction {
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
       throw new UnimplementedError('Can not evaluate functions on vectors yet.');
+    }
+
+    if (type == EvaluationType.INTERVAL) {
+      // TODO evaluate endpoints and critical points (n * pi)
+      // or just return [-1, 1] if half a period is in the given interval
     }
 
     throw new UnimplementedError('Can not evaluate cos on ${type} yet.');
