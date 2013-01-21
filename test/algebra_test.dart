@@ -1,4 +1,4 @@
-part of rt_test_suite;
+part of math_test_suite;
 
 /**
  * Contains methods to test the math algebra implementation.
