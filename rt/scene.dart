@@ -366,7 +366,7 @@ class Sphere extends Primitive {
     PluggableShader ret = this._shader.clone();
 
     ret.position = intersect.hitPoint;
-    ret.normal = intersect.hitPoint - this.origin;
+    ret.normal = (intersect.hitPoint - this.origin).normalize();
 
     return ret;
   }
@@ -508,7 +508,7 @@ class ImplicitFunction extends Primitive {
     num gradY = fDy.evaluate(Expr.EvaluationType.REAL, cm);
     num gradZ = fDz.evaluate(Expr.EvaluationType.REAL, cm);
 
-    ret.normal = new vec3.raw(gradX, gradY, gradZ);
+    ret.normal = new vec3.raw(gradX, gradY, gradZ).normalize();
 
     return ret;
   }
