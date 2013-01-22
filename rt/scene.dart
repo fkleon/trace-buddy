@@ -2,7 +2,7 @@ library rt_primitives;
 
 import 'dart:math' as Math;
 
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math_browser.dart';
 import '../math/algebra.dart' show Point3D, Interval;
 import '../math/math_expressions.dart' as Expr;
 
@@ -424,7 +424,7 @@ class ImplicitFunction extends Primitive {
 
   num findRootBF(Expr.MathFunction g, Interval i) {
     //print('Analyze $i');
-    if (i.length() < 2) {
+    if (i.length() < 0.001) {
       return i.min;
     }
 

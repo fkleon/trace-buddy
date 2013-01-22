@@ -2,7 +2,7 @@ library rt_basics;
 
 import 'dart:math' as Math;
 
-import 'package:vector_math/vector_math_console.dart';// show vec2, vec3, vec4;
+import 'package:vector_math/vector_math_browser.dart';// show vec2, vec3, vec4;
 import '../math/algebra.dart' show Point3D, Interval;
 import '../math/math_expressions.dart' as Expr;
 

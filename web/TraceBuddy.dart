@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:isolate';
 
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math_browser.dart';
 import '../math/math_expressions.dart';
 import '../math/algebra.dart';
 
@@ -58,11 +58,11 @@ class RenderController {
 
   /**
    * Renders the scene.
-   * 
+   *
    * With the optional argument scale can be determined that a lower resolution
    * preview should be rendered. A scale of 0.5 will render the image in half
    * the size.
-   * 
+   *
    * The result of the rendering process is stored in the [OutputMatric] member
    * `om` of this renderer.
    */
@@ -70,7 +70,7 @@ class RenderController {
     if (view == null) {
       throw new ArgumentError('Did not define a view.'); //TODO remove this non-sense
     }
-    
+
     createRenderer(scale);
 
     this.view.renderInfo = 'rendering..';
@@ -90,13 +90,13 @@ class RenderController {
 
   /**
    * Creates the renderer and all associated objects.
-   * 
+   *
    * The additional argument scale determines if the image will be rendered
    * in a scaled version, for example a smaller preview of half the resolution:
    * scale = 0.5.
-   * 
+   *
    * This method performs the following steps:
-   * 
+   *
    * 1. Create a default scene, if not yet set.
    * 2. Create a default sampler, is not yet set. This will be a [DefaultSampler].
    * 3. Create a default camera, if not yet set.
@@ -111,7 +111,7 @@ class RenderController {
       Shader redShader = new AmbientShader(red);
       Shader greenShader = new AmbientShader(green);
       Shader turquisShader = new AmbientShader(turquis);
-      
+
       Shader phongGreenShader = new PhongShader(green, green, 50.0, green);
       Shader phongRedShader = new PhongShader(red, red, 50.0, red);
       Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
@@ -131,9 +131,9 @@ class RenderController {
       primitives = [new ImplicitFunction(f, phongGreenShader)];
       scene = new Scene(primitives);
     }
-    
-   
-    
+
+
+
     // add coordinate system
     scene.displayCCS(view == null ? true : view.renderCoords);
 
@@ -155,7 +155,7 @@ class RenderController {
           60,
           res);
     }
-    
+
     // create renderer
     renderer = new Renderer(scene, sampler, camera);
   }
@@ -181,7 +181,7 @@ class RenderController {
     view.zOriginStr = camera.center.z.toString();
     view.render();
   }
-  
+
   void add_function(){
     Parser pars = new Parser();
     vec4 color = createColorVec();
@@ -190,12 +190,12 @@ class RenderController {
     Expression customExpr = pars.parse(view.inputString);
     print(customExpr);
     Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
-    
+
     MathFunction g = new CustomFunction('g',[x,y,z], customExpr);
     primitives.add(new ImplicitFunction(g, dynamicShader));
     scene = new Scene(primitives);
   }
-  
+
   int hexToSum(String inputHex) {
     String hex = inputHex;
     print(hex);
@@ -228,9 +228,9 @@ class RenderController {
     int rInt = hexToSum(rString);
     int gInt = hexToSum(gString);
     int bInt = hexToSum(bString);
-   
+
     return new vec4.raw(rInt/255, gInt/255, bInt/255,1);
-    
+
   }
 }
 
@@ -269,7 +269,7 @@ class AsciiDumper {
 class TraceBuddyView {
   //TODO hardcoded x resolution of preview
   final int lowX = 120;
-  
+
   // The controller
   RenderController rc;
   //get rc => _rc == null ? new RenderController(this) : _rc;
@@ -288,7 +288,7 @@ class TraceBuddyView {
   // input String and color picker
   String inputString;
   String inputColor;
-  
+
   // Rendering properties
   bool renderCoords;
   bool renderPreview;
@@ -298,10 +298,10 @@ class TraceBuddyView {
 
   get imageCanvas => query('#imageCanvas');
   get _hiddenCanvas => query('#hiddenCanvas');
-  
+
   /**
    * Creates a new trace buddy view.
-   * 
+   *
    * Initializes image canvas, resolution, other stuff and scale factor.
    */
   TraceBuddyView(RenderController this.rc) {
@@ -320,7 +320,7 @@ class TraceBuddyView {
 
   String get xResStr => _xResStr;
   String get yResStr => _yResStr;
-  
+
   // Wrapped to recalculate scale factor on change.
   void set xResStr(String str) {
     _xResStr = str;
@@ -350,7 +350,7 @@ class TraceBuddyView {
     rc.scene.remove(elementId);
     e.preventDefault();
   }
- 
+
 
   /**
    * Calculates the scale factor of given resolution in respect to default
@@ -388,7 +388,7 @@ class TraceBuddyView {
 
       rc.renderScene();
       //AsciiDumper.dumpAsciiRGB(rc.om);
-  
+
       drawImage(rc.om);
     }
   }
