@@ -233,6 +233,7 @@ class Plus extends BinaryOperator {
    *
    * 1. a + 0 = a
    * 2. 0 + a = a
+   * 3. a + -(b) = a - b
    */
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -244,6 +245,10 @@ class Plus extends BinaryOperator {
 
     if (_isNumber(secondOp, 0)) {
       return firstOp;
+    }
+    
+    if (secondOp is UnaryMinus) {
+      return firstOp - secondOp.exp; // a + -(b) = a - b
     }
 
     return new Plus(firstOp, secondOp);
@@ -283,6 +288,7 @@ class Minus extends BinaryOperator {
    *
    * 1. a - 0 = a
    * 2. 0 - a = a
+   * 3. a - -(b) = a + b
    */
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -294,6 +300,10 @@ class Minus extends BinaryOperator {
 
     if (_isNumber(secondOp, 0)) {
       return firstOp;
+    }
+    
+    if (secondOp is UnaryMinus) {
+      return firstOp + secondOp.exp; // a - -(b) = a + b
     }
 
     return new Minus(firstOp, secondOp);
@@ -439,10 +449,6 @@ class Divide extends BinaryOperator {
 
     if (_isNumber(firstOp, 0)) {
       return firstOp; // = 0
-    }
-
-    if (_isNumber(secondOp, 0)) {
-      throw new IntegerDivisionByZeroException();
     }
 
     if (_isNumber(secondOp, 1)) {
