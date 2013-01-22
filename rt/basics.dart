@@ -74,7 +74,7 @@ class BoundingBox {
 
   /**
    * Creates a bounding box with the given corners.
-   * The sonstructor assumes minCorner to be smaller than maxCorner.
+   * The constructor assumes minCorner to be smaller than maxCorner.
    */
   BoundingBox(this.minCorner, this.maxCorner);
 
