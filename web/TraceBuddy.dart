@@ -2,16 +2,19 @@ import 'dart:html';
 import 'dart:isolate';
 
 import 'package:vector_math/vector_math_console.dart';
+import '../math/math_expressions.dart';
+import '../math/algebra.dart';
 
 import '../rt/renderer.dart';
 import '../rt/samplers.dart';
-import '../math/algebra.dart';
-import '../rt/ray.dart';
+import '../rt/basics.dart';
 import '../rt/shaders.dart';
+import '../rt/scene.dart';
 
-import '../math/math_expressions.dart';
-
+/// Global reference to the view.
 var view;
+
+/// Global reference to the controller.
 var rc;
 
 // main entry point for application
@@ -53,10 +56,21 @@ class RenderController {
     });
   }
 
+  /**
+   * Renders the scene.
+   * 
+   * With the optional argument scale can be determined that a lower resolution
+   * preview should be rendered. A scale of 0.5 will render the image in half
+   * the size.
+   * 
+   * The result of the rendering process is stored in the [OutputMatric] member
+   * `om` of this renderer.
+   */
   void renderScene([num scale = 1]) {
     if (view == null) {
       throw new ArgumentError('Did not define a view.'); //TODO remove this non-sense
     }
+    
     createRenderer(scale);
 
     this.view.renderInfo = 'rendering..';
@@ -71,15 +85,23 @@ class RenderController {
 
     num timeForRender = timer.elapsedMilliseconds;
 
-    // write the image to canvas element
-    //TODO use view
-//    writeToCanvas2d(om, imageCanvasElement);
-
     this.view.renderInfo = 'Done. Rendered in ${timeForRender/1000.0} s.';
   }
 
-
-  void createRenderer(num scale) {
+  /**
+   * Creates the renderer and all associated objects.
+   * 
+   * The additional argument scale determines if the image will be rendered
+   * in a scaled version, for example a smaller preview of half the resolution:
+   * scale = 0.5.
+   * 
+   * This method performs the following steps:
+   * 
+   * 1. Create a default scene, if not yet set.
+   * 2. Create a default sampler, is not yet set. This will be a [DefaultSampler].
+   * 3. Create a default camera, if not yet set.
+   */
+  void createRenderer([num scale = 1]) {
     // load scene
     if (scene == null) {
       vec4 red = new vec4.raw(1,0,0,0);
@@ -119,13 +141,10 @@ class RenderController {
       sampler = new DefaultSampler();
     }
 
-    //reset imageCanvas
-
-
     // load camera
     if (camera == null) {
       Point3D cameraOrigin = view == null ? new Point3D(-5,2,-5) : this.view.cameraOrigin;
-      vec2 res = view == null ? new vec2.raw(300,200) : this.view.res.scale(1/scale);
+      vec2 res = view == null ? new vec2.raw(300,200) : this.view.res.scale(scale);
 
       camera = new PerspectiveCamera.lookAt(
           cameraOrigin,
@@ -133,29 +152,16 @@ class RenderController {
           new vec3.raw(0,1,0),
           60,
           res);
-  //    camera = new PerspectiveCamera(
-  //        new Point3D(-10,2,-1),
-  //        new vec3.raw(1,-0.5,0),
-  //        new vec3.raw(0,1,0),
-  //        60,
-  //        new vec2.raw(xRes, yRes));
-
-//      camera = new PerspectiveCamera.lookAt(
-//          new Point3D(-5,2,-5),
-//          new Point3D(0,0,0),
-//          new vec3.raw(0,1,0),
-//          60,
-//          new vec2.raw(xRes, yRes));
     }
-
+    
     // create renderer
     renderer = new Renderer(scene, sampler, camera);
   }
 
   /**
-   * rotates the camera around the origin and rerenders the image.
+   * Rotates the camera around the origin and rerenders the image.
    */
-  void rotate(num horAngle, num verAngle){
+  void rotate(num horAngle, num verAngle) {
     this.camera.rotate(horAngle, verAngle);
     view.xOriginStr = camera.center.x.toString();
     view.yOriginStr = camera.center.y.toString();
@@ -163,7 +169,10 @@ class RenderController {
     view.render();
   }
 
-  void zoom(num distance){
+  /**
+   * Zooms the camera with given distance and rerenders the image.
+   */
+  void zoom(num distance) {
     this.camera.zoom(distance);
     view.xOriginStr = camera.center.x.toString();
     view.yOriginStr = camera.center.y.toString();
@@ -206,6 +215,10 @@ class AsciiDumper {
  * Delegates calls to the RenderController.
  */
 class TraceBuddyView {
+  //TODO hardcoded x resolution of preview
+  final int lowX = 120;
+  
+  // The controller
   RenderController rc;
   //get rc => _rc == null ? new RenderController(this) : _rc;
 
@@ -228,7 +241,13 @@ class TraceBuddyView {
   num currentScale;
 
   get imageCanvas => query('#imageCanvas');
-  get hiddenCanvas => query('#hiddenCanvas');
+  get _hiddenCanvas => query('#hiddenCanvas');
+  
+  /**
+   * Creates a new trace buddy view.
+   * 
+   * Initializes image canvas, resolution, other stuff and scale factor.
+   */
   TraceBuddyView(RenderController this.rc) {
     renderInfo = '';
     initializeImageCanvas(400, 300);
@@ -241,145 +260,150 @@ class TraceBuddyView {
     currentScale = calculateScaleFactor(xRes, yRes);
   }
 
- void set xResStr(String str){
-   _xResStr = str;
-   currentScale = calculateScaleFactor(xRes, yRes);
-   initializeImageCanvas(xRes, yRes);
- }
+  String get xResStr => _xResStr;
+  String get yResStr => _yResStr;
+  
+  // Wrapped to recalculate scale factor on change.
+  void set xResStr(String str) {
+    _xResStr = str;
+    currentScale = calculateScaleFactor(xRes, yRes);
+    initializeImageCanvas(xRes, yRes);
+  }
 
- String get xResStr => _xResStr;
+  // Wrapped to recalculate scale factor on change.
+  void set yResStr(String str) {
+    _yResStr = str;
+    currentScale = calculateScaleFactor(xRes, yRes);
+    initializeImageCanvas(xRes, yRes);
+  }
 
- void set yResStr(String str){
-   _yResStr = str;
-   currentScale = calculateScaleFactor(xRes, yRes);
-   initializeImageCanvas(xRes, yRes);
- }
+  int get xRes => _parseInt(_xResStr);
+  int get yRes => _parseInt(_yResStr);
+  vec2 get res => new vec2.raw(xRes, yRes);
 
- String get yResStr => _yResStr;
- int get xRes => _parseInt(_xResStr);
- int get yRes => _parseInt(_yResStr);
- vec2 get res => new vec2.raw(xRes, yRes);
-
- Point3D get cameraOrigin =>
+  Point3D get cameraOrigin =>
       new Point3D(_parseDouble(xOriginStr),
                   _parseDouble(yOriginStr),
                   _parseDouble(zOriginStr));
 
- void removePrimitive(Event e) {
-   Element target = (e.target as Element);
-   int elementId = int.parse(target.attributes['data-item-id']);
-   rc.scene.remove(elementId);
-   e.preventDefault();
- }
- //TODO delete later
-  final int lowX = 120;
- num calculateScaleFactor(num resX, num resY){
-   double ratio = resX / resY;
-   num lowY = lowX/ratio;
-   num scaleFactor = resX / lowX;
-   return scaleFactor;
- }
+  void removePrimitive(Event e) {
+    Element target = (e.target as Element);
+    int elementId = int.parse(target.attributes['data-item-id']);
+    rc.scene.remove(elementId);
+    e.preventDefault();
+  }
+ 
 
- void initializeImageCanvas(num xRes, num yRes){
-   imageCanvas.width = xRes;
-   imageCanvas.height = yRes;
- }
+  /**
+   * Calculates the scale factor of given resolution in respect to default
+   * preview resolution defined by `lowX`.
+   */
+  num calculateScaleFactor(num xRes, num yRes) {
+    double ratio = xRes / yRes;
+    num lowY = lowX / ratio;
+    num scaleFactor = lowX / xRes;
+    return scaleFactor;
+  }
 
- /*
-  * Triggers rendering process of the scene and draws the result afterwards.
-  */
- void render() {
+  /**
+   * Initializes visible image canvas with given size.
+   */
+  void initializeImageCanvas(num xRes, num yRes){
+    imageCanvas.width = xRes;
+    imageCanvas.height = yRes;
+  }
 
- if(renderPreview){
-   rc.camera = null; //TODO find nifty solution
-   print(currentScale);
-   rc.renderScene(currentScale);
-   drawImage(rc.om,currentScale);
-   // TODO use isolate
-   // TODO write method
- } else {
-   rc.camera = null; //TODO find nifty solution
+  /*
+   * Triggers rendering process of the scene and draws the result afterwards.
+   */
+  void render() {
+    // TODO use isolate
+    if(renderPreview) {
+      print('render preview scale $currentScale');
+      rc.camera = null; //TODO find nifty solution
+      rc.renderScene(currentScale);
+      drawImage(rc.om, currentScale);
+    } else {
+      rc.camera = null; //TODO find nifty solution
+  //  SendPort renderer = spawnFunction(rc.renderSceneIsolate);
+  //  renderer.send('test');
 
-//   SendPort renderer = spawnFunction(rc.renderSceneIsolate);
-//   renderer.send('test');
+      rc.renderScene();
+      //AsciiDumper.dumpAsciiRGB(rc.om);
+  
+      drawImage(rc.om);
+    }
+  }
 
-   rc.renderScene();
-   //AsciiDumper.dumpAsciiRGB(rc.om);
+  /*
+   * Draws the given [OutputMatrix] into the Canvas.
+   */
+  void drawImage(OutputMatrix om, [num scale = 1]) {
+    var timer = new Stopwatch();
+    timer.start();
+    _writeToCanvas2d(om, imageCanvas, _hiddenCanvas, scale);
+    this.renderInfo = '${renderInfo} Drawn in ${timer.elapsedMilliseconds/1000} s.';
+  }
 
-   drawImage(rc.om);
-   }
- }
+  /*
+   * Writes a given [OutputMatrix] to the 2d context of a given [CanvasElement].
+   */
+  void _writeToCanvas2d(OutputMatrix om, CanvasElement imageCanvas, CanvasElement hiddenCanvas, num scale) {
+    // make sure canvas is big enough
+    hiddenCanvas.width = om.columns;
+    hiddenCanvas.height = om.rows;
 
- /*
-  * Draws the given [OutputMatrix] into the Canvas.
-  */
- void drawImage(OutputMatrix om, [num scale = 1]) {
-   var timer = new Stopwatch();
-   timer.start();
-   _writeToCanvas2d(om, imageCanvas, hiddenCanvas, scale);
-   this.renderInfo = '${renderInfo} Drawn in ${timer.elapsedMilliseconds/1000} s.';
- }
+    // convert OM infomration to canvas information
+    ImageData id = hiddenCanvas.context2d.createImageData(om.columns, om.rows);
 
- /*
-  * Writes a given [OutputMatrix] to the 2d context of a given [CanvasElement].
-  */
- void _writeToCanvas2d(OutputMatrix om, CanvasElement imageCanvas, CanvasElement hiddenCanvas, num scale) {
-   // make sure canvas is big enough
-   hiddenCanvas.width = om.columns;
-   hiddenCanvas.height = om.rows;
+    CanvasRenderingContext2D destCon = imageCanvas.context2d;
+    int i = 0;
+    for (vec3 color in om.getSerialized()) {
+      // set RGBA
+      id.data[i++] = asRgbInt(color[0]);
+      id.data[i++] = asRgbInt(color[1]);
+      id.data[i++] = asRgbInt(color[2]);
+      id.data[i++] = 255;
+    }
 
-   // convert OM infomration to canvas information
-   ImageData id = hiddenCanvas.context2d.createImageData(om.columns, om.rows);
+    hiddenCanvas.context2d.putImageData(id,0,0);
+    destCon.setTransform(1, 0, 0, 1, 0, 0);
+    destCon.scale(1/scale, 1/scale);
+    destCon.drawImage(hiddenCanvas,0,0);
+  }
 
+  /*
+   * Converts a double [0..1] to a RGB int [0..255].
+   */
+  int asRgbInt(num value) {
+    return (value*255).toInt();
+  }
 
-   CanvasRenderingContext2D destCon = imageCanvas.context2d;
-   int i = 0;
-   for (vec3 color in om.getSerialized()) {
-     // set RGBA
-     id.data[i++] = asRgbInt(color[0]);
-     id.data[i++] = asRgbInt(color[1]);
-     id.data[i++] = asRgbInt(color[2]);
-     id.data[i++] = 255;
-   }
+  /*
+   * Parses a string to int.
+   *
+   * Returns 0 if input is illegal.
+   */
+  int _parseInt(String value) {
+    try {
+      return int.parse(value);
+    } on FormatException catch (e) {
+      print('Illegal integer: $value ($e)');
+      return 0;
+    }
+  }
 
-   hiddenCanvas.context2d.putImageData(id,0,0);
-   destCon.setTransform(1, 0, 0, 1, 0, 0);
-   destCon.scale(scale, scale);
-   destCon.drawImage(hiddenCanvas,0,0);
- }
-
- /*
-  * Converts a double [0..1] to a RGB int [0..255].
-  */
- int asRgbInt(num value) {
-   return (value*255).toInt();
- }
-
- /*
-  * Parses a string to int.
-  *
-  * Returns 0 if input is illegal.
-  */
- int _parseInt(String value) {
-   try {
-     return int.parse(value);
-   } on FormatException catch (e) {
-     print('Illegal integer: $value ($e)');
-     return 0;
-   }
- }
-
- /*
-  * Parses a string to double.
-  *
-  * Returns 0.0 if input is illegal.
-  */
- double _parseDouble(String value) {
-   try {
-     return double.parse(value);
-   } on FormatException catch (e) {
-     print('Illegal double: $value ($e)');
-     return 0.0;
-   }
- }
+  /*
+   * Parses a string to double.
+   *
+   * Returns 0.0 if input is illegal.
+   */
+  double _parseDouble(String value) {
+    try {
+      return double.parse(value);
+    } on FormatException catch (e) {
+      print('Illegal double: $value ($e)');
+      return 0.0;
+    }
+  }
 }

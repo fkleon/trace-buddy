@@ -29,6 +29,7 @@ import 'algebra.dart' as Algebra;
 import 'package:vector_math/vector_math_console.dart' show vec2, vec3, vec4;
 
 part 'expression.dart';
+part 'functions.dart';
 part 'parser.dart';
 part 'evaluator.dart';
 
