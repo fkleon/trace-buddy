@@ -407,12 +407,15 @@ class ImplicitFunction extends Primitive {
     //g.replace();
 
     // Starting interval [0, maxDistance]
-    Interval i = new Interval(0, 50);
+    Interval i = new Interval(0, maxDistance);
 
     //Interval i = f.evaluate(Expr.EvaluationType.INTERVAL, cm);
     //print(i);
 
     num distance = findRootBF(f, i);
+
+    //TODO f needs to be composite for this to work, or have x, y, z substituted.
+    //num distance = findRoot(f, i);
     //findRoot(g, i);
 
     Intersection int = new Intersection(distance, this, r.getPoint3D(distance));
@@ -421,7 +424,7 @@ class ImplicitFunction extends Primitive {
 
   num findRootBF(Expr.MathFunction g, Interval i) {
     //print('Analyze $i');
-    if (i.length() < 0.1) {
+    if (i.length() < 2) {
       return i.min;
     }
 
@@ -440,10 +443,9 @@ class ImplicitFunction extends Primitive {
     }
   }
 
-  /*
   num findRoot(Expr.MathFunction g, Interval i) {
 
-    Expr.Expression tExpr = new Expr.Interval(new Expr.Number(0), new Expr.Number(maxDistance));
+    Expr.Expression tExpr = new Expr.Interval(new Expr.Number(i.min), new Expr.Number(i.max));
     Expr.Variable t = new Expr.Variable('t');
     cm.bindGlobalVariable(t, tExpr);
 
@@ -454,33 +456,48 @@ class ImplicitFunction extends Primitive {
 
     // If interval contains 0, derive G(t)
     if (gEval.containsZero()) {
-      Function gDerived = g.derive();
-      Interval gDerivedEval = gDerived.evaluate(i);
+      Expr.MathFunction gDerived = g.derive('t');
+      Interval gDerivedEval = gDerived.evaluate(Expr.EvaluationType.INTERVAL, cm);
 
       if (gDerivedEval.containsZero()) {
         // Monotonous part of function.
         // -> calculate root
-        newtonRoot(g, i);
+        print(i);
+        _newtonRoot(g, gDerived, (i.min+i.max)/2);
       } else {
         // Recursively split.
-        num r1 = findRoot(new Interval(i.min, (i.min+i.max)/2.0));
-        num r2 = findRoot(new Interval((i.min+i.max)/2.0, i.max));
+        num r1 = findRoot(g, new Interval(i.min, (i.min+i.max)/2.0));
+        num r2 = findRoot(g, new Interval((i.min+i.max)/2.0, i.max));
         return Math.min(r1,r2); // Return root ar minimal distance.
       }
     } else {
       // No root.
       // Return negative value for no hit.
-      return -1;
+//      return -1;
+      return 999999;
     }
   }
 
-  num newtonRoot(Function f, num startValue) {
-    Function g = f.derive();
+  num newtonRoot(Expr.MathFunction f, num startValue) {
+    Expr.MathFunction g = f.derive(f.getParam(0).name); // should be one-dimensional
     return _newtonRoot(f, g, startValue);
   }
 
-  num _newtonRoot(Function f, Function g, num startValue) {
-    num x_i = startValue - (f.evaluate(startValue)/g(evaluate(startValue)));
+  num _newtonRoot(Expr.MathFunction f, Expr.MathFunction g, num startValue) {
+    cm.bindGlobalVariableName('t', new Expr.Number(startValue)); //TODO make it work with cmposites (set f.gerParam(i))..
+    //TODO or allow to evaluate without context model.
+    //print(cm.variables);
+    //print(f.toFullString());
+    num fEval = f.evaluate(Expr.EvaluationType.REAL, cm);
+
+    cm.bindGlobalVariableName('t', new Expr.Number(startValue));
+    num gEval = g.evaluate(Expr.EvaluationType.REAL, cm);
+
+    print(g.toFullString());
+    print('$fEval / $gEval');
+
+    //TODO handle gEval == 0
+    num x_i = startValue - (fEval/gEval);
 
     if ((x_i - startValue).abs() < EPS) {
       return x_i;
@@ -488,7 +505,7 @@ class ImplicitFunction extends Primitive {
       return _newtonRoot(f, g, x_i);
     }
   }
-  */
+
 
   Shader getShader(Intersection intersect) {
     PluggableShader ret = this._shader.clone();
