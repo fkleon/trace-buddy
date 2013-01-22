@@ -2,16 +2,126 @@ part of math_expressions;
 
 class Parser {
   Lexer lex;
-  List<Token> inputStream;
-  List<Expression> expressionStack;
   Parser(){
     lex = new Lexer();
   }
+  
+  Expression parse(String inputString){
+    List<Expression> expressionStack = new List<Expression>();
+    List<Token> inputStream;
+    lex.createUPNStream(inputString);
+    inputStream = lex.tokenStream;
+    for (var i=0;i<inputStream.length;i++){
+      Token currentToken = inputStream[i];
+      
+      
+      if(currentToken.type == TokenType.VAL){
+        Expression currentExpression = new Number(double.parse(currentToken.text));
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.VAR){
+        Expression currentExpression = new Variable(currentToken.text);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.PLUS){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = leftOperand + rightOperand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.MINUS){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = leftOperand - rightOperand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.TIMES){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = leftOperand * rightOperand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.DIV){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = leftOperand / rightOperand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.POW){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = leftOperand ^ rightOperand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.UNMINUS){
+        Expression operand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = - operand;
+        expressionStack.add(currentExpression);
+        continue;
+      }
+ 
+      if(currentToken.type == TokenType.LOG){
+        Expression rightOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression leftOperand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = new Log(leftOperand, rightOperand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.LN){
+        Expression operand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = new Ln(operand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.SQRT){
+        Expression operand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = new Sqrt(operand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+    }
+    if(expressionStack.length>1){
+      throw new StateError("The input String is not a correct expression");
+    }
+    return expressionStack.last;
+  }
+  
 }
 
 class Lexer{
   var keywords = new Map<String, TokenType>();
-  List<Token> tokenStream;
+  List<Token> _tokenStream;
   String intBuffer ="";
   String varBuffer ="";
   Lexer(){
@@ -26,49 +136,56 @@ class Lexer{
     keywords["e"]= TokenType.EFUNC;
     keywords["("]= TokenType.LBRACE;
     keywords[")"]= TokenType.RBRACE;
-    tokenStream = new List<Token>();
+    _tokenStream = new List<Token>();
   }
-
+   
+  List<Token> get tokenStream =>  _tokenStream;
+  
   /**
-   * creates a list of tokens from the given string
-   */
-    void createTokenStream(String inputString){
-
+   * creates a list of tokens from the given string.
+   */ 
+  
+    List<Token> createTokenStream(String inputString){
+    List<Token> tempTokenStream = new List<Token>();
+      
     String clearedString = inputString.replaceAll(" ", "");
     List<String> stringlist = clearedString.splitChars();
     int siInt;
     for (var i=0; i< stringlist.length;i++){
       String si = stringlist[i];
-      print("Run: $i , si: $si");
       /* check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
      */
       if(keywords.containsKey(si)){
         // check and or do intBuffer and varBuffer
-        if(intBuffer.length >0)doIntBuffer();
-        if(varBuffer.length >0)doVarBuffer();
-        tokenStream.add(new Token(si,keywords[si]));
+        if(intBuffer.length >0)doIntBuffer(tempTokenStream);
+        if(varBuffer.length >0)doVarBuffer(tempTokenStream);
+        tempTokenStream.add(new Token(si,keywords[si]));
       }else{
-      // check if the current string is a Number. If it's the case add the string to the intBuffer
+      // check if the current string is a Number. If it's the case add the string to the intBuffer.
      try {
        siInt = int.parse(si);
-       // the current string is a number and it is added to the intBuffer
+       // the current string is a number and it is added to the intBuffer.
        intBuffer = intBuffer.concat(si);
-       if(varBuffer.length >0)doVarBuffer();
-       print("was in int case");
+       if(varBuffer.length >0)doVarBuffer(tempTokenStream);
      } on FormatException {
-       // the current string is not a number and not a simple keyword, so it has to be a variable or log or ln
+       
+      if(si=="."){
+        intBuffer = intBuffer.concat(si);
+        continue;
+      }
+       // the current string is not a number and not a simple keyword, so it has to be a variable or log or ln.
       if(intBuffer.length >0) {
         /* the intBuffer contains a string and the current string is a variable or part of a complex keyword, so the value is added to the tokenstream
-         * and the current string is added to the var buffer
+         * and the current string is added to the var buffer.
          */
-        doIntBuffer();
+        doIntBuffer(tempTokenStream);
         varBuffer = varBuffer.concat(si);
-        //reset the intBuffer
+        //reset the intBuffer.
         intBuffer ="";
         print("was in text and do int case");
       } else {
-        // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream
+        // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
         print("was in text case");
         varBuffer = varBuffer.concat(si);
          }
@@ -76,47 +193,58 @@ class Lexer{
      }
    }
     if(intBuffer.length >0) {
-      // the intBuffer contains a string and the current string is a variable, so both Tokens are added to the tokenStream
-      doIntBuffer();
+      // the intBuffer contains a string and the current string is a variable, so both Tokens are added to the tokenStream.
+      doIntBuffer(tempTokenStream);
       intBuffer ="";
     }
+    return tempTokenStream;
   }
 
-    void doIntBuffer(){
-      tokenStream.add(new Token(intBuffer,TokenType.VAL));
+    /**
+     * checks if the intBuffer contains a number and adds it to the tokenStream.
+     */
+    void doIntBuffer(List<Token> stream){
+      stream.add(new Token(intBuffer,TokenType.VAL));
       intBuffer = "";
     }
 
-    void doVarBuffer(){
+    /**
+     * checks if the varBuffer contains a keyword or a variable and adds them to the tokenStream.
+     */
+    void doVarBuffer(List<Token> stream){
       if(keywords.containsKey(varBuffer)){
-        tokenStream.add(new Token(varBuffer,keywords[varBuffer]));
+        stream.add(new Token(varBuffer,keywords[varBuffer]));
       }else{
-        tokenStream.add(new Token(varBuffer,TokenType.VAR));
+        stream.add(new Token(varBuffer,TokenType.VAR));
       }
       varBuffer = "";
     }
 
-  List<Token> shuntingYard(){
-    if(tokenStream.isEmpty) throw new Exception("tokenStream was empty you frickin moron");
+    
+    /**
+     * Transforms the lexers token stream into UPN.
+     */
+    List<Token> shuntingYard(List<Token> stream){
+    if(stream.isEmpty) throw new Exception("tokenStream was empty you frickin moron");
     List<Token> outputStream = new List<Token>();
     List<Token> operatorBuffer = new List<Token>();
 
-    for(int i=0;i<tokenStream.length;i++){
-      Token tempToken = tokenStream[i];
+    for(int i=0;i<stream.length;i++){
+      Token tempToken = stream[i];
 
-      //if the current Token is a value or a variable, put them into the outputstream
+      //if the current Token is a value or a variable, put them into the outputstream.
       if(tempToken.type == TokenType.VAL || tempToken.type == TokenType.VAR){
         outputStream.add(tempToken);
         continue;
       }
 
-      //if the current Token is a left brace, put it on the operator buffer
+      //if the current Token is a left brace, put it on the operator buffer.
       if(tempToken.type == TokenType.LBRACE){
         operatorBuffer.add(tempToken);
         continue;
       }
 
-      //if the current Token is a right brace, empty the operator buffer until you find a left brace
+      //if the current Token is a right brace, empty the operator buffer until you find a left brace.
       if(tempToken.type == TokenType.RBRACE ){
         while(operatorBuffer.last.type != TokenType.LBRACE){
           outputStream.add(operatorBuffer.last);
@@ -125,14 +253,17 @@ class Lexer{
         operatorBuffer.removeLast();
         continue;
       }
-
+      /*
+       * if there is no other operator in the operatorBuffer, than the current operator token ist added to the
+       * operatorBuffer.
+       */
       if(operatorBuffer.isEmpty){
         operatorBuffer.add(tempToken);
         continue;
       }
 
       /* if the current Tokens type is MINUS and the last Token in the operator buffer is of type LBRACE
-       * the current Token is an unary minus, so the tokentype has to be changed
+       * the current Token is an unary minus, so the tokentype has to be changed.
        */
       if(tempToken.type == TokenType.MINUS && operatorBuffer.last.type == TokenType.LBRACE){
         Token newToken = new Token(tempToken.text, TokenType.UNMINUS);
@@ -142,7 +273,7 @@ class Lexer{
       /* if the current token is an operator and it's priority is lower than the priority of the last
        * operator in the operator buffer, than put the operators from the operator buffer into the output
        * stream until you find an operator with a priority lower or equal as the current tokens.
-       * Then add the current Token to the operator buffer
+       * Then add the current Token to the operator buffer.
        */
       if(tempToken.type.priority < operatorBuffer.last.type.priority){
         while(operatorBuffer.length>0 && operatorBuffer.last.type.priority > tempToken.type.priority){
@@ -156,7 +287,10 @@ class Lexer{
         continue;
       }
     }
-
+    /*
+     * when the algorithm reached the end of the input stream, then we add the tokens in the 
+     * operatorBuffer to the outputStream.
+     */
     while(!operatorBuffer.isEmpty){
       outputStream.add(operatorBuffer.last);
       operatorBuffer.removeLast();
@@ -164,14 +298,25 @@ class Lexer{
 
     return outputStream;
   }
+  
+  /** 
+   * This method invokes the createTokenStream methode to create an infix token stream and then invokes the shunting
+   * yards method to transform this stream into an UPN token stream.
+   * 
+   * Returns  List<Token>.
+   */
+  createUPNStream(String inputString){
+    List<Token> infixStream = createTokenStream(inputString);
+    _tokenStream = shuntingYard(infixStream);
+  }
 }
 
 class Token{
   //TODO
-  final String text;
+  var text;
   final TokenType type;
 
-  Token(String this.text, TokenType this.type){
+  Token(var this.text, TokenType this.type){
   }
 
   String toString(){
