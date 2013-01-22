@@ -182,23 +182,32 @@ class RenderController {
     view.render();
   }
 
+  /**
+   * creates a new custom function from the string that is in the function_field text input.
+   * The shader is a phongshader with the current color of the colorpicker.
+   * The name of the function is queried from the function_name field.
+   */
   void add_function(){
     Parser pars = new Parser();
     vec4 color = createColorVec();
-    print(color);
     Shader dynamicShader = new PhongShader(color , color , 50.0, color);
-    Expression customExpr = pars.parse(view.inputString);
-    print(customExpr);
+    InputElement functionElement = query('#function_field');
+    InputElement nameElement = query('#function_name');
+
+    Expression customExpr = pars.parse(functionElement.value);
+    functionElement.value="";
     Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
 
-    MathFunction g = new CustomFunction('g',[x,y,z], customExpr);
-    primitives.add(new ImplicitFunction(g, dynamicShader));
+    MathFunction func = new CustomFunction(nameElement.value,[x,y,z], customExpr);
+    nameElement.value="";
+    primitives.add(new ImplicitFunction(func, dynamicShader));
     scene = new Scene(primitives);
   }
-
+  /**
+   * converts an hex interger to a dezimal integer
+   */
   int hexToSum(String inputHex) {
     String hex = inputHex;
-    print(hex);
     int val = 0;
 
     int len = hex.length;
@@ -219,7 +228,9 @@ class RenderController {
 
     return val;
   }
-
+  /**
+   * creates a vec4 with the rgb values of the color pickers current color
+   */
   vec4 createColorVec(){
     String colorString = view.inputColor.replaceAll("#", "");
     String rString = colorString.substring(0  , 2);
@@ -285,8 +296,7 @@ class TraceBuddyView {
   String _xResStr, _yResStr;
   String xOriginStr, yOriginStr, zOriginStr;
 
-  // input String and color picker
-  String inputString;
+  // color of color picker
   String inputColor;
 
   // Rendering properties
@@ -314,8 +324,7 @@ class TraceBuddyView {
     renderCoords = true;
     renderPreview = false;
     currentScale = calculateScaleFactor(xRes, yRes);
-    inputString = "";
-    inputColor = "";
+    inputColor = "#0000ff";
   }
 
   String get xResStr => _xResStr;
