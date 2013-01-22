@@ -50,6 +50,12 @@
             <button id="btnRender" on-click="view.render()">Render</button>
           </div>
         </fieldset>
+        <fieldset id="implicit_function_input">
+          <legend>Implicit function input</legend>
+          <input type="text" id="implicit_function_field" bind-value="view.inputString"/>
+          <input type="color" id="implicit_function_color" bind-value="view.inputColor"/>
+          <button id="functionButton" on-click="rc.add_function()">Add Function</button>
+        </fieldset>
 
         <fieldset id="sceneInfo">
           <legend>Scene Information</legend>

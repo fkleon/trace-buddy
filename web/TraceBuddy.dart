@@ -111,7 +111,7 @@ class RenderController {
       Shader redShader = new AmbientShader(red);
       Shader greenShader = new AmbientShader(green);
       Shader turquisShader = new AmbientShader(turquis);
-
+      
       Shader phongGreenShader = new PhongShader(green, green, 50.0, green);
       Shader phongRedShader = new PhongShader(red, red, 50.0, red);
       Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
@@ -131,7 +131,9 @@ class RenderController {
       primitives = [new ImplicitFunction(f, phongGreenShader)];
       scene = new Scene(primitives);
     }
-
+    
+   
+    
     // add coordinate system
     scene.displayCCS(view == null ? true : view.renderCoords);
 
@@ -179,7 +181,57 @@ class RenderController {
     view.zOriginStr = camera.center.z.toString();
     view.render();
   }
+  
+  void add_function(){
+    Parser pars = new Parser();
+    vec4 color = createColorVec();
+    print(color);
+    Shader dynamicShader = new PhongShader(color , color , 50.0, color);
+    Expression customExpr = pars.parse(view.inputString);
+    print(customExpr);
+    Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
+    
+    MathFunction g = new CustomFunction('g',[x,y,z], customExpr);
+    primitives.add(new ImplicitFunction(g, dynamicShader));
+    scene = new Scene(primitives);
+  }
+  
+  int hexToSum(String inputHex) {
+    String hex = inputHex;
+    print(hex);
+    int val = 0;
 
+    int len = hex.length;
+    for (int i = 0; i < len; i++) {
+      int hexDigit = hex.charCodeAt(i);
+      if (hexDigit >= 48 && hexDigit <= 57) {
+        val += (hexDigit - 48) * (1 << (4 * (len - 1 - i)));
+      } else if (hexDigit >= 65 && hexDigit <= 70) {
+        // A..F
+        val += (hexDigit - 55) * (1 << (4 * (len - 1 - i)));
+      } else if (hexDigit >= 97 && hexDigit <= 102) {
+        // a..f
+        val += (hexDigit - 87) * (1 << (4 * (len - 1 - i)));
+      } else {
+        throw new ArgumentError("Bad hexidecimal value");
+      }
+    }
+
+    return val;
+  }
+
+  vec4 createColorVec(){
+    String colorString = view.inputColor.replaceAll("#", "");
+    String rString = colorString.substring(0  , 2);
+    String gString = colorString.substring(2  , 4);
+    String bString = colorString.substring(4  , 6);
+    int rInt = hexToSum(rString);
+    int gInt = hexToSum(gString);
+    int bInt = hexToSum(bString);
+   
+    return new vec4.raw(rInt/255, gInt/255, bInt/255,1);
+    
+  }
 }
 
 /**
@@ -233,6 +285,10 @@ class TraceBuddyView {
   String _xResStr, _yResStr;
   String xOriginStr, yOriginStr, zOriginStr;
 
+  // input String and color picker
+  String inputString;
+  String inputColor;
+  
   // Rendering properties
   bool renderCoords;
   bool renderPreview;
@@ -258,6 +314,8 @@ class TraceBuddyView {
     renderCoords = true;
     renderPreview = false;
     currentScale = calculateScaleFactor(xRes, yRes);
+    inputString = "";
+    inputColor = "";
   }
 
   String get xResStr => _xResStr;
