@@ -549,7 +549,7 @@ class Power extends BinaryOperator {
       var exponent = second.evaluate(EvaluationType.REAL, context);
 
       if (exponent is double) {
-        print('Warning, expected natural exponent but is real. Interpreting as int: ${this}');
+        //print('Warning, expected natural exponent but is real. Interpreting as int: ${this}');
         exponent = exponent.toInt();
       }
 
