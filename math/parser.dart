@@ -201,11 +201,15 @@ class Lexer {
     }
 
     if(intBuffer.length > 0) {
-      // the intBuffer contains a string and the current string is a variable, so both Tokens are added to the tokenStream.
+      // There are no more symbols in the input string but there is still an int in the intBuffer
       doIntBuffer(tempTokenStream);
       intBuffer ="";
     }
-
+    if(varBuffer.length > 0) {
+      // There are no more symbols in the input string but there is still an variable or keyword in the varBuffer
+      doVarBuffer(tempTokenStream);
+      varBuffer ="";
+    }
     return tempTokenStream;
   }
 
