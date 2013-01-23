@@ -61,3 +61,8 @@ p {
   background-repeat: no-repeat;
   background-size: 15%
 }
+#function_name{
+  width: 4em;}
+  
+#function_field{
+  width: 25em;}
