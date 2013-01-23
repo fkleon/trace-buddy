@@ -183,10 +183,10 @@ class Lexer{
         varBuffer = varBuffer.concat(si);
         //reset the intBuffer.
         intBuffer ="";
-        print("was in text and do int case");
+      //  print("was in text and do int case");
       } else {
         // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
-        print("was in text case");
+       // print("was in text case");
         varBuffer = varBuffer.concat(si);
          }
        }
@@ -316,6 +316,8 @@ class Token{
   var text;
   final TokenType type;
 
+  bool operator==(Token token) => (token.text == this.text) && (token.type == this.type);
+  
   Token(var this.text, TokenType this.type){
   }
 

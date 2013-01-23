@@ -57,7 +57,10 @@
 
         <fieldset id="implicit_function_input">
           <legend>Implicit function input</legend>
-          <input type="text" id="implicit_function_field" bind-value="view.inputString"/>
+          <label for="function_name">Name:</label>
+          <input type="text" id="function_name"/>
+          <label for="function_field">Function:</label>
+          <input type="text" id="function_field"/>
           <input type="color" id="implicit_function_color" bind-value="view.inputColor"/>
           <button id="functionButton" on-click="rc.add_function()">Add Function</button>
         </fieldset>
