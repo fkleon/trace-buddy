@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:vector_math/vector_math_browser.dart';
+import 'package:vector_math/vector_math_console.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
 
 import '../math/algebra.dart';
