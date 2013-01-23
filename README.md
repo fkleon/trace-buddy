@@ -13,7 +13,7 @@ Distributed under the MIT License, see [LICENSE][] file.
 
 ### Usage Information
 Have a look at the [Wiki pages][tracewiki] for example screenshots and usage information.  
-For now you can find a [live demo of trace-buddy here][tracedemo].
+For now you can find a [live demo of trace-buddy here][tracedemo] (best viewed in Chrome, which includes a native HTML5 color picker).
 
 ### Developer Information
 Have a look at the [DartDoc of trace-buddy][tracedoc] to gain a general overview over its internal architecture.
