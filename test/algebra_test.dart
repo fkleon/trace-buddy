@@ -21,10 +21,19 @@ class AlgebraTests extends TestSet {
   void initTests() {
     // do some funky stuff
     p0 = new Alg.Point3D.zero();
-    p1 = new Alg.Point3D(1,2,3);
-    p2 = new Alg.Point3D(4,-5,7);
-    v1 = new vec3.raw(1,-2,5);
-    v2 = new vec3.raw(-1,0,-7);
+    p1 = new Alg.Point3D(1, 2, 3);
+    p2 = new Alg.Point3D(4, -5, 7);
+    v1 = new vec3.raw(1, -2, 5);
+    v2 = new vec3.raw(-1, 0, -7);
+
+    iNull1 = new Alg.Interval(0, 30);
+    iNull2 = new Alg.Interval(-20, 0);
+    iPos = new Alg.Interval(2, 7);
+    iNeg = new Alg.Interval(-5, -1);
+    iZero = new Alg.Interval(-1, 1);
+    iEmpty = new Alg.Interval.empty();
+
+    i = new Alg.Interval(0.00002, 300);
   }
 
   /*
@@ -32,6 +41,7 @@ class AlgebraTests extends TestSet {
    */
   Alg.Point3D p0,p1,p2;
   vec3 v1,v2;
+  Alg.Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
   // Tests the expected state after point creation.
   pointCreation() {
@@ -115,12 +125,42 @@ class AlgebraTests extends TestSet {
     expect(lerped.z, closeTo(5.36, EPS));
   }
 
-  //TODO interval tests
   intervalCreation() {
-    throw new UnimplementedError();
+    expectInterval(i, 0.00002, 300, true, false);
+    expectInterval(iZero, -1, 1, false, true);
+    expectInterval(iPos, 2, 7, true, false);
+    expectInterval(iNeg, -5, -1, false, false);
+    expectInterval(iNull1, 0, 30 , true, true);
+    expectInterval(iNull2, -20, 0 , false, true);
+    expectEmptyInterval(iEmpty);
   }
 
-  intervalArithmetic() {
-    throw new UnimplementedError();
+  void expectInterval(i, iMin, iMax, iPos, iZero) {
+    expect(i.min, equals(iMin));
+    expect(i.max, equals(iMax));
+    expect(i.isPositive() == iPos, isTrue);
+    expect(i.containsZero() == iZero, isTrue);
+    expect(i.length(), equals(i.max - i.min));
+  }
+
+  void expectEmptyInterval(i) {
+    expect(i.emptySet == true, isTrue);
+    expect(i.min.isNaN, i.max.isNaN);
+  }
+
+  void intervalArithmetic() {
+    Alg.Interval result;
+
+    result = iPos + iNeg;
+    expectInterval(result, -3, 6, false, true);
+
+    result = iNeg + iNeg;
+    expectInterval(result, -10, -2, false, false);
+
+    result = iNeg - iNeg;
+    expectInterval(result, -4, 4, false, true);
+
+    //TODO interval tests * and /
+
   }
 }
