@@ -12,6 +12,7 @@ It has been described by several authors, including Hart<sup>2</sup> and Knoll e
 Distributed under the MIT License, see [LICENSE][] file.
 
 ### Usage Information
+Have a look at the [Wiki pages][tracewiki] for example screenshots and usage information.  
 For now you can find a [live demo of trace-buddy here][tracedemo].
 
 ### Developer Information
@@ -46,6 +47,7 @@ see build.dart
 [license]: https://github.com/fkleon/trace-buddy/edit/master/LICENSE "trace-buddy License"
 [tracedoc]: https://130.185.104.44/trace-buddy/docs "trace-buddy DartDoc"
 [tracedemo]: https://130.185.104.44/trace-buddy/demo/out/TraceBuddy.html "trace-buddy live demo"
+[tracewiki]: https://github.com/fkleon/trace-buddy/wiki "trace-buddy wiki"
 [hart1993]: http://mathinfo.univ-reims.fr/IMG/pdf/ray-tracing-implicit-surfaces.pdf "Ray Tracing Implicit Surfaces, PDF"
 [knoll2009]: http://www.cs.utah.edu/~knolla/cgrtia.pdf "Fast Ray Tracing of Arbitrary Implicit Surfaces with Interval and Affine Arithmetic, PDF"
 [bohlender2010]: http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf "Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF"
