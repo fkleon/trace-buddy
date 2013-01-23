@@ -188,14 +188,25 @@ class RenderController {
    * The name of the function is queried from the function_name field.
    */
   void add_function(){
+    view.functionAddError = '';
     Parser pars = new Parser();
     vec4 color = createColorVec();
     Shader dynamicShader = new PhongShader(color , color , 50.0, color);
+
     InputElement functionElement = query('#function_field');
     InputElement nameElement = query('#function_name');
 
-    Expression customExpr = pars.parse(functionElement.value);
-    functionElement.value="";
+    Expression customExpr;
+
+    try {
+      customExpr = pars.parse(functionElement.value);
+    } catch (e) {
+      view.functionAddError = e.toString();
+      return;
+    }
+
+    functionElement.value = "";
+
     Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
 
     MathFunction func = new CustomFunction(nameElement.value,[x,y,z], customExpr);
@@ -287,6 +298,7 @@ class TraceBuddyView {
 
   // Render information
   String renderInfo;
+  String functionAddError;
 
   // Scene information
   String get sceneInformation => '${primitives.length} primitives in scene.';
@@ -315,7 +327,7 @@ class TraceBuddyView {
    * Initializes image canvas, resolution, other stuff and scale factor.
    */
   TraceBuddyView(RenderController this.rc) {
-    renderInfo = '';
+    renderInfo = functionAddError = '';
     initializeImageCanvas(400, 300);
     _xResStr = '400';
     _yResStr = '300';

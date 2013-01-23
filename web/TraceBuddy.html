@@ -62,7 +62,10 @@
           <label for="function_field">Function:</label>
           <input type="text" id="function_field"/>
           <input type="color" id="implicit_function_color" bind-value="view.inputColor"/>
-          <button id="functionButton" on-click="rc.add_function()">Add Function</button>
+          <div>
+            <button id="functionButton" on-click="rc.add_function()">Add Function</button>
+            <div class="error">{{view.functionAddError}}</div>
+          </div>
         </fieldset>
 
         <fieldset id="sceneInfo">
