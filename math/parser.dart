@@ -123,8 +123,8 @@ class Parser {
 class Lexer {
   var keywords = new Map<String, TokenType>();
   List<Token> _tokenStream;
-  String intBuffer ="";
-  String varBuffer ="";
+  String intBuffer = "";
+  String varBuffer = "";
 
   Lexer() {
     keywords["+"] = TokenType.PLUS;
@@ -160,8 +160,10 @@ class Lexer {
        */
       if(keywords.containsKey(si)) {
         // check and or do intBuffer and varBuffer
-        if(intBuffer.length > 0)doIntBuffer(tempTokenStream);
-        if(varBuffer.length > 0)doVarBuffer(tempTokenStream);
+        if(intBuffer.length > 0)
+          doIntBuffer(tempTokenStream);
+        if(varBuffer.length > 0)
+          doVarBuffer(tempTokenStream);
         tempTokenStream.add(new Token(si, keywords[si]));
       } else {
         // check if the current string is a Number. If it's the case add the string to the intBuffer.
@@ -169,8 +171,10 @@ class Lexer {
           siInt = int.parse(si);
           // the current string is a number and it is added to the intBuffer.
           intBuffer = intBuffer.concat(si);
-          if(varBuffer.length >0)doVarBuffer(tempTokenStream);
+          if(varBuffer.length > 0)
+            doVarBuffer(tempTokenStream);
         } on FormatException {
+          // check if the current string is part of a floating point input
           if(si=="."){
             intBuffer = intBuffer.concat(si);
             continue;
@@ -190,6 +194,7 @@ class Lexer {
             // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
             // print("was in text case");
             varBuffer = varBuffer.concat(si);
+            doVarBuffer(tempTokenStream);
           }
         }
       }
