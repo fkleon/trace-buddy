@@ -20,10 +20,14 @@
         <fieldset id="cameraControls">
         <legend>Camera Controls</legend>
           <div>
+            <label>Rotate</label>
             <button id="controlUp" on-click="rc.rotate(0,-10)">Up</button>
             <button id="controlDown" on-click="rc.rotate(0,10)">Down</button>
             <button id="controlLeft" on-click="rc.rotate(-10,0)">Left</button>
             <button id="controlRight" on-click="rc.rotate(10,0)" >Right</button>
+          </div>
+          <div>
+            <label>Move</label>
             <button id="controlForward" on-click="rc.zoom(2)">Forward</button>
             <button id="controlBackward" on-click="rc.zoom(-2)">Backward</button>
           </div>
