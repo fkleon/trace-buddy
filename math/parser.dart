@@ -194,7 +194,6 @@ class Lexer {
             // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
             // print("was in text case");
             varBuffer = varBuffer.concat(si);
-            doVarBuffer(tempTokenStream);
           }
         }
       }
@@ -206,7 +205,7 @@ class Lexer {
       intBuffer ="";
     }
     if(varBuffer.length > 0) {
-      // There are no more symbols in the input string but there is still an variable or keyword in the varBuffer
+      // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
       doVarBuffer(tempTokenStream);
       varBuffer ="";
     }
