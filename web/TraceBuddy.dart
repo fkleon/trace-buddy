@@ -339,6 +339,23 @@ class TraceBuddyView {
     inputColor = "#0000ff";
   }
 
+  bool controlHidden = false;
+  
+  void hideControl(){
+    DivElement controls = query('#controlsDiv');
+    ButtonElement butt = query('#hideButton');
+    if(controlHidden){
+      controls.style.display='block';
+      controlHidden = false;
+      butt.text = "Hide Control";
+    }else{
+      controls.style.display='none';
+      controlHidden = true;
+      butt.text = "Show Control";
+
+    }
+  }
+  
   String get xResStr => _xResStr;
   String get yResStr => _yResStr;
 
@@ -412,6 +429,8 @@ class TraceBuddyView {
 
       drawImage(rc.om);
     }
+    
+   
   }
 
   /*

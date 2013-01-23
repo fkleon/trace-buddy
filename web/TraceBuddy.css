@@ -73,3 +73,9 @@ p {
 #function_field {
   width: 25em;
 }
+
+#hideButton{
+  position: absolute;
+  top:10px;
+  right:10px;  
+  }
