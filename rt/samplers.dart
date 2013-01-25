@@ -61,7 +61,7 @@ class RegularSampler extends Sampler {
   RegularSampler(this.xSamples, this.ySamples): super();
 
   Collection<Sample> getSamples(int x, int y) {
-    List<Sample> samples = new List<Sample>(xSamples*ySamples);
+    List<Sample> samples = new List<Sample>.fixedLength(xSamples*ySamples);
 
     for (int cx = 0; cx < xSamples; cx++) {
       for (int cy = 0; cy < ySamples; cy++) {

@@ -46,8 +46,9 @@ class OutputMatrixTests extends TestSet {
     expect(isBlack(om.getPixel(rows, columns)), isTrue);
 
     for (int i = 1; i<=rows; i++) {
-      for (int j = 1; j<=columns; j++)
+      for (int j = 1; j<=columns; j++) {
         expect(isBlack(om.getPixel(i, j)), isTrue);
+      }
     }
 
     // expect all rows to return normally
@@ -75,7 +76,7 @@ class OutputMatrixTests extends TestSet {
     expect(isRed(om.getPixel(2,5)),isTrue);
 
     // build red row
-    List<vec3> redRow = new List<vec3>(columns);
+    List<vec3> redRow = new List<vec3>.fixedLength(columns);
     for (int i=0; i<columns; i++) {
       redRow[i] = red;
     }
@@ -100,8 +101,9 @@ class OutputMatrixTests extends TestSet {
 
     // expect all pixels to be black after clear
     for (int i = 1; i<=rows; i++) {
-      for (int j = 1; j<=columns; j++)
+      for (int j = 1; j<=columns; j++) {
         expect(isBlack(om.getPixel(i, j)), isTrue);
+      }
     }
   }
 }

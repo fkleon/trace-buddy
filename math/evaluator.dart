@@ -110,7 +110,7 @@ class ContextModel {
    * Throws a StateError, if function is not bound.
    */
   MathFunction getFunction(String name) {
-    var candidates = functions.filter((mathFunction) => mathFunction.name == name);
+    var candidates = functions.where((mathFunction) => mathFunction.name == name).toSet();
     if (candidates.length > 1) {
       for (MathFunction fun in candidates) {
         // just grab first - should not contain doubles.

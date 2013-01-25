@@ -22,5 +22,5 @@ void main() {
                   new BBoxTests(),
                   new OutputMatrixTests()];
 
-  new TestExecutor.with(testSets).runTests();
+  new TestExecutor.initWith(testSets).runTests();
 }

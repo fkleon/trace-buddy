@@ -246,7 +246,7 @@ class Plus extends BinaryOperator {
     if (_isNumber(secondOp, 0)) {
       return firstOp;
     }
-    
+
     if (secondOp is UnaryMinus) {
       return firstOp - secondOp.exp; // a + -(b) = a - b
     }
@@ -301,7 +301,7 @@ class Minus extends BinaryOperator {
     if (_isNumber(secondOp, 0)) {
       return firstOp;
     }
-    
+
     if (secondOp is UnaryMinus) {
       return firstOp + secondOp.exp; // a - -(b) = a + b
     }
@@ -682,7 +682,7 @@ class Vector extends Literal {
   int get length => elements.length;
 
   Expression derive(String toVar) {
-    List<Expression> elementDerivatives = new List<Expression>(length);
+    List<Expression> elementDerivatives = new List<Expression>.fixedLength(length);
 
     // Derive each element.
     for (int i = 0; i < length; i++) {
@@ -696,7 +696,7 @@ class Vector extends Literal {
    * Simplifies all elements of this vector.
    */
   Expression simplify() {
-    List<Expression> simplifiedElements = new List<Expression>(length);
+    List<Expression> simplifiedElements = new List<Expression>.fixedLength(length);
 
     // Simplify each element.
     for (int i = 0; i < length; i++) {

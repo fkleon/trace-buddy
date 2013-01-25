@@ -24,5 +24,5 @@ void main() {
                   new ExpressionTests(),
                   new ParserTests()];
 
-  new TestExecutor.with(testSets).runTests();
+  new TestExecutor.initWith(testSets).runTests();
 }

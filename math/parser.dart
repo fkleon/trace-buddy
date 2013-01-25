@@ -160,10 +160,12 @@ class Lexer {
        */
       if(keywords.containsKey(si)) {
         // check and or do intBuffer and varBuffer
-        if(intBuffer.length > 0)
+        if(intBuffer.length > 0) {
           doIntBuffer(tempTokenStream);
-        if(varBuffer.length > 0)
+        }
+        if(varBuffer.length > 0) {
           doVarBuffer(tempTokenStream);
+        }
         tempTokenStream.add(new Token(si, keywords[si]));
       } else {
         // check if the current string is a Number. If it's the case add the string to the intBuffer.
@@ -171,8 +173,9 @@ class Lexer {
           siInt = int.parse(si);
           // the current string is a number and it is added to the intBuffer.
           intBuffer = intBuffer.concat(si);
-          if(varBuffer.length > 0)
+          if(varBuffer.length > 0) {
             doVarBuffer(tempTokenStream);
+          }
         } on FormatException {
           // check if the current string is part of a floating point input
           if(si=="."){
@@ -236,8 +239,9 @@ class Lexer {
    * Transforms the lexers token stream into UPN.
    */
   List<Token> shuntingYard(List<Token> stream) {
-    if(stream.isEmpty)
+    if(stream.isEmpty) {
       throw new Exception("tokenStream was empty");
+    }
 
     List<Token> outputStream = new List<Token>();
     List<Token> operatorBuffer = new List<Token>();

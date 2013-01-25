@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:isolate';
 
-import 'package:vector_math/vector_math_browser.dart';
+import 'package:vector_math/vector_math_console.dart';
 import '../math/math_expressions.dart';
 import '../math/algebra.dart';
 
@@ -290,7 +290,7 @@ class AsciiDumper {
  */
 class TraceBuddyView {
   //TODO hardcoded x resolution of preview
-  final int lowX = 120;
+  final int lowX = 20;
 
   // The controller
   RenderController rc;
@@ -340,7 +340,7 @@ class TraceBuddyView {
   }
 
   bool controlHidden = false;
-  
+
   void hideControl(){
     DivElement controls = query('#controlsDiv');
     ButtonElement butt = query('#hideButton');
@@ -355,7 +355,7 @@ class TraceBuddyView {
 
     }
   }
-  
+
   String get xResStr => _xResStr;
   String get yResStr => _yResStr;
 
@@ -429,8 +429,8 @@ class TraceBuddyView {
 
       drawImage(rc.om);
     }
-    
-   
+
+
   }
 
   /*

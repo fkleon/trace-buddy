@@ -29,7 +29,7 @@ class OutputMatrix {
    */
   OutputMatrix(int this.rows, int this.columns) {
     // init the array (serialized matrix)
-    _content = new List<vec3>(rows*columns);
+    _content = new List<vec3>.fixedLength(rows*columns);
 
     // set all pixel to black
     clear();

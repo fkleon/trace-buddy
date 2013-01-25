@@ -15,7 +15,7 @@ class TestExecutor {
   /**
    * Creates a test executor with given test sets.
    */
-  TestExecutor.with(this.testSets);
+  TestExecutor.initWith(this.testSets);
 
   /// Contains all registered test sets.
   List<TestSet> testSets;
