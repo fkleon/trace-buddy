@@ -23,19 +23,19 @@ Add the following dependencies to your pubspec.yaml, or just use the provided on
 
 ```dart
 dependencies:
-  browser: any
-  vector_math: 0.9.2
-  unittest: any
+  browser: "0.3.5+1"
+  vector_math: ">=0.9.3"
+  unittest: ">=0.3.5"
   benchmark_harness: ">=1.0.0 <2.0.0"
-  web_ui: any
+  web_ui: "0.3.2"
 ```
 
-vector_math needs to be adjusted..
+Note: vector_math 0.9.3 fixed dynamic constructors, so that no manual adjustment is necessary anymore.
 
 After importing the project in Dart Editor, run the unit test suites to make sure that everything is set up correctly.
 
 #### Compiling
-see build.dart
+When used with the DartEditor, the build.dart script automatically compiles the web_ui components to `web/out/`.
 
 - - -
 <sub>[1] Bohlender, Gerd, and Ulrich Kulisch. 2010. ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard."][bohlender2010] Reliable Computing 15 (1): 36–42.</sub>  
