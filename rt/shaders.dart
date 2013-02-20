@@ -1,7 +1,7 @@
 library rt_shader;
 
 import 'dart:math' as Math;
-import 'package:vector_math/vector_math_console.dart' show vec3, vec4;
+import 'package:vector_math/vector_math.dart' show vec3, vec4;
 import '../math/algebra.dart' show Point3D;
 
 /**

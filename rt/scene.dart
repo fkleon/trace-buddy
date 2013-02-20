@@ -2,7 +2,7 @@ library rt_primitives;
 
 import 'dart:math' as Math;
 
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math.dart';
 import '../math/algebra.dart' show Point3D, Interval;
 import '../math/math_expressions.dart' as Expr;
 

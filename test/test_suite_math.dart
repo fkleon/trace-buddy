@@ -3,7 +3,7 @@ library math_test_suite;
 import 'dart:math' as Math;
 
 import 'package:unittest/unittest.dart';
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math.dart';
 
 import 'test_framework.dart';
 import '../math/algebra.dart' as Alg;

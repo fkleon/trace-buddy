@@ -1,6 +1,6 @@
 library rt_sampler;
 
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math.dart';
 
 /**
  * A [Sample] has a position within a pixel and a weigth.

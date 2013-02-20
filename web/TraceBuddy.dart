@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:isolate';
 
-import 'package:vector_math/vector_math_console.dart';
+import 'package:vector_math/vector_math.dart';
 import '../math/math_expressions.dart';
 import '../math/algebra.dart';
 
