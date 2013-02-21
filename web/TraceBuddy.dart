@@ -23,7 +23,7 @@ void main() {
   view = new TraceBuddyView(rc);
   rc.view = view;
 
-  window.on.load.add((e) => query('#glassplate').style.display='none');
+  window.onLoad.listen((e) => query('#glassplate').style.display='none');
 }
 
 /**
