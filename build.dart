@@ -7,4 +7,4 @@ import 'dart:io';
 main() =>
   build(new Options().arguments,
       ['web/TraceBuddy.html'],
-      baseDir: "rt");
+      baseDir: "");
