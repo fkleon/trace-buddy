@@ -23,11 +23,11 @@ Add the following dependencies to your pubspec.yaml, or just use the provided on
 
 ```dart
 dependencies:
-  browser: "0.3.7+6 <0.3.8"
-  vector_math: ">=0.9.3 <0.9.4"
+  browser: ">=0.3.7+6 <0.3.8"
+  vector_math: ">=0.9.5 <0.9.6"
   unittest: ">=0.3.7+6 <0.3.8"
   benchmark_harness: ">=1.0.2 <1.0.3"
-  web_ui: ">=0.3.3+1 <0.3.4"
+  web_ui: ">=0.3.3+2 <0.3.4"
 ```
 
 Note: vector_math 0.9.3 fixed dynamic constructors, so that no manual adjustment is necessary anymore.
