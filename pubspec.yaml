@@ -2,8 +2,8 @@ name:  TraceBuddy
 description:  A raytracer to render implicit functions.
 
 dependencies:
-  browser: ">=0.3.7+6 <0.3.8"
+  browser: ">=0.4.1 <0.4.2"
   vector_math: ">=0.9.5 <0.9.6"
-  unittest: ">=0.3.7+6 <0.3.8"
+  unittest: ">=0.4.1 <0.4.2"
   benchmark_harness: ">=1.0.2 <1.0.3"
-  web_ui: ">=0.3.3+2 <0.3.4"
+  web_ui: ">=0.4.1 <0.4.2"

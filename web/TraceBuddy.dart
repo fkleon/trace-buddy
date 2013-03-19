@@ -223,7 +223,7 @@ class RenderController {
 
     int len = hex.length;
     for (int i = 0; i < len; i++) {
-      int hexDigit = hex.charCodeAt(i);
+      int hexDigit = hex.codeUnitAt(i);
       if (hexDigit >= 48 && hexDigit <= 57) {
         val += (hexDigit - 48) * (1 << (4 * (len - 1 - i)));
       } else if (hexDigit >= 65 && hexDigit <= 70) {

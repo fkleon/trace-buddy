@@ -150,10 +150,12 @@ class Lexer {
     List<Token> tempTokenStream = new List<Token>();
 
     String clearedString = inputString.replaceAll(" ", "");
-    List<String> stringlist = clearedString.splitChars();
+
+    RuneIterator iter = clearedString.runes.iterator;
     int siInt;
-    for (var i = 0; i < stringlist.length; i++) {
-      String si = stringlist[i];
+
+    while (iter.moveNext()) {
+      String si = iter.currentAsString;
 
       /* check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
