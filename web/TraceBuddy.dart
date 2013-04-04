@@ -382,10 +382,9 @@ class TraceBuddyView {
                   _parseDouble(yOriginStr),
                   _parseDouble(zOriginStr));
 
-  void removePrimitive(Event e) {
-    Element target = (e.target as Element);
-    int elementId = int.parse(target.attributes['data-item-id']);
+  void removePrimitive(Event e, num elementId) {
     rc.scene.remove(elementId);
+    // prevent default event behaviour (html link)
     e.preventDefault();
   }
 
