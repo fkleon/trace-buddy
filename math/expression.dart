@@ -526,7 +526,7 @@ class Power extends BinaryOperator {
     }
 
     if (_isNumber(exponentOp, 0)) {
-      return new Number(1); // x^0 = 1
+      return new Number(1.0); // x^0 = 1
     }
 
     if (_isNumber(exponentOp, 1)) {
@@ -637,12 +637,13 @@ class Number extends Literal {
 
   /**
    * Creates a number literal with given value.
+   * Always holds a double internally.
    */
-  Number(num value): super(value);
+  Number(num value): super(value.toDouble());
 
   bool isConstant() => true;
 
-  num getConstantValue() => value;
+  double getConstantValue() => value;
 
   evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
@@ -658,7 +659,7 @@ class Number extends Literal {
     throw new UnsupportedError('Number $this can not be interpreted as: ${type}');
   }
 
-  Expression derive(String toVar) => new Number(0);
+  Expression derive(String toVar) => new Number(0.0);
 }
 
 /**
@@ -717,21 +718,27 @@ class Vector extends Literal {
 
       // Interpret vector elements as REAL.
       if (length == 2) {
-        return new Vector2(elements[0].evaluate(elementType, context),
-                           elements[1].evaluate(elementType, context));
+        double x,y;
+        x = elements[0].evaluate(elementType, context);
+        y = elements[1].evaluate(elementType, context);
+        return new Vector2(x, y);
       }
 
       if (length == 3) {
-        return new Vector3(elements[0].evaluate(elementType, context),
-                           elements[1].evaluate(elementType, context),
-                           elements[2].evaluate(elementType, context));
+        double x,y,z;
+        x = elements[0].evaluate(elementType, context);
+        y = elements[1].evaluate(elementType, context);
+        z = elements[2].evaluate(elementType, context);
+        return new Vector3(x, y, z);
       }
 
       if (length == 4) {
-        return new Vector4(elements[0].evaluate(elementType, context),
-                           elements[1].evaluate(elementType, context),
-                           elements[2].evaluate(elementType, context),
-                           elements[3].evaluate(elementType, context));
+        double x,y,z,w;
+        x = elements[0].evaluate(elementType, context);
+        y = elements[1].evaluate(elementType, context);
+        z = elements[2].evaluate(elementType, context);
+        w = elements[3].evaluate(elementType, context);
+        return new Vector4(x, y, z, w);
       }
 
       if (length > 4) {
@@ -761,7 +768,7 @@ class Variable extends Literal {
    */
   Variable(String this.name);
 
-  Expression derive(String toVar) => name == toVar ? new Number(1) : new Number(0);
+  Expression derive(String toVar) => name == toVar ? new Number(1.0) : new Number(0.0);
 
   String toString() => '$name';
 
