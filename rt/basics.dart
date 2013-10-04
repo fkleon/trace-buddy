@@ -3,8 +3,7 @@ library rt_basics;
 import 'dart:math' as Math;
 
 import 'package:vector_math/vector_math.dart';// show vec2, Vector3, vec4;
-import '../math/algebra.dart' show Point3D, Interval;
-import '../math/math_expressions.dart' as Expr;
+import 'package:math_expressions/math_expressions.dart' show Point3D, Interval;
 
 import 'scene.dart';
 

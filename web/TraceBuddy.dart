@@ -2,8 +2,7 @@ import 'dart:html';
 import 'dart:isolate';
 
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
-import '../math/math_expressions.dart';
-import '../math/algebra.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 import '../rt/renderer.dart';
 import '../rt/samplers.dart';

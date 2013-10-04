@@ -3,7 +3,7 @@ library rt_renderer;
 import 'dart:math' as Math;
 
 import 'package:vector_math/vector_math.dart' show tan, Vector2, Vector3, Vector4;
-import '../math/algebra.dart' show Point3D;
+import 'package:math_expressions/math_expressions.dart' show Point3D;
 
 import 'basics.dart' show EPS, Ray, Intersection;
 import 'samplers.dart' show Sample, Sampler;

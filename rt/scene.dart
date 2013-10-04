@@ -3,8 +3,7 @@ library rt_primitives;
 import 'dart:math' as Math;
 
 import 'package:vector_math/vector_math.dart';
-import '../math/algebra.dart' show Point3D, Interval;
-import '../math/math_expressions.dart' as Expr;
+import 'package:math_expressions/math_expressions.dart';
 
 import 'basics.dart' show EPS, Ray, IdGen, Intersection;
 import 'shaders.dart' show Shader, AmbientShader, PluggableShader;
@@ -384,20 +383,20 @@ class Sphere extends Primitive {
 class ImplicitFunction extends Primitive {
 
   final num maxDistance = 100;
-  Expr.MathFunction f; // only contains x, y, z
-  Expr.ContextModel cm;
+  MathFunction f; // only contains x, y, z
+  ContextModel cm;
 
-  ImplicitFunction(Expr.MathFunction this.f, [Shader shader]) : super(shader) {
-    this.cm = new Expr.ContextModel();
+  ImplicitFunction(MathFunction this.f, [Shader shader]) : super(shader) {
+    this.cm = new ContextModel();
   }
 
   Intersection intersect(Ray r, num prevBestDistance) {
-    Expr.Variable x = new Expr.Variable('x'), y = new Expr.Variable('y'), z = new Expr.Variable('z');
-    Expr.Variable t = new Expr.Variable('t');
+    Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
+    Variable t = new Variable('t');
 
-    Expr.Expression xExpr = new Expr.Number(r.origin.x) + (t * new Expr.Number(r.direction.x));
-    Expr.Expression yExpr = new Expr.Number(r.origin.y) + (t * new Expr.Number(r.direction.y));
-    Expr.Expression zExpr = new Expr.Number(r.origin.z) + (t * new Expr.Number(r.direction.z));
+    Expression xExpr = new Number(r.origin.x) + (t * new Number(r.direction.x));
+    Expression yExpr = new Number(r.origin.y) + (t * new Number(r.direction.y));
+    Expression zExpr = new Number(r.origin.z) + (t * new Number(r.direction.z));
 
     cm.bindGlobalVariable(x, xExpr);
     cm.bindGlobalVariable(y, yExpr);
@@ -425,17 +424,17 @@ class ImplicitFunction extends Primitive {
     return int;
   }
 
-  num findRootBF(Expr.MathFunction g, Interval i) {
+  num findRootBF(MathFunction g, Interval i) {
     //print('Analyze $i');
     if (i.length() < 0.001) {
       return i.min;
     }
 
-    Expr.Expression tExpr = new Expr.Interval(new Expr.Number(i.min), new Expr.Number(i.max));
-    Expr.Variable t = new Expr.Variable('t');
+    Expression tExpr = new IntervalLiteral(new Number(i.min), new Number(i.max));
+    Variable t = new Variable('t');
     cm.bindGlobalVariable(t, tExpr);
 
-    Interval gEval = g.evaluate(Expr.EvaluationType.INTERVAL, cm);
+    Interval gEval = g.evaluate(EvaluationType.INTERVAL, cm);
 
     if (gEval.containsZero()) {
       num r1 = findRootBF(g, new Interval(i.min, (i.min + i.max) / 2.0));
@@ -446,21 +445,21 @@ class ImplicitFunction extends Primitive {
     }
   }
 
-  num findRoot(Expr.MathFunction g, Interval i) {
+  num findRoot(MathFunction g, Interval i) {
 
-    Expr.Expression tExpr = new Expr.Interval(new Expr.Number(i.min), new Expr.Number(i.max));
-    Expr.Variable t = new Expr.Variable('t');
+    Expression tExpr = new IntervalLiteral(new Number(i.min), new Number(i.max));
+    Variable t = new Variable('t');
     cm.bindGlobalVariable(t, tExpr);
 
     // Calculate value of the function at interval borders
     // G(i.min), G(i.max)
-    Interval gEval = g.evaluate(Expr.EvaluationType.INTERVAL, cm);
+    Interval gEval = g.evaluate(EvaluationType.INTERVAL, cm);
     //Interval gEval = g.evaluate(i);
 
     // If interval contains 0, derive G(t)
     if (gEval.containsZero()) {
-      Expr.MathFunction gDerived = g.derive('t');
-      Interval gDerivedEval = gDerived.evaluate(Expr.EvaluationType.INTERVAL, cm);
+      MathFunction gDerived = g.derive('t');
+      Interval gDerivedEval = gDerived.evaluate(EvaluationType.INTERVAL, cm);
 
       if (gDerivedEval.containsZero()) {
         // Monotonous part of function.
@@ -481,20 +480,20 @@ class ImplicitFunction extends Primitive {
     }
   }
 
-  num newtonRoot(Expr.MathFunction f, num startValue) {
-    Expr.MathFunction g = f.derive(f.getParam(0).name); // should be one-dimensional
+  num newtonRoot(MathFunction f, num startValue) {
+    MathFunction g = f.derive(f.getParam(0).name); // should be one-dimensional
     return _newtonRoot(f, g, startValue);
   }
 
-  num _newtonRoot(Expr.MathFunction f, Expr.MathFunction g, num startValue) {
-    cm.bindGlobalVariableName('t', new Expr.Number(startValue)); //TODO make it work with cmposites (set f.gerParam(i))..
+  num _newtonRoot(MathFunction f, MathFunction g, num startValue) {
+    cm.bindGlobalVariableName('t', new Number(startValue)); //TODO make it work with cmposites (set f.gerParam(i))..
     //TODO or allow to evaluate without context model.
     //print(cm.variables);
     //print(f.toFullString());
-    num fEval = f.evaluate(Expr.EvaluationType.REAL, cm);
+    num fEval = f.evaluate(EvaluationType.REAL, cm);
 
-    cm.bindGlobalVariableName('t', new Expr.Number(startValue));
-    num gEval = g.evaluate(Expr.EvaluationType.REAL, cm);
+    cm.bindGlobalVariableName('t', new Number(startValue));
+    num gEval = g.evaluate(EvaluationType.REAL, cm);
 
     print(g.toFullString());
     print('$fEval / $gEval');
@@ -516,17 +515,17 @@ class ImplicitFunction extends Primitive {
     ret.position = intersect.hitPoint;
 
     // To determine normal, derive function in all directions (gradient).
-    Expr.MathFunction fDx = f.derive('x');
-    Expr.MathFunction fDy = f.derive('y');
-    Expr.MathFunction fDz = f.derive('z');
+    MathFunction fDx = f.derive('x');
+    MathFunction fDy = f.derive('y');
+    MathFunction fDz = f.derive('z');
 
-    cm.bindGlobalVariableName('x', new Expr.Number(intersect.hitPoint.x));
-    cm.bindGlobalVariableName('y', new Expr.Number(intersect.hitPoint.y));
-    cm.bindGlobalVariableName('z', new Expr.Number(intersect.hitPoint.z));
+    cm.bindGlobalVariableName('x', new Number(intersect.hitPoint.x));
+    cm.bindGlobalVariableName('y', new Number(intersect.hitPoint.y));
+    cm.bindGlobalVariableName('z', new Number(intersect.hitPoint.z));
 
-    double gradX = fDx.evaluate(Expr.EvaluationType.REAL, cm);
-    double gradY = fDy.evaluate(Expr.EvaluationType.REAL, cm);
-    double gradZ = fDz.evaluate(Expr.EvaluationType.REAL, cm);
+    double gradX = fDx.evaluate(EvaluationType.REAL, cm);
+    double gradY = fDy.evaluate(EvaluationType.REAL, cm);
+    double gradZ = fDz.evaluate(EvaluationType.REAL, cm);
 
     ret.normal = new Vector3(gradX, gradY, gradZ).normalize();
 

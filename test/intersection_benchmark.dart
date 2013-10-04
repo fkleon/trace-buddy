@@ -2,8 +2,7 @@ import 'dart:math' as math;
 
 import 'package:vector_math/vector_math.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
-
-import '../math/algebra.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class IntersectionBenchmark extends BenchmarkBase {
 
