@@ -89,7 +89,7 @@ class OutputMatrix {
   /**
    * Returns a list of colors for given row.
    */
-  List<Vector3> getRow(int row) => _content.getRange((row - 1) * columns, columns);
+  Iterable<Vector3> getRow(int row) => _content.getRange((row - 1) * columns, row*columns);
 
   /**
    * Returns an array containing all colors in serialized form,
