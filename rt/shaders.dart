@@ -83,7 +83,7 @@ class AmbientShader extends PluggableShader {
    */
   AmbientShader(this.ambCoeff);
 
-  Vector4 getAmbientCoeff() => ambCoeff;
+  Vector4 getAmbientCoeff() => new Vector4.copy(ambCoeff);
 
   Shader clone() => new AmbientShader(new Vector4.copy(ambCoeff));
 }

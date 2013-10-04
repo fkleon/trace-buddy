@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:isolate';
 
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 import '../math/math_expressions.dart';
 import '../math/algebra.dart';
 
@@ -128,11 +128,9 @@ class RenderController {
 
       MathFunction f = new CustomFunction('f', [x, y ,z], expr);
 
-      primitives = [new ImplicitFunction(f, phongGreenShader)];
+      primitives.add(new ImplicitFunction(f, phongGreenShader));
       scene = new Scene(primitives);
     }
-
-
 
     // add coordinate system
     scene.displayCCS(view == null ? true : view.renderCoords);
@@ -429,7 +427,6 @@ class TraceBuddyView {
       drawImage(rc.om);
     }
 
-
   }
 
   /*
@@ -450,7 +447,7 @@ class TraceBuddyView {
     hiddenCanvas.width = om.columns;
     hiddenCanvas.height = om.rows;
 
-    // convert OM infomration to canvas information
+    // convert OM information to canvas information
     ImageData id = hiddenCanvas.context2d.createImageData(om.columns, om.rows);
 
     CanvasRenderingContext2D destCon = imageCanvas.context2d;

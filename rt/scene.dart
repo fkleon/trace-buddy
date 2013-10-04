@@ -241,6 +241,8 @@ class CartesianCoordinateSystem extends Primitive {
 
   InfinitePlane _xAxis, _yAxis, _zAxis;
 
+  Point3D get origin => new Point3D.zero();
+  
   /**
    * Returns always the same instance of CartesianCoordinateSystem in the
    * context of an application.
@@ -522,9 +524,9 @@ class ImplicitFunction extends Primitive {
     cm.bindGlobalVariableName('y', new Expr.Number(intersect.hitPoint.y));
     cm.bindGlobalVariableName('z', new Expr.Number(intersect.hitPoint.z));
 
-    num gradX = fDx.evaluate(Expr.EvaluationType.REAL, cm);
-    num gradY = fDy.evaluate(Expr.EvaluationType.REAL, cm);
-    num gradZ = fDz.evaluate(Expr.EvaluationType.REAL, cm);
+    double gradX = fDx.evaluate(Expr.EvaluationType.REAL, cm);
+    double gradY = fDy.evaluate(Expr.EvaluationType.REAL, cm);
+    double gradZ = fDz.evaluate(Expr.EvaluationType.REAL, cm);
 
     ret.normal = new Vector3(gradX, gradY, gradZ).normalize();
 
