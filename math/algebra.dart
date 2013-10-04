@@ -1,7 +1,7 @@
 library math_algebra;
 
 import 'dart:math' as Math;
-import 'package:vector_math/vector_math.dart' show vec3, vec4;
+import 'package:vector_math/vector_math.dart' show Vector3, Vector4;
 
 /**
  * A point in 3-dimensional space.
@@ -9,12 +9,12 @@ import 'package:vector_math/vector_math.dart' show vec3, vec4;
  */
 class Point3D {
 
-  num x, y, z;
+  double x, y, z;
 
   /**
    * Creates a new Point3D with the given coordinates.
    */
-  Point3D(num this.x, num this.y, num this.z);
+  Point3D(double this.x, double this.y, double this.z);
 
   /**
    * Creates a new Point3D from given vector3 / vector4.
@@ -29,18 +29,18 @@ class Point3D {
   /**
    * Creates a new Point3D at the coordinate origin.
    */
-  Point3D.zero(): x = 0, y = 0, z = 0;
+  Point3D.zero(): x = 0.0, y = 0.0, z = 0.0;
 
   /**
    * Returns a new point which position is determined by moving the old point
    * along the given vector.
    */
-  Point3D operator+(vec3 v) => new Point3D(this.x + v.x, this.y + v.y, this.z + v.z);
+  Point3D operator+(Vector3 v) => new Point3D(this.x + v.x, this.y + v.y, this.z + v.z);
 
   /**
-   * Returns the [vec3] pointing from the given point to this point.
+   * Returns the [Vector3] pointing from the given point to this point.
    */
-  vec3 operator-(Point3D p2) => new vec3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
+  Vector3 operator-(Point3D p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
 
   /**
    * Negates the point's components.
@@ -53,7 +53,8 @@ class Point3D {
    */
   bool operator==(Object o) {
     if (o is Point3D) {
-      return this.x == o.x && this.y == o.y && this.z == o.z;
+      Point3D other = o as Point3D;
+      return this.x == other.x && this.y == other.y && this.z == other.z;
     } else {
       return false;
     }
@@ -74,13 +75,13 @@ class Point3D {
   /**
    * Transforms the point to its vector representation.
    */
-  vec3 toVec3() => new vec3.raw(this.x, this.y, this.z);
+  Vector3 toVec3() => new Vector3(this.x, this.y, this.z);
 
   /**
    * Transforms the point to its homogeneous vector4 representation.
    * The w component is set to 1.
    */
-  vec4 toVec4() => new vec4.raw(this.x, this.y, this.z, 1);
+  Vector4 toVec4() => new Vector4(this.x, this.y, this.z, 1.0);
 
   String toString() => "$x,$y,$z";
 }

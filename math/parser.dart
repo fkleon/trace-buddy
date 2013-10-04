@@ -171,34 +171,40 @@ class Lexer {
         tempTokenStream.add(new Token(si, keywords[si]));
       } else {
         // check if the current string is a Number. If it's the case add the string to the intBuffer.
+        StringBuffer sb = new StringBuffer(intBuffer);
         try {
           siInt = int.parse(si);
           // the current string is a number and it is added to the intBuffer.
-          intBuffer = intBuffer.concat(si);
+          sb.write(si);
+          intBuffer = sb.toString();
           if(varBuffer.length > 0) {
             doVarBuffer(tempTokenStream);
           }
         } on FormatException {
           // check if the current string is part of a floating point input
           if(si=="."){
-            intBuffer = intBuffer.concat(si);
+            sb.write(si);
+            intBuffer = sb.toString();
             continue;
           }
 
           // the current string is not a number and not a simple keyword, so it has to be a variable or log or ln.
+          sb = new StringBuffer(varBuffer);
           if(intBuffer.length > 0) {
             /* the intBuffer contains a string and the current string is a variable or part of a complex keyword, so the value is added to the tokenstream
              * and the current string is added to the var buffer.
              */
             doIntBuffer(tempTokenStream);
-            varBuffer = varBuffer.concat(si);
+            sb.write(si);
+            varBuffer = sb.toString();
             //reset the intBuffer.
             intBuffer ="";
             //  print("was in text and do int case");
           } else {
             // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
             // print("was in text case");
-            varBuffer = varBuffer.concat(si);
+            sb.write(si);
+            varBuffer = sb.toString();
           }
         }
       }

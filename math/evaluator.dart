@@ -115,7 +115,6 @@ class ContextModel {
       for (MathFunction fun in candidates) {
         // just grab first - should not contain doubles.
         return fun;
-        break;
       }
     } else {
       throw new StateError('Function not bound: $name');

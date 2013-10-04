@@ -89,7 +89,7 @@ abstract class Expression {
   bool _isNumber(Expression exp, [num value = 0]) {
     // Check for literal.
     if (exp is Literal && (exp as Literal).isConstant()) {
-      return exp.getConstantValue() == value;
+      return (exp as Literal).getConstantValue() == value;
     }
 
     //TODO Remove this rubbish if we stick to BoundVariable
@@ -190,7 +190,7 @@ class UnaryMinus extends UnaryOperator {
 
     // double minus
     if (simplifiedOp is UnaryMinus) {
-      return simplifiedOp.exp;
+      return (simplifiedOp as UnaryMinus).exp;
     }
 
     // operand == 0
@@ -248,7 +248,7 @@ class Plus extends BinaryOperator {
     }
 
     if (secondOp is UnaryMinus) {
-      return firstOp - secondOp.exp; // a + -(b) = a - b
+      return firstOp - (secondOp as UnaryMinus).exp; // a + -(b) = a - b
     }
 
     return new Plus(firstOp, secondOp);
@@ -303,7 +303,7 @@ class Minus extends BinaryOperator {
     }
 
     if (secondOp is UnaryMinus) {
-      return firstOp + secondOp.exp; // a - -(b) = a + b
+      return firstOp + (secondOp as UnaryMinus).exp; // a - -(b) = a + b
     }
 
     return new Minus(firstOp, secondOp);
@@ -356,12 +356,12 @@ class Times extends BinaryOperator {
 
     bool negative = false;
     if (firstOp is UnaryMinus) {
-      firstOp = firstOp.exp;
+      firstOp = (firstOp as UnaryMinus).exp;
       negative = !negative;
     }
 
     if (secondOp is UnaryMinus) {
-      secondOp = secondOp.exp;
+      secondOp = (secondOp as UnaryMinus).exp;
       negative = !negative;
     }
 
@@ -438,12 +438,12 @@ class Divide extends BinaryOperator {
     bool negative = false;
 
     if (firstOp is UnaryMinus) {
-      firstOp = firstOp.exp;
+      firstOp = (firstOp as UnaryMinus).exp;
       negative = !negative;
     }
 
     if (secondOp is UnaryMinus) {
-      secondOp = secondOp.exp;
+      secondOp = (secondOp as UnaryMinus).exp;
       negative = !negative;
     }
 
@@ -682,7 +682,7 @@ class Vector extends Literal {
   int get length => elements.length;
 
   Expression derive(String toVar) {
-    List<Expression> elementDerivatives = new List<Expression>.fixedLength(length);
+    List<Expression> elementDerivatives = new List<Expression>(length);
 
     // Derive each element.
     for (int i = 0; i < length; i++) {
@@ -696,7 +696,7 @@ class Vector extends Literal {
    * Simplifies all elements of this vector.
    */
   Expression simplify() {
-    List<Expression> simplifiedElements = new List<Expression>.fixedLength(length);
+    List<Expression> simplifiedElements = new List<Expression>(length);
 
     // Simplify each element.
     for (int i = 0; i < length; i++) {
@@ -717,21 +717,21 @@ class Vector extends Literal {
 
       // Interpret vector elements as REAL.
       if (length == 2) {
-        return new vec2.raw(elements[0].evaluate(elementType, context),
-                              elements[1].evaluate(elementType, context));
+        return new Vector2(elements[0].evaluate(elementType, context),
+                           elements[1].evaluate(elementType, context));
       }
 
       if (length == 3) {
-        return new vec3.raw(elements[0].evaluate(elementType, context),
-                              elements[1].evaluate(elementType, context),
-                              elements[2].evaluate(elementType, context));
+        return new Vector3(elements[0].evaluate(elementType, context),
+                           elements[1].evaluate(elementType, context),
+                           elements[2].evaluate(elementType, context));
       }
 
       if (length == 4) {
-        return new vec4.raw(elements[0].evaluate(elementType, context),
-                              elements[1].evaluate(elementType, context),
-                              elements[2].evaluate(elementType, context),
-                              elements[3].evaluate(elementType, context));
+        return new Vector4(elements[0].evaluate(elementType, context),
+                           elements[1].evaluate(elementType, context),
+                           elements[2].evaluate(elementType, context),
+                           elements[3].evaluate(elementType, context));
       }
 
       if (length > 4) {

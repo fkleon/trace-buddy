@@ -26,7 +26,7 @@ library math_expressions;
 
 import 'dart:math' as Math;
 import 'algebra.dart' as Algebra;
-import 'package:vector_math/vector_math.dart' show vec2, vec3, vec4;
+import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 
 part 'expression.dart';
 part 'functions.dart';

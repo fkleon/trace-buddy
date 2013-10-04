@@ -298,8 +298,9 @@ class Exponential extends DefaultFunction {
     }
 
     if (expSimpl is Times && (expSimpl as Times).second is Ln) {
-     Ln ln = expSimpl.second;
-     return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
+     Times t = expSimpl as Times;
+     Ln ln = t.second;
+     return new Power(ln.arg, t.first); // e^(x*ln(y)) = y^x
     }
 
     return new Exponential(expSimpl);
@@ -521,10 +522,10 @@ class Sqrt extends Root {
     Expression argSimpl = arg.simplify();
 
     if (argSimpl is Power) {
-      Expression exponent = argSimpl.second;
+      Expression exponent = (argSimpl as Power).second;
       if (exponent is Number) {
-        if (exponent.value == 2) {
-          return argSimpl.first; // sqrt(x^2) = x
+        if ((exponent as Number).value == 2) {
+          return (argSimpl as Power).first; // sqrt(x^2) = x
         }
       }
     }
