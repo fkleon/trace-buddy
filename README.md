@@ -19,18 +19,7 @@ For now you can find a [live demo of trace-buddy here][tracedemo] (best viewed i
 Have a look at the [DartDoc of trace-buddy][tracedoc] to gain a general overview over its internal architecture.
 
 #### Dependencies
-Add the following dependencies to your pubspec.yaml, or just use the provided one:
-
-```dart
-dependencies:
-  browser: ">=0.3.7+6 <0.3.8"
-  vector_math: ">=0.9.5 <0.9.6"
-  unittest: ">=0.3.7+6 <0.3.8"
-  benchmark_harness: ">=1.0.2 <1.0.3"
-  web_ui: ">=0.3.3+2 <0.3.4"
-```
-
-Note: vector_math 0.9.3 fixed dynamic constructors, so that no manual adjustment is necessary anymore.
+For a list of dependencies, see [pubspec.yaml](pubspec.yaml).
 
 After importing the project in Dart Editor, run the unit test suites to make sure that everything is set up correctly.
 
