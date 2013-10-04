@@ -279,7 +279,7 @@ class ExpressionTests extends TestSet {
   }
 
   bool _hasMember(expr, m, [m2]) {
-    if (?m2) {
+    if (m2 != null) {
       // Binary op.
       return expr.first == m && expr.second == m2;
     } else {

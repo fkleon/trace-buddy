@@ -13,8 +13,8 @@ class RayTests extends TestSet {
   };
 
   void initTests() {
-    r1 = new Ray(new Point3D.zero(), new vec3.raw(1,0,0));
-    r2 = new Ray(new Point3D(1,-1,1), new vec3.raw(0,1,0));
+    r1 = new Ray(new Point3D.zero(), new Vector3(1.0,0.0,0.0));
+    r2 = new Ray(new Point3D(1.0,-1.0,1.0), new Vector3(0.0,1.0,0.0));
   }
 
   /*
@@ -28,20 +28,20 @@ class RayTests extends TestSet {
     expect(r1.direction.y, equals(0));
     expect(r1.direction.z, equals(0));
 
-    expect(r2.origin, equals(new Point3D(1,-1,1)));
+    expect(r2.origin, equals(new Point3D(1.0,-1.0,1.0)));
     expect(r2.direction.x, equals(0));
     expect(r2.direction.y, equals(1));
     expect(r2.direction.z, equals(0));
   }
 
   rayPosition() {
-    expect(r1.getPoint3D(5), equals(new Point3D(5, 0, 0)));
+    expect(r1.getPoint3D(5), equals(new Point3D(5.0, 0.0, 0.0)));
     expect(r1.getPoint3D(-0.66).x, closeTo(-0.66, EPS));
     expect(r1.getPoint3D(0), equals(new Point3D.zero()));
 
-    expect(r2.getPoint3D(3), equals(new Point3D(1, 2, 1)));
+    expect(r2.getPoint3D(3), equals(new Point3D(1.0, 2.0, 1.0)));
     expect(r2.getPoint3D(-0.66).y, closeTo(-1.66, EPS));
-    expect(r2.getPoint3D(-0), equals(new Point3D(1, -1, 1)));
+    expect(r2.getPoint3D(-0), equals(new Point3D(1.0, -1.0, 1.0)));
   }
 }
 
@@ -61,14 +61,14 @@ class BBoxTests extends TestSet {
 
   void initTests() {
     // easy, aligned rays
-    r1 = new Ray(new Point3D.zero(), new vec3.raw(1, 0, 0));
-    r2 = new Ray(new Point3D(1, -10, 1), new vec3.raw(0, 1, 0));
+    r1 = new Ray(new Point3D.zero(), new Vector3(1.0, 0.0, 0.0));
+    r2 = new Ray(new Point3D(1.0, -10.0, 1.0), new Vector3(0.0, 1.0, 0.0));
     // something harder
-    r3 = new Ray(new Point3D(0.153, 0.1365, -0.367), new vec3.raw(0.25, 0.25, 0.25));
+    r3 = new Ray(new Point3D(0.153, 0.1365, -0.367), new Vector3(0.25, 0.25, 0.25));
 
     // aligned boxes
-    bbox1 = new BoundingBox(new Point3D(2, -1, -1), new Point3D(3, 1, 1));
-    bbox2 = new BoundingBox(new Point3D(-1, 0, -1), new Point3D(3, 10, 2));
+    bbox1 = new BoundingBox(new Point3D(2.0, -1.0, -1.0), new Point3D(3.0, 1.0, 1.0));
+    bbox2 = new BoundingBox(new Point3D(-1.0, 0.0, -1.0), new Point3D(3.0, 10.0, 2.0));
 
     // big box.
     bbox3 = new BoundingBox(new Point3D(-30.0084, 1.111, -30.212), new Point3D(4687.99, 500.2135, 135.11));
@@ -103,7 +103,7 @@ class BBoxTests extends TestSet {
   }
 
   bboxIntersectAligned() {
-    vec2 result = bbox1.intersect(r1);
+    Vector2 result = bbox1.intersect(r1);
     print(result);
     expect(result.x, equals(2));
     expect(result.y, equals(3));
@@ -123,7 +123,7 @@ class BBoxTests extends TestSet {
   }
 
   bboxIntersectUnaligned() {
-    vec2 result = bbox3.intersect(r3);
+    Vector2 result = bbox3.intersect(r3);
     print(result);
 
     //TODO find exact intersection distances

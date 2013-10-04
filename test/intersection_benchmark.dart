@@ -12,32 +12,32 @@ class IntersectionBenchmark extends BenchmarkBase {
   // Not measured: setup code executed before the benchmark runs.
   void setup() {
     // init sphere
-    c = new Point3D(10, 0, 0);
+    c = new Point3D(10.0, 0.0, 0.0);
     r = 1.0;
 
     // init ray with 2 hitpoints
     o1 = new Point3D.zero();
-    d1 = new vec3.raw(10,1,0).normalize();
+    d1 = new Vector3(10.0,1.0,0.0).normalize();
 
     // init ray with 1 hitpoint
-    o2 = new Point3D(0,1,0);
-    d2 = new vec3.raw(10, 0, 0).normalize();
+    o2 = new Point3D(0.0,1.0,0.0);
+    d2 = new Vector3(10.0, 0.0, 0.0).normalize();
 
     // init ray with no hitpoint
-    o3 = new Point3D(0,0,0);
-    d3 = new vec3.raw(1, 1, 0).normalize();
+    o3 = new Point3D.zero();
+    d3 = new Vector3(1.0, 1.0, 0.0).normalize();
   }
 
   // Not measured: teardown code executed after the benchmark runs.
   void teardown() { }
 
-  const double EPS = 0.00001;
+  static const double EPS = 0.00001;
   Point3D c, o1, o2, o3;
   double r;
-  vec3 d1, d2, d3;
+  Vector3 d1, d2, d3;
 
   // expects normalized direction vector
-  double calcDet(Point3D o, vec3 d, Point3D c, num r) {
+  double calcDet(Point3D o, Vector3 d, Point3D c, num r) {
     //print('-- CALC DET --');
 
     double A = d.dot(d);
@@ -67,16 +67,16 @@ class IntersectionBenchmark extends BenchmarkBase {
   }
 
   // expects normalized direction vector
-  double calcRT(Point3D o, vec3 d, Point3D c, num r) {
+  double calcRT(Point3D o, Vector3 d, Point3D c, num r) {
     //print('-- CALC RT --');
 
-    vec3 distance = o-c;
+    Vector3 distance = o-c;
     //print('dist: $distance');
     double B = distance.dot(d);
     //print('B: $B');
     double C = B*B - distance.length2 + (r*r);
     //print('C: $C');
-    double l1 = C >= 0.0 ? -B - sqrt(C) : -1.0;
+    double l1 = C >= 0.0 ? -B - math.sqrt(C) : -1.0;
     //double l2 = C >= 0.0 ? -B + sqrt(C) : -1.0; // unnecessary, l1 will always be the nearest hitpoint
 
     if (l1 < 0) {
@@ -91,15 +91,15 @@ class IntersectionBenchmark extends BenchmarkBase {
   }
 
   // buggy
-  double calcGeom(Point3D o, vec3 d, Point3D c, num r) {
+  double calcGeom(Point3D o, Vector3 d, Point3D c, num r) {
     //print('-- CALC GEOM --');
 
-    vec3 b = d.scale((c-o).dot(d));
+    Vector3 b = d.scale((c-o).dot(d));
     //print('b: $b');
     Point3D B = new Point3D(b.x, b.y, b.z);
     //print('B: $B');
 
-    vec3 dist = B-c;
+    Vector3 dist = B-c;
     //print('dist_len: ${dist.length}');
 
     double hitDist = (r*r) - dist.length2;

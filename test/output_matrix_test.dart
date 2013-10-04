@@ -16,9 +16,9 @@ class OutputMatrixTests extends TestSet {
   // Initialises the matrix and color vectors.
   void initTests() {
     om = new OutputMatrix(rows, columns);
-    black = new vec3.zero();
-    white = new vec3.raw(1,1,1);
-    red = new vec3(1,0,0);
+    black = new Vector3.zero();
+    white = new Vector3(1.0,1.0,1.0);
+    red = new Vector3(1.0,0.0,0.0);
   }
 
   /*
@@ -26,7 +26,7 @@ class OutputMatrixTests extends TestSet {
    */
   final int rows = 100, columns = 99;
   OutputMatrix om;
-  vec3 black, white, red;
+  Vector3 black, white, red;
 
   // Tests the expected state of the matrix after creation.
   matrixCreation() {
@@ -57,15 +57,15 @@ class OutputMatrixTests extends TestSet {
     }
   }
 
-  bool isBlack(vec3 color) {
+  bool isBlack(Vector3 color) {
     return color.x == 0 && color.y == 0 && color.z == 0;
   }
 
-  bool isWhite(vec3 color) {
+  bool isWhite(Vector3 color) {
     return color.x == 1 && color.y == 1 && color.z == 1;
   }
 
-  bool isRed(vec3 color) {
+  bool isRed(Vector3 color) {
     return color.x == 1 && color.y == 0 && color.z == 0;
   }
 
@@ -76,7 +76,7 @@ class OutputMatrixTests extends TestSet {
     expect(isRed(om.getPixel(2,5)),isTrue);
 
     // build red row
-    List<vec3> redRow = new List<vec3>.fixedLength(columns);
+    List<Vector3> redRow = new List<Vector3>(columns);
     for (int i=0; i<columns; i++) {
       redRow[i] = red;
     }

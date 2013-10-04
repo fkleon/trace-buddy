@@ -44,7 +44,7 @@ class RenderController {
 
   RenderController() {
     // initialize renderer
-    createRenderer(1);
+    createRenderer();
   }
 
   get primitives => scene.nonIdxPrimitives;
@@ -66,7 +66,7 @@ class RenderController {
    * The result of the rendering process is stored in the [OutputMatric] member
    * `om` of this renderer.
    */
-  void renderScene([num scale = 1]) {
+  void renderScene([double scale = 1.0]) {
     if (view == null) {
       throw new ArgumentError('Did not define a view.'); //TODO remove this non-sense
     }
@@ -101,12 +101,12 @@ class RenderController {
    * 2. Create a default sampler, is not yet set. This will be a [DefaultSampler].
    * 3. Create a default camera, if not yet set.
    */
-  void createRenderer([num scale = 1]) {
+  void createRenderer([double scale = 1.0]) {
     // load scene
     if (scene == null) {
-      vec4 red = new vec4.raw(1,0,0,0);
-      vec4 green = new vec4.raw(0,1,0,0);
-      vec4 turquis = new vec4.raw(0,1,1,0);
+      Vector4 red = new Vector4(1.0,0.0,0.0,0.0);
+      Vector4 green = new Vector4(0.0,1.0,0.0,0.0);
+      Vector4 turquis = new Vector4(0.0,1.0,1.0,0.0);
 
       Shader redShader = new AmbientShader(red);
       Shader greenShader = new AmbientShader(green);
@@ -116,9 +116,9 @@ class RenderController {
       Shader phongRedShader = new PhongShader(red, red, 50.0, red);
       Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
 
-      Collection<Primitive> primitives = [new InfinitePlane(new Point3D(0,-2,0),new vec3.raw(0, 1, 0), phongTurquisShader),
-                                          new Sphere(new Point3D(10,0,0),2,phongGreenShader),
-                                          new Sphere(new Point3D(-4,-1,1),0.2,phongRedShader)];
+      List<Primitive> primitives = [new InfinitePlane(new Point3D(0.0,-2.0,0.0),new Vector3(0.0, 1.0, 0.0), phongTurquisShader),
+                                    new Sphere(new Point3D(10.0,0.0,0.0),2,phongGreenShader),
+                                    new Sphere(new Point3D(-4.0,-1.0,1.0),0.2,phongRedShader)];
 
       Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
       Number two = new Number(2);
@@ -145,13 +145,13 @@ class RenderController {
 
     // load camera
     if (camera == null) {
-      Point3D cameraOrigin = view == null ? new Point3D(-5,2,-5) : this.view.cameraOrigin;
-      vec2 res = view == null ? new vec2.raw(300,200) : this.view.res.scale(scale);
+      Point3D cameraOrigin = view == null ? new Point3D(-5.0,2.0,-5.0) : this.view.cameraOrigin;
+      Vector2 res = view == null ? new Vector2(300.0,200.0) : this.view.res.scale(scale);
 
       camera = new PerspectiveCamera.lookAt(
           cameraOrigin,
-          new Point3D(0,0,0),
-          new vec3.raw(0,1,0),
+          new Point3D(0.0,0.0,0.0),
+          new Vector3(0.0,1.0,0.0),
           60,
           res);
     }
@@ -190,7 +190,7 @@ class RenderController {
   void add_function(){
     view.functionAddError = '';
     Parser pars = new Parser();
-    vec4 color = createColorVec();
+    Vector4 color = createColorVec();
     Shader dynamicShader = new PhongShader(color , color , 50.0, color);
 
     InputElement functionElement = query('#function_field');
@@ -240,9 +240,9 @@ class RenderController {
     return val;
   }
   /**
-   * creates a vec4 with the rgb values of the color pickers current color
+   * creates a Vector4 with the rgb values of the color pickers current color
    */
-  vec4 createColorVec(){
+  Vector4 createColorVec(){
     String colorString = view.inputColor.replaceAll("#", "");
     String rString = colorString.substring(0  , 2);
     String gString = colorString.substring(2  , 4);
@@ -251,7 +251,7 @@ class RenderController {
     int gInt = hexToSum(gString);
     int bInt = hexToSum(bString);
 
-    return new vec4.raw(rInt/255, gInt/255, bInt/255,1);
+    return new Vector4(rInt/255, gInt/255, bInt/255,1.0);
 
   }
 }
@@ -264,7 +264,7 @@ class AsciiDumper {
   static void dumpAsciiRGB(OutputMatrix om) {
     for (int row = 1; row < om.rows; row++) {
       List<String> rowString = new List<String>();
-      for (vec3 rgb in om.getRow(row)) {
+      for (Vector3 rgb in om.getRow(row)) {
         if (isBlack(rgb)) rowString.add('-');
         else if (isWhite(rgb)) rowString.add('W');
         else if (isRed(rgb)) rowString.add('R');
@@ -277,11 +277,11 @@ class AsciiDumper {
     }
   }
 
-  static bool isBlack(vec3 rgb) => rgb.x == 0 && rgb.y == 0 && rgb.z == 0;
-  static bool isWhite(vec3 rgb) => rgb.x == 1 && rgb.y == 1 && rgb.z == 1;
-  static bool isRed(vec3 rgb) => rgb.x == 1 && rgb.y == 0 && rgb.z == 0;
-  static bool isGreen(vec3 rgb) => rgb.x == 0 && rgb.y == 1 && rgb.z == 0;
-  static bool isBlue(vec3 rgb) => rgb.x == 0 && rgb.y == 0 && rgb.z == 1;
+  static bool isBlack(Vector3 rgb) => rgb.x == 0 && rgb.y == 0 && rgb.z == 0;
+  static bool isWhite(Vector3 rgb) => rgb.x == 1 && rgb.y == 1 && rgb.z == 1;
+  static bool isRed(Vector3 rgb) => rgb.x == 1 && rgb.y == 0 && rgb.z == 0;
+  static bool isGreen(Vector3 rgb) => rgb.x == 0 && rgb.y == 1 && rgb.z == 0;
+  static bool isBlue(Vector3 rgb) => rgb.x == 0 && rgb.y == 0 && rgb.z == 1;
 }
 
 /**
@@ -375,7 +375,7 @@ class TraceBuddyView {
 
   int get xRes => _parseInt(_xResStr);
   int get yRes => _parseInt(_yResStr);
-  vec2 get res => new vec2.raw(xRes, yRes);
+  Vector2 get res => new Vector2(xRes.toDouble(), yRes.toDouble());
 
   Point3D get cameraOrigin =>
       new Point3D(_parseDouble(xOriginStr),
@@ -403,7 +403,7 @@ class TraceBuddyView {
   /**
    * Initializes visible image canvas with given size.
    */
-  void initializeImageCanvas(num xRes, num yRes){
+  void initializeImageCanvas(int xRes, int yRes){
     imageCanvas.width = xRes;
     imageCanvas.height = yRes;
   }
@@ -455,7 +455,7 @@ class TraceBuddyView {
 
     CanvasRenderingContext2D destCon = imageCanvas.context2d;
     int i = 0;
-    for (vec3 color in om.getSerialized()) {
+    for (Vector3 color in om.getSerialized()) {
       // set RGBA
       id.data[i++] = asRgbInt(color[0]);
       id.data[i++] = asRgbInt(color[1]);
@@ -472,7 +472,8 @@ class TraceBuddyView {
   /*
    * Converts a double [0..1] to a RGB int [0..255].
    */
-  int asRgbInt(num value) {
+  int asRgbInt(double value) {
+    assert(value >= 0 || value <= 1);
     return (value*255).toInt();
   }
 

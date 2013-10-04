@@ -8,8 +8,8 @@ import 'package:vector_math/vector_math.dart';
 class Sample {
 
   /// The sample's position within a pixel: [0..1]
-  vec2 position;
-  num weight;
+  Vector2 position;
+  double weight;
 
   /**
    * Creates a new [Sample] with the given position and weigth.
@@ -31,7 +31,7 @@ abstract class Sampler {
   /**
    * Returns a collection of samples for the given pixel.
    */
-  Collection<Sample> getSamples(int x, int y);
+  List<Sample> getSamples(int x, int y);
 }
 
 /**
@@ -40,8 +40,8 @@ abstract class Sampler {
  */
 class DefaultSampler extends Sampler {
 
-  Collection<Sample> getSamples(int x, int y) {
-    var sample = new Sample(new vec2.raw(0.5,0.5), 1);
+  List<Sample> getSamples(int x, int y) {
+    var sample = new Sample(new Vector2(0.5,0.5), 1.0);
     return [sample];
   }
 }
@@ -60,13 +60,13 @@ class RegularSampler extends Sampler {
    */
   RegularSampler(this.xSamples, this.ySamples): super();
 
-  Collection<Sample> getSamples(int x, int y) {
-    List<Sample> samples = new List<Sample>.fixedLength(xSamples*ySamples);
+  List<Sample> getSamples(int x, int y) {
+    List<Sample> samples = new List<Sample>(xSamples*ySamples);
 
     for (int cx = 0; cx < xSamples; cx++) {
       for (int cy = 0; cy < ySamples; cy++) {
-        vec2 pos = new vec2.raw(x,y);
-        pos = (pos + new vec2.raw(0.5, 0.5)) / (new vec2.raw(xSamples, ySamples));
+        Vector2 pos = new Vector2(x.toDouble(),y.toDouble());
+        pos = (pos + new Vector2(0.5, 0.5)).divide((new Vector2(xSamples.toDouble(), ySamples.toDouble())));
 
         samples.add(new Sample(pos, (1/(xSamples*ySamples))));
       }

@@ -1,7 +1,7 @@
 library rt_shader;
 
 import 'dart:math' as Math;
-import 'package:vector_math/vector_math.dart' show vec3, vec4;
+import 'package:vector_math/vector_math.dart' show Vector3, Vector4;
 import '../math/algebra.dart' show Point3D;
 
 /**
@@ -23,16 +23,16 @@ abstract class Shader {
    *
    * Returns the zero vector, if the shader does not support reflectance.
    */
-  vec4 getReflectance(vec3 outDir, vec3 inDir) {
-    return new vec4.zero();
+  Vector4 getReflectance(Vector3 outDir, Vector3 inDir) {
+    return new Vector4.zero();
   }
 
   /**
    * Returns the ambient coefficient of the primitive at the hit point.
    * Returns the zero vector, if shader does not support ambient lighting.
    */
-  vec4 getAmbientCoeff() {
-    return new vec4.zero();
+  Vector4 getAmbientCoeff() {
+    return new Vector4.zero();
   }
 
   /**
@@ -40,8 +40,8 @@ abstract class Shader {
    * This is the case for a reflected ray on a mirror.
    * Returns the zero vector, if shader does not support indirect radiance.
    */
-  vec4 getIndirectRadiance() {
-    return new vec4.zero();
+  Vector4 getIndirectRadiance() {
+    return new Vector4.zero();
   }
 
   /**
@@ -60,9 +60,9 @@ abstract class PluggableShader extends Shader {
   /// The position of the hit point.
   Point3D position;
 
-  vec3 _normal; // normalized
+  Vector3 _normal; // normalized
 
-  set normal(vec3 normal) => _normal = normal.normalize();
+  set normal(Vector3 normal) => _normal = normal.normalize();
 
   /// The normal vector at the hit point. Must be stored in normalized form.
   get normal => _normal;
@@ -76,16 +76,16 @@ abstract class PluggableShader extends Shader {
 class AmbientShader extends PluggableShader {
 
   /// The ambient coefficient of this shader.
-  final vec4 ambCoeff;
+  final Vector4 ambCoeff;
 
   /**
    * Createa a new AmbientShader.
    */
   AmbientShader(this.ambCoeff);
 
-  vec4 getAmbientCoeff() => ambCoeff;
+  Vector4 getAmbientCoeff() => ambCoeff;
 
-  Shader clone() => new AmbientShader(new vec4.copy(ambCoeff));
+  Shader clone() => new AmbientShader(new Vector4.copy(ambCoeff));
 }
 
 /**
@@ -98,7 +98,7 @@ class AmbientShader extends PluggableShader {
 class PhongShader extends AmbientShader {
 
   /// The diffuse and specular coefficient of this phong shader.
-  final vec4 difCoeff, specCoeff;
+  final Vector4 difCoeff, specCoeff;
 
   /// The specular exponent of this phong shader.
   final double specExp;
@@ -107,25 +107,25 @@ class PhongShader extends AmbientShader {
    * Creates a new Phong Shader with the given diffuse, specular and ambient
    * coefficients as well as the given specular exponent.
    */
-  PhongShader(this.difCoeff, this.specCoeff, this.specExp, vec4 ambCoeff) : super(ambCoeff);
+  PhongShader(this.difCoeff, this.specCoeff, this.specExp, Vector4 ambCoeff) : super(ambCoeff);
 
-  vec4 getReflectance(vec3 outDir, vec3 inDir) {
-    vec4 Cs = this.specCoeff;
-    vec4 Cd = this.difCoeff;
+  Vector4 getReflectance(Vector3 outDir, Vector3 inDir) {
+    Vector4 Cs = this.specCoeff;
+    Vector4 Cd = this.difCoeff;
     double Ce = this.specExp;
 
-    vec3 halfVect = (inDir.normalize() + outDir.normalize()).normalize();
+    Vector3 halfVect = (inDir.normalize() + outDir.normalize()).normalize();
     double specCoeff = Math.max(halfVect.dot(normal), 0.0);
     specCoeff = Math.exp(Math.log(specCoeff) * Ce);
     double diffCoeff = Math.max(normal.dot(inDir.normalize()), 0.0);
 
     return
-        new vec4.raw(diffCoeff, diffCoeff, diffCoeff, diffCoeff) * Cd
-        + new vec4.raw(specCoeff, specCoeff, specCoeff, specCoeff) * Cs;
+        new Vector4(diffCoeff, diffCoeff, diffCoeff, diffCoeff).multiply(Cd)
+        + new Vector4(specCoeff, specCoeff, specCoeff, specCoeff).multiply(Cs);
   }
 
   Shader clone() =>
-      new PhongShader(new vec4.copy(difCoeff),
-                      new vec4.copy(specCoeff),
+      new PhongShader(new Vector4.copy(difCoeff),
+                      new Vector4.copy(specCoeff),
                       specExp, ambCoeff);
 }

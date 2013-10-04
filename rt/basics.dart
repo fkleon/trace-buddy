@@ -2,7 +2,7 @@ library rt_basics;
 
 import 'dart:math' as Math;
 
-import 'package:vector_math/vector_math.dart';// show vec2, vec3, vec4;
+import 'package:vector_math/vector_math.dart';// show vec2, Vector3, vec4;
 import '../math/algebra.dart' show Point3D, Interval;
 import '../math/math_expressions.dart' as Expr;
 
@@ -23,18 +23,18 @@ class Ray {
   Point3D origin;
 
   /// The direction vector of this ray.
-  vec3 direction;
+  Vector3 direction;
 
   /**
    * Creates a [Ray] from a given origin and direction vector.
    */
-  Ray(Point3D this.origin, vec3 this.direction);
+  Ray(Point3D this.origin, Vector3 this.direction);
 
   /**
    * Returns the point in space after this ray has traveled a given distance
    * from its origin.
    */
-  Point3D getPoint3D(num distance) => this.origin + (this.direction * distance);
+  Point3D getPoint3D(num distance) => this.origin + (this.direction * distance.toDouble());
 
   String toString() => "Ray [$origin --> $direction].";
 }
@@ -90,26 +90,28 @@ class BoundingBox {
    *
    * If the v.x > v.y there is no hit point.
    */
-  vec2 intersect(Ray r) {
+  Vector2 intersect(Ray r) {
     //TODO 0-direction or 0-divisor yield in NaN and +/- Infinity
-    vec3 t1 = (minCorner - r.origin) / r.direction;
-    vec3 t2 = (maxCorner - r.origin) / r.direction;
+    Vector3 t1 = (minCorner - r.origin).divide(r.direction);
+    Vector3 t2 = (maxCorner - r.origin).divide(r.direction);
 
-    vec3 tMin = min(t1, t2);
-    vec3 tMax = max(t1, t2);
+    Vector3 tMin = new Vector3.zero(), tMax = new Vector3.zero();
+    Vector3.min(t1, t2, tMin);
+    Vector3.max(t1, t2, tMax);
 
     num hit1 = Math.max(Math.max(tMin.x, tMin.y), tMin.z);
     num hit2 = Math.min(Math.min(tMin.x, tMin.y), tMin.z);
 
-    return new vec2.raw(hit1, hit2);
+    return new Vector2(hit1, hit2);
   }
 
   /**
    * Extends this bounding box with the given point.
    */
   void extend(Point3D point) {
-    vec3 newMin = min(minCorner.toVec3(), point.toVec3());
-    vec3 newMax = max(maxCorner.toVec3(), point.toVec3());
+    Vector3 newMin = new Vector3.zero(), newMax = new Vector3.zero();
+    Vector3.min(minCorner.toVec3(), point.toVec3(), newMin);
+    Vector3.max(maxCorner.toVec3(), point.toVec3(), newMax);
     minCorner = new Point3D.vec(newMin);
     maxCorner = new Point3D.vec(newMax);
   }
@@ -118,8 +120,9 @@ class BoundingBox {
    * Extends this bounding box with the given bounding box.
    */
   void extendBB(BoundingBox bbox) {
-    vec3 newMin = min(minCorner.toVec3(), bbox.minCorner.toVec3());
-    vec3 newMax = max(maxCorner.toVec3(), bbox.maxCorner.toVec3());
+    Vector3 newMin = new Vector3.zero(), newMax = new Vector3.zero();
+    Vector3.min(minCorner.toVec3(), bbox.minCorner.toVec3(), newMin);
+    Vector3.max(maxCorner.toVec3(), bbox.maxCorner.toVec3(), newMax);
     minCorner = new Point3D.vec(newMin);
     maxCorner = new Point3D.vec(newMax);
   }

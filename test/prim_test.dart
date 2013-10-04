@@ -17,19 +17,19 @@ class PrimTests extends TestSet {
 
   void initTests() {
     prim_origin = new Point3D.zero();
-    prim_s1 = new Sphere(new Point3D(10, 0, 0), 1);
-    prim_s2 = new Sphere(new Point3D(-10, -10, -10), 2);
-    prim_p1 = new InfinitePlane(new Point3D(0, 2, 0), new vec3.raw(0, 1, 0));
-    prim_r1 = new Ray(prim_origin, new vec3.raw(1, 0, 0));
-    prim_r2 = new Ray(prim_origin, new vec3.raw(10, 1, 0).normalize());
-    prim_r3 = new Ray(prim_origin, new vec3.raw(10, 2, 0));
-    prim_r4 = new Ray(prim_origin, new vec3.raw(0, 1, 0));
+    prim_s1 = new Sphere(new Point3D(10.0, 0.0, 0.0), 1);
+    prim_s2 = new Sphere(new Point3D(-10.0, -10.0, -10.0), 2);
+    prim_p1 = new InfinitePlane(new Point3D(0.0, 2.0, 0.0), new Vector3(0.0, 1.0, 0.0));
+    prim_r1 = new Ray(prim_origin, new Vector3(1.0, 0.0, 0.0));
+    prim_r2 = new Ray(prim_origin, new Vector3(10.0, 1.0, 0.0).normalize());
+    prim_r3 = new Ray(prim_origin, new Vector3(10.0, 2.0, 0.0));
+    prim_r4 = new Ray(prim_origin, new Vector3(0.0, 1.0, 0.0));
   }
 
   /**
-   * Tests for vec4 equality based on member equality.
+   * Tests for Vector4 equality based on member equality.
    */
-  bool isEqual(vec4 x, vec4 y)
+  bool isEqual(Vector4 x, Vector4 y)
   => x.x == y.x && x.y == y.y && x.z == y.z && x.w == y.w;
 
   /*
@@ -41,9 +41,9 @@ class PrimTests extends TestSet {
   Point3D prim_origin;
 
   void sphereCreationValid(){
-    expect(prim_s1.center, equals(new Point3D(10, 0, 0)));
+    expect(prim_s1.center, equals(new Point3D(10.0, 0.0, 0.0)));
     expect(prim_s1.radius, equals(1));
-    expect(prim_s2.center, equals(new Point3D(-10, -10, -10)));
+    expect(prim_s2.center, equals(new Point3D(-10.0, -10.0, -10.0)));
     expect(prim_s2.radius, equals(2));
   }
 
@@ -63,7 +63,7 @@ class PrimTests extends TestSet {
   }
 
   void infinitePlaneCreation(){
-    expect(isEqual(prim_p1.equation, new vec4.raw(0, 1, 0, -2)), isTrue);
+    expect(isEqual(prim_p1.equation, new Vector4(0.0, 1.0, 0.0, -2.0)), isTrue);
   }
 
   void infinitePlaneIntersection(){

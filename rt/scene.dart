@@ -37,7 +37,7 @@ abstract class Primitive {
    */
   Primitive([Shader this._shader]) : id = new IdGen().nextId() {
     if (_shader == null) {
-      _shader = new AmbientShader(new vec4.raw(1,0,0,0));
+      _shader = new AmbientShader(new Vector4(1.0,0.0,0.0,0.0));
     }
   }
 
@@ -61,7 +61,7 @@ abstract class Primitive {
   Point3D get origin => null;
 
   /// The primary color of the primitive as vector4 (only used for GUI).
-  vec4 get color => _shader == null ? new vec4.zero() : _shader.getAmbientCoeff();
+  Vector4 get color => _shader == null ? new Vector4.zero() : _shader.getAmbientCoeff();
 
   /// The primary color of the primitive as CSS rgba string (only used for GUI).
   String get colorString => 'rgba(${(color.r*255).toInt()},'
@@ -89,8 +89,8 @@ class Scene extends Primitive {
    * which initialized the scene with the given primitives instead
    * of creating an empty one.
    */
-  Scene([Collection<Primitive> primitives]) {
-    if (?primitives) {
+  Scene([List<Primitive> primitives]) {
+    if (primitives != null) {
       this.nonIdxPrimitives = new List<Primitive>.from(primitives);
     } else {
       this.nonIdxPrimitives = new List<Primitive>();
@@ -183,7 +183,7 @@ class Scene extends Primitive {
 class InfinitePlane extends Primitive {
 
   /// The plane equation.
-  vec4 equation;
+  Vector4 equation;
 
   /// The plane origin.
   Point3D origin;
@@ -191,9 +191,9 @@ class InfinitePlane extends Primitive {
   /**
    * Creates a new [InfinitePlane] from the given origin, normal and shader.
    */
-  InfinitePlane(Point3D this.origin, vec3 normal, [Shader shader]) : super(shader){
-    num w = -normal.dot(origin.toVec3());
-    equation = new vec4(normal,w);
+  InfinitePlane(Point3D this.origin, Vector3 normal, [Shader shader]) : super(shader){
+    double w = -normal.dot(origin.toVec3());
+    equation = new Vector4(normal.x, normal.y, normal.z ,w);
   }
 
   Intersection intersect(Ray r, num prevBestDistance) {
@@ -201,7 +201,8 @@ class InfinitePlane extends Primitive {
 
     // perform calculations in homogeneous space
     // check if ray is orthogonal to normal (= parallel to plane)
-    var div = new vec4(r.direction).dot(equation);
+    Vector4 homDir = new Vector4(r.direction.x, r.direction.y, r.direction.z, 0.0);
+    double div = homDir.dot(equation);
 
     if (div.abs() > EPS) {
       // calculate distance from ray origin to plane
@@ -256,27 +257,27 @@ class CartesianCoordinateSystem extends Primitive {
    */
   CartesianCoordinateSystem._internal() {
     var origin = new Point3D.zero();
-    this._xAxis = new InfinitePlane(origin, new vec3.raw(0, 1, 0));
-    this._yAxis = new InfinitePlane(origin, new vec3.raw(1, 0, 0));
-    this._zAxis = new InfinitePlane(origin, new vec3.raw(0, 1, 0));
+    this._xAxis = new InfinitePlane(origin, new Vector3(0.0, 1.0, 0.0));
+    this._yAxis = new InfinitePlane(origin, new Vector3(1.0, 0.0, 0.0));
+    this._zAxis = new InfinitePlane(origin, new Vector3(0.0, 1.0, 0.0));
   }
 
   Intersection intersect(Ray r, num prevBestDistance) {
     Intersection intRet = _xAxis.intersect(r, prevBestDistance);
     // check if hitpoint is near x axis;
-    if (intRet.distance > 0 && abs(intRet.hitPoint.z) < THRESH && abs(intRet.hitPoint.y) < THRESH) {
+    if (intRet.distance > 0 && intRet.hitPoint.z.abs() < THRESH && intRet.hitPoint.y.abs() < THRESH) {
       return intRet;
     }
 
     intRet = _yAxis.intersect(r, prevBestDistance);
     // check if hitpoint is near y axis;
-    if (intRet.distance > 0 && abs(intRet.hitPoint.x) < THRESH && abs(intRet.hitPoint.z) < THRESH) {
+    if (intRet.distance > 0 && intRet.hitPoint.x.abs() < THRESH && intRet.hitPoint.z.abs() < THRESH) {
       return intRet;
     }
 
     intRet = _zAxis.intersect(r, prevBestDistance);
     // check if hitpoint is near z axis;
-    if (intRet.distance > 0 && abs(intRet.hitPoint.x) < THRESH && abs(intRet.hitPoint.y) < THRESH) {
+    if (intRet.distance > 0 && intRet.hitPoint.x.abs() < THRESH && intRet.hitPoint.y.abs() < THRESH) {
       return intRet;
     }
 
@@ -340,8 +341,8 @@ class Sphere extends Primitive {
     num det = B * B - 4 * A * C;
 
     if (det >= 0) {
-      num sol1 = (-B + sqrt(det)) / (2 * A);
-      num sol2 = (-B - sqrt(det)) / (2 * A);
+      num sol1 = (-B + Math.sqrt(det)) / (2 * A);
+      num sol2 = (-B - Math.sqrt(det)) / (2 * A);
 
       num minDist,maxDist;
       if (sol1 >= sol2) {
@@ -525,7 +526,7 @@ class ImplicitFunction extends Primitive {
     num gradY = fDy.evaluate(Expr.EvaluationType.REAL, cm);
     num gradZ = fDz.evaluate(Expr.EvaluationType.REAL, cm);
 
-    ret.normal = new vec3.raw(gradX, gradY, gradZ).normalize();
+    ret.normal = new Vector3(gradX, gradY, gradZ).normalize();
 
     return ret;
   }

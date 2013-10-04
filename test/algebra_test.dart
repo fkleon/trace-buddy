@@ -21,10 +21,10 @@ class AlgebraTests extends TestSet {
   void initTests() {
     // do some funky stuff
     p0 = new Alg.Point3D.zero();
-    p1 = new Alg.Point3D(1, 2, 3);
-    p2 = new Alg.Point3D(4, -5, 7);
-    v1 = new vec3.raw(1, -2, 5);
-    v2 = new vec3.raw(-1, 0, -7);
+    p1 = new Alg.Point3D(1.0, 2.0, 3.0);
+    p2 = new Alg.Point3D(4.0, -5.0, 7.0);
+    v1 = new Vector3(1.0, -2.0, 5.0);
+    v2 = new Vector3(-1.0, 0.0, -7.0);
 
     iNull1 = new Alg.Interval(0, 30);
     iNull2 = new Alg.Interval(-20, 0);
@@ -40,7 +40,7 @@ class AlgebraTests extends TestSet {
    *  Tests and variables.
    */
   Alg.Point3D p0,p1,p2;
-  vec3 v1,v2;
+  Vector3 v1,v2;
   Alg.Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
   // Tests the expected state after point creation.
