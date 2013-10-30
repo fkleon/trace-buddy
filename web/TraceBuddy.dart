@@ -447,9 +447,9 @@ class TraceBuddyView {
     hiddenCanvas.height = om.rows;
 
     // convert OM information to canvas information
-    ImageData id = hiddenCanvas.context2d.createImageData(om.columns, om.rows);
+    ImageData id = hiddenCanvas.context2D.createImageData(om.columns, om.rows);
 
-    CanvasRenderingContext2D destCon = imageCanvas.context2d;
+    CanvasRenderingContext2D destCon = imageCanvas.context2D;
     int i = 0;
     for (Vector3 color in om.getSerialized()) {
       // set RGBA
@@ -459,7 +459,7 @@ class TraceBuddyView {
       id.data[i++] = 255;
     }
 
-    hiddenCanvas.context2d.putImageData(id,0,0);
+    hiddenCanvas.context2D.putImageData(id,0,0);
     destCon.setTransform(1, 0, 0, 1, 0, 0);
     destCon.scale(1/scale, 1/scale);
     destCon.drawImage(hiddenCanvas,0,0);
