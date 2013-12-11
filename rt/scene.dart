@@ -241,7 +241,7 @@ class CartesianCoordinateSystem extends Primitive {
   InfinitePlane _xAxis, _yAxis, _zAxis;
 
   Point3D get origin => new Point3D.zero();
-  
+
   /**
    * Returns always the same instance of CartesianCoordinateSystem in the
    * context of an application.
@@ -398,9 +398,9 @@ class ImplicitFunction extends Primitive {
     Expression yExpr = new Number(r.origin.y) + (t * new Number(r.direction.y));
     Expression zExpr = new Number(r.origin.z) + (t * new Number(r.direction.z));
 
-    cm.bindGlobalVariable(x, xExpr);
-    cm.bindGlobalVariable(y, yExpr);
-    cm.bindGlobalVariable(z, zExpr);
+    cm.bindVariable(x, xExpr);
+    cm.bindVariable(y, yExpr);
+    cm.bindVariable(z, zExpr);
 
     // Composition G(t) = F(x,y,z) o r(t)
     //Function g = compose(f, r);
@@ -432,7 +432,7 @@ class ImplicitFunction extends Primitive {
 
     Expression tExpr = new IntervalLiteral(new Number(i.min), new Number(i.max));
     Variable t = new Variable('t');
-    cm.bindGlobalVariable(t, tExpr);
+    cm.bindVariable(t, tExpr);
 
     Interval gEval = g.evaluate(EvaluationType.INTERVAL, cm);
 
@@ -449,7 +449,7 @@ class ImplicitFunction extends Primitive {
 
     Expression tExpr = new IntervalLiteral(new Number(i.min), new Number(i.max));
     Variable t = new Variable('t');
-    cm.bindGlobalVariable(t, tExpr);
+    cm.bindVariable(t, tExpr);
 
     // Calculate value of the function at interval borders
     // G(i.min), G(i.max)
@@ -486,13 +486,13 @@ class ImplicitFunction extends Primitive {
   }
 
   num _newtonRoot(MathFunction f, MathFunction g, num startValue) {
-    cm.bindGlobalVariableName('t', new Number(startValue)); //TODO make it work with cmposites (set f.gerParam(i))..
+    cm.bindVariableName('t', new Number(startValue)); //TODO make it work with cmposites (set f.gerParam(i))..
     //TODO or allow to evaluate without context model.
     //print(cm.variables);
     //print(f.toFullString());
     num fEval = f.evaluate(EvaluationType.REAL, cm);
 
-    cm.bindGlobalVariableName('t', new Number(startValue));
+    cm.bindVariableName('t', new Number(startValue));
     num gEval = g.evaluate(EvaluationType.REAL, cm);
 
     print(g.toFullString());
@@ -515,13 +515,13 @@ class ImplicitFunction extends Primitive {
     ret.position = intersect.hitPoint;
 
     // To determine normal, derive function in all directions (gradient).
-    MathFunction fDx = f.derive('x');
-    MathFunction fDy = f.derive('y');
-    MathFunction fDz = f.derive('z');
+    MathFunction fDx = f.derive('x')..simplify();
+    MathFunction fDy = f.derive('y')..simplify();
+    MathFunction fDz = f.derive('z')..simplify();
 
-    cm.bindGlobalVariableName('x', new Number(intersect.hitPoint.x));
-    cm.bindGlobalVariableName('y', new Number(intersect.hitPoint.y));
-    cm.bindGlobalVariableName('z', new Number(intersect.hitPoint.z));
+    cm.bindVariableName('x', new Number(intersect.hitPoint.x));
+    cm.bindVariableName('y', new Number(intersect.hitPoint.y));
+    cm.bindVariableName('z', new Number(intersect.hitPoint.z));
 
     double gradX = fDx.evaluate(EvaluationType.REAL, cm);
     double gradY = fDy.evaluate(EvaluationType.REAL, cm);

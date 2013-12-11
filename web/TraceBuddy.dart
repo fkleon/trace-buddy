@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:isolate';
 
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 import 'package:math_expressions/math_expressions.dart';
@@ -47,13 +46,6 @@ class RenderController {
   }
 
   get primitives => scene.nonIdxPrimitives;
-
-  void renderSceneIsolate() {
-    port.receive((_,__) {
-      renderScene();
-      print('done');
-    });
-  }
 
   /**
    * Renders the scene.
@@ -190,8 +182,8 @@ class RenderController {
     Vector4 color = createColorVec();
     Shader dynamicShader = new PhongShader(color , color , 50.0, color);
 
-    InputElement functionElement = query('#function_field');
-    InputElement nameElement = query('#function_name');
+    InputElement functionElement = querySelector('#function_field');
+    InputElement nameElement = querySelector('#function_name');
 
     Expression customExpr;
 
@@ -315,8 +307,8 @@ class TraceBuddyView {
   //scale factor
   num currentScale;
 
-  get imageCanvas => query('#imageCanvas');
-  get _hiddenCanvas => query('#hiddenCanvas');
+  get imageCanvas => querySelector('#imageCanvas');
+  get _hiddenCanvas => querySelector('#hiddenCanvas');
 
   /**
    * Creates a new trace buddy view.
@@ -339,8 +331,8 @@ class TraceBuddyView {
   bool controlHidden = false;
 
   void hideControl(){
-    DivElement controls = query('#controlsDiv');
-    ButtonElement butt = query('#hideButton');
+    DivElement controls = querySelector('#controlsDiv');
+    ButtonElement butt = querySelector('#hideButton');
     if(controlHidden){
       controls.style.display='block';
       controlHidden = false;
