@@ -172,6 +172,8 @@ class Scene extends Primitive {
 
   Shader getShader(Intersection intersect) => intersect.prim.getShader(intersect);
 
+  String toString() => "Scene";
+
   // TODO indexable primitives
   // TODO acceleration structure / rebuild index?
 }
@@ -223,6 +225,8 @@ class InfinitePlane extends Primitive {
 
     return ret;
   }
+
+  String toString() => "InfinitePlane";
 }
 
 /**
@@ -293,6 +297,8 @@ class CartesianCoordinateSystem extends Primitive {
 
     return ret;
   }
+
+  String toString() => "CartesianCoordinateSystem";
 }
 
 /**
@@ -372,6 +378,8 @@ class Sphere extends Primitive {
 
     return ret;
   }
+
+  String toString() => "Sphere";
 }
 
 /**

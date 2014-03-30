@@ -35,7 +35,7 @@ When used with the DartEditor, the build.dart script automatically compiles the 
 [dartium]: http://www.dartlang.org/dartium "Dartium"
 [license]: https://github.com/fkleon/trace-buddy/edit/master/LICENSE "trace-buddy License"
 [tracedoc]: http://fkleon.github.io/trace_buddy "trace-buddy DartDoc"
-[tracedemo]: https://130.185.104.44/trace-buddy/demo/out/TraceBuddy.html "trace-buddy live demo"
+[tracedemo]: https://130.185.104.44/trace-buddy/out/web/TraceBuddy.html "trace-buddy live demo"
 [tracewiki]: https://github.com/fkleon/trace-buddy/wiki "trace-buddy wiki"
 [hart1993]: http://mathinfo.univ-reims.fr/IMG/pdf/ray-tracing-implicit-surfaces.pdf "Ray Tracing Implicit Surfaces, PDF"
 [knoll2009]: http://www.cs.utah.edu/~knolla/cgrtia.pdf "Fast Ray Tracing of Arbitrary Implicit Surfaces with Interval and Affine Arithmetic, PDF"
