@@ -1,7 +1,7 @@
 library rt_test_suite;
 
 import 'package:unittest/unittest.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math.dart' hide Ray, Sphere;
 import 'package:math_expressions/math_expressions.dart';
 
 import 'test_framework.dart';
