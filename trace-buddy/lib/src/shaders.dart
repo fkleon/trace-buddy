@@ -1,8 +1,4 @@
-library rt_shader;
-
-import 'dart:math' as Math;
-import 'package:vector_math/vector_math.dart' show Vector3, Vector4;
-import 'package:math_expressions/math_expressions.dart' show Point3D;
+part of tracebuddy;
 
 /**
  * A [Shader] determines the appearance of a [Primitive] at

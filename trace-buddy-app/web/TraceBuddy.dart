@@ -3,11 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 import 'package:math_expressions/math_expressions.dart';
 
-import '../rt/renderer.dart';
-import '../rt/samplers.dart';
-import '../rt/basics.dart';
-import '../rt/shaders.dart';
-import '../rt/scene.dart';
+import 'package:tracebuddy/tracebuddy.dart';
 
 /// Global reference to the view.
 var view;

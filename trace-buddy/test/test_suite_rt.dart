@@ -1,4 +1,4 @@
-library rt_test_suite;
+library tracebuddy_test_suite;
 
 import 'package:unittest/unittest.dart';
 import 'package:vector_math/vector_math.dart' hide Ray, Sphere;
@@ -6,9 +6,7 @@ import 'package:math_expressions/math_expressions.dart';
 
 import 'test_framework.dart';
 
-import '../rt/basics.dart';
-import '../rt/renderer.dart';
-import '../rt/scene.dart';
+import '../lib/tracebuddy.dart';
 
 part 'ray_test.dart';
 part 'prim_test.dart';

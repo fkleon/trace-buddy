@@ -1,4 +1,4 @@
-part of rt_test_suite;
+part of tracebuddy_test_suite;
 
 /**
  * Contains a test set for primitive creation and intersection methods.

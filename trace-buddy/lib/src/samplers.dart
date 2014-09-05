@@ -1,6 +1,4 @@
-library rt_sampler;
-
-import 'package:vector_math/vector_math.dart';
+part of tracebuddy;
 
 /**
  * A [Sample] has a position within a pixel and a weigth.

@@ -1,12 +1,4 @@
-library rt_primitives;
-
-import 'dart:math' as Math;
-
-import 'package:vector_math/vector_math.dart' hide Ray;
-import 'package:math_expressions/math_expressions.dart';
-
-import 'basics.dart' show EPS, Ray, IdGen, Intersection;
-import 'shaders.dart' show Shader, AmbientShader, PluggableShader;
+part of tracebuddy;
 
 /**
  * A [Primitive] is an arbitrary object which can be part of a scene and

@@ -1,14 +1,4 @@
-library rt_renderer;
-
-import 'dart:math' as Math;
-
-import 'package:vector_math/vector_math.dart' show tan, Vector2, Vector3, Vector4;
-import 'package:math_expressions/math_expressions.dart' show Point3D;
-
-import 'basics.dart' show EPS, Ray, Intersection;
-import 'samplers.dart' show Sample, Sampler;
-import 'scene.dart' show Scene;
-import 'shaders.dart' show Shader;
+part of tracebuddy;
 
 /**
  * Matrix containing the output colors at every pixel of the final image

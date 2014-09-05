@@ -9,4 +9,5 @@ packages
 
 # Folders #
 packages/
-web/out/
+out/
+build/

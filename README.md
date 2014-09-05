@@ -18,13 +18,12 @@ For now you can find a [live demo of trace-buddy here][tracedemo] (best viewed i
 ### Developer Information
 Have a look at the [DartDoc of trace-buddy][tracedoc] to gain a general overview over its internal architecture.
 
-#### Dependencies
-For a list of dependencies, see [pubspec.yaml](pubspec.yaml).
-
-After importing the project in Dart Editor, run the unit test suites to make sure that everything is set up correctly.
+The project is split in two parts:
+* The TraceBuddy library containing the raytracing logic.
+* The TraceBuddy Webapp containing the web logic.
 
 #### Compiling
-When used with the DartEditor, the build.dart script automatically compiles the web_ui components to `web/out/`.
+When used with the DartEditor, the build.dart script of trace-buddy-app automatically compiles the web_ui components to `web/out/`.
 
 - - -
 <sub>[1] Bohlender, Gerd, and Ulrich Kulisch. 2010. ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard."][bohlender2010] Reliable Computing 15 (1): 36–42.</sub>  

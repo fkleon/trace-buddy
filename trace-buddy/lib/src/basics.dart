@@ -1,11 +1,4 @@
-library rt_basics;
-
-import 'dart:math' as Math;
-
-import 'package:vector_math/vector_math.dart';// show vec2, Vector3, vec4;
-import 'package:math_expressions/math_expressions.dart' show Point3D, Interval;
-
-import 'scene.dart';
+part of tracebuddy;
 
 /// relative accuracy for floating-point calculations
 const num EPS = 0.000001;
