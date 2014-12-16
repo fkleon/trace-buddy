@@ -1,0 +1,164 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>PhongShader class / rt_shader Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="rt_shader" data-type="PhongShader">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../rt_shader.html">rt_shader</a> &rsaquo; <a href="../rt_shader/PhongShader.html">PhongShader</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>PhongShader</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A <a class="crossref" href="../rt_shader/PhongShader.html">PhongShader</a> uses the phong reflection model to determine the surface
+radiance.</p>
+<p>For a more detailed description of the mechanism see the article on the
+<a href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong Reflection Model</a>.</p>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../rt_shader/Shader.html">Shader</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../rt_shader/PluggableShader.html">PluggableShader</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../rt_shader/AmbientShader.html">AmbientShader</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>PhongShader</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>PhongShader</strong>(Vector4 difCoeff, Vector4 specCoeff, double specExp, Vector4 ambCoeff) <a class="anchor-link" href="#"
+              title="Permalink to PhongShader.PhongShader">#</a></h4>
+<div class="doc">
+<p>Creates a new Phong Shader with the given diffuse, specular and ambient
+coefficients as well as the given specular exponent.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="ambCoeff">
+final Vector4         <strong>ambCoeff</strong> <a class="anchor-link"
+            href="#ambCoeff"
+            title="Permalink to PhongShader.ambCoeff">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_shader/AmbientShader.html">AmbientShader</a> </div><div class="doc">
+<p>The ambient coefficient of this shader.</p>
+</div>
+</div>
+<div class="field"><h4 id="difCoeff">
+final Vector4         <strong>difCoeff</strong> <a class="anchor-link"
+            href="#difCoeff"
+            title="Permalink to PhongShader.difCoeff">#</a>
+        </h4>
+        <div class="doc">
+<p>The diffuse and specular coefficient of this phong shader.</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="normal">
+var         <strong>normal</strong> <a class="anchor-link"
+            href="#normal"
+            title="Permalink to PhongShader.normal">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_shader/PluggableShader.html">PluggableShader</a> </div><div class="doc">
+<p>The normal vector at the hit point. Must be stored in normalized form.</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="position">
+Point3D         <strong>position</strong> <a class="anchor-link"
+            href="#position"
+            title="Permalink to PhongShader.position">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_shader/PluggableShader.html">PluggableShader</a> </div><div class="doc">
+<p>The position of the hit point.</p>
+</div>
+</div>
+<div class="field"><h4 id="specCoeff">
+final Vector4         <strong>specCoeff</strong> <a class="anchor-link"
+            href="#specCoeff"
+            title="Permalink to PhongShader.specCoeff">#</a>
+        </h4>
+        <div class="doc">
+<p>The diffuse and specular coefficient of this phong shader.</p>
+</div>
+</div>
+<div class="field"><h4 id="specExp">
+final double         <strong>specExp</strong> <a class="anchor-link"
+            href="#specExp"
+            title="Permalink to PhongShader.specExp">#</a>
+        </h4>
+        <div class="doc">
+<p>The specular exponent of this phong shader.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="clone">
+<a href="../rt_shader/Shader.html">Shader</a> <strong>clone</strong>() <a class="anchor-link" href="#clone"
+              title="Permalink to PhongShader.clone">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a hard copy (clone) of the current shader.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_shader/Shader.html">Shader</a> </div></div>
+</div>
+</div>
+<div class="method inherited"><h4 id="getAmbientCoeff">
+Vector4 <strong>getAmbientCoeff</strong>() <a class="anchor-link" href="#getAmbientCoeff"
+              title="Permalink to PhongShader.getAmbientCoeff">#</a></h4>
+<div class="inherited-from">inherited from <a href="../rt_shader/AmbientShader.html">AmbientShader</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the ambient coefficient of the primitive at the hit point.
+Returns the zero vector, if shader does not support ambient lighting.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_shader/Shader.html">Shader</a> </div></div>
+</div>
+</div>
+<div class="method inherited"><h4 id="getIndirectRadiance">
+Vector4 <strong>getIndirectRadiance</strong>() <a class="anchor-link" href="#getIndirectRadiance"
+              title="Permalink to PhongShader.getIndirectRadiance">#</a></h4>
+<div class="inherited-from">inherited from <a href="../rt_shader/Shader.html">Shader</a> </div><div class="doc">
+<p>Returns the radiance which comes from indirect illumination.
+This is the case for a reflected ray on a mirror.
+Returns the zero vector, if shader does not support indirect radiance.</p>
+</div>
+</div>
+<div class="method"><h4 id="getReflectance">
+Vector4 <strong>getReflectance</strong>(Vector3 outDir, Vector3 inDir) <a class="anchor-link" href="#getReflectance"
+              title="Permalink to PhongShader.getReflectance">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the reflectance for the associated <code>Primitive</code> at the associated
+hitpoint and and for the given direction vectors.</p>
+<p>The parameter outDir is the vector from the hit point in direction of its
+origin. The parameter inDir is vector from the hit point in direction of
+the light source.</p>
+<p>Returns the zero vector, if the shader does not support reflectance.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_shader/Shader.html">Shader</a> </div></div>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-04 19:17:25.595</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

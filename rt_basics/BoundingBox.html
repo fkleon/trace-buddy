@@ -1,0 +1,110 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>BoundingBox class / rt_basics Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="rt_basics" data-type="BoundingBox">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../rt_basics.html">rt_basics</a> &rsaquo; <a href="../rt_basics/BoundingBox.html">BoundingBox</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>BoundingBox</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A 3-dimensional bounding box.</p>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>BoundingBox</strong>(Point3D minCorner, Point3D maxCorner) <a class="anchor-link" href="#"
+              title="Permalink to BoundingBox.BoundingBox">#</a></h4>
+<div class="doc">
+<p>Creates a bounding box with the given corners.
+The constructor assumes minCorner to be smaller than maxCorner.</p>
+</div>
+</div>
+<div class="method"><h4 id="empty">
+new <strong>BoundingBox.empty</strong>() <a class="anchor-link" href="#empty"
+              title="Permalink to BoundingBox.BoundingBox.empty">#</a></h4>
+<div class="doc">
+<p>Creates a new empty bounding box.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="maxCorner">
+Point3D         <strong>maxCorner</strong> <a class="anchor-link"
+            href="#maxCorner"
+            title="Permalink to BoundingBox.maxCorner">#</a>
+        </h4>
+        <div class="doc">
+<p>Corner points of this bounding box.</p>
+</div>
+</div>
+<div class="field"><h4 id="minCorner">
+Point3D         <strong>minCorner</strong> <a class="anchor-link"
+            href="#minCorner"
+            title="Permalink to BoundingBox.minCorner">#</a>
+        </h4>
+        <div class="doc">
+<p>Corner points of this bounding box.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="extend">
+void <strong>extend</strong>(Point3D point) <a class="anchor-link" href="#extend"
+              title="Permalink to BoundingBox.extend">#</a></h4>
+<div class="doc">
+<p>Extends this bounding box with the given point.</p>
+</div>
+</div>
+<div class="method"><h4 id="extendBB">
+void <strong>extendBB</strong>(<a href="../rt_basics/BoundingBox.html">BoundingBox</a> bbox) <a class="anchor-link" href="#extendBB"
+              title="Permalink to BoundingBox.extendBB">#</a></h4>
+<div class="doc">
+<p>Extends this bounding box with the given bounding box.</p>
+</div>
+</div>
+<div class="method"><h4 id="intersect">
+Vector2 <strong>intersect</strong>(<a href="../rt_basics/Ray.html">Ray</a> r) <a class="anchor-link" href="#intersect"
+              title="Permalink to BoundingBox.intersect">#</a></h4>
+<div class="doc">
+<p>Intersects this box with the given ray and returns a vec2 containing
+the distances to the intersections.</p>
+<p>If the v.x > v.y there is no hit point.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-04 19:17:25.300</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

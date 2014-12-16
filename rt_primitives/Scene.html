@@ -1,0 +1,163 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Scene class / rt_primitives Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="rt_primitives" data-type="Scene">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../rt_primitives.html">rt_primitives</a> &rsaquo; <a href="../rt_primitives/Scene.html">Scene</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Scene</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A <a class="crossref" href="../rt_primitives/Scene.html">Scene</a> basically is a collection of <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a>s which together
+form the scene to be rendered.</p>
+<p>The <a class="crossref" href="../rt_primitives/Scene.html">Scene</a> itself is a primitive as well, and offers an intersect method.</p>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/Primitive.html">Primitive</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Scene</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>Scene</strong>([List&lt;<a href="../rt_primitives/Primitive.html">Primitive</a>&gt; primitives]) <a class="anchor-link" href="#"
+              title="Permalink to Scene.Scene">#</a></h4>
+<div class="doc">
+<p>Creates a new <a class="crossref" href="../rt_primitives/Scene.html">Scene</a>. Takes an optional parameter <code>primitives</code>,
+which initialized the scene with the given primitives instead
+of creating an empty one.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="ccs">
+<a href="../rt_primitives/CartesianCoordinateSystem.html">CartesianCoordinateSystem</a>         <strong>ccs</strong> <a class="anchor-link"
+            href="#ccs"
+            title="Permalink to Scene.ccs">#</a>
+        </h4>
+        <div class="doc">
+<p>The cartesian coordinate system of this scene.</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="color">
+final Vector4         <strong>color</strong> <a class="anchor-link"
+            href="#color"
+            title="Permalink to Scene.color">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The primary color of the primitive as vector4 (only used for GUI).</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="colorString">
+final String         <strong>colorString</strong> <a class="anchor-link"
+            href="#colorString"
+            title="Permalink to Scene.colorString">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The primary color of the primitive as CSS rgba string (only used for GUI).</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="id">
+final int         <strong>id</strong> <a class="anchor-link"
+            href="#id"
+            title="Permalink to Scene.id">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>Unique id of the primitive.</p>
+</div>
+</div>
+<div class="field"><h4 id="nonIdxPrimitives">
+List&lt;<a href="../rt_primitives/Primitive.html">Primitive</a>&gt;         <strong>nonIdxPrimitives</strong> <a class="anchor-link"
+            href="#nonIdxPrimitives"
+            title="Permalink to Scene.nonIdxPrimitives">#</a>
+        </h4>
+        <div class="doc">
+<p>A list of non-indexable primitives in the scene.</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="origin">
+final Point3D         <strong>origin</strong> <a class="anchor-link"
+            href="#origin"
+            title="Permalink to Scene.origin">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The origin of the primitive (only used for GUI).</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="add">
+void <strong>add</strong>(<a href="../rt_primitives/Primitive.html">Primitive</a> p) <a class="anchor-link" href="#add"
+              title="Permalink to Scene.add">#</a></h4>
+<div class="doc">
+<p>Adds the given <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> to this scene.</p>
+</div>
+</div>
+<div class="method"><h4 id="displayCCS">
+void <strong>displayCCS</strong>(bool displayCCS) <a class="anchor-link" href="#displayCCS"
+              title="Permalink to Scene.displayCCS">#</a></h4>
+<div class="doc">
+<p>Given parameter determines if the cartesian coordinate system will be
+rendered in this scene.</p>
+</div>
+</div>
+<div class="method"><h4 id="getShader">
+<a href="../rt_shader/Shader.html">Shader</a> <strong>getShader</strong>(<a href="../rt_basics/Intersection.html">Intersection</a> intersect) <a class="anchor-link" href="#getShader"
+              title="Permalink to Scene.getShader">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the shader for a given intersection point.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div></div>
+</div>
+</div>
+<div class="method"><h4 id="intersect">
+<a href="../rt_basics/Intersection.html">Intersection</a> <strong>intersect</strong>(<a href="../rt_basics/Ray.html">Ray</a> r, num prevBestDistance) <a class="anchor-link" href="#intersect"
+              title="Permalink to Scene.intersect">#</a></h4>
+<div class="doc">
+<p>Performs a ray - scene intersection.</p>
+<p>Iterates over all primitives and calls their intersect.
+Will only return hit points which are closer than the specified
+<code>prevBestDistance</code>.</p>
+</div>
+</div>
+<div class="method"><h4 id="remove">
+void <strong>remove</strong>(int primId) <a class="anchor-link" href="#remove"
+              title="Permalink to Scene.remove">#</a></h4>
+<div class="doc">
+<p>Removes the <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> with given id from this scene.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-04 19:17:25.451</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

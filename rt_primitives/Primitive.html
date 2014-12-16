@@ -1,0 +1,126 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Primitive abstract class / rt_primitives Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="rt_primitives" data-type="Primitive">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../rt_primitives.html">rt_primitives</a> &rsaquo; <a href="../rt_primitives/Primitive.html">Primitive</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Primitive</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> is an arbitrary object which can be part of a scene and
+rendered by the ray tracer.</p>
+<p>Any concrete implementation of a <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> needs to implement the
+intersect method, which tests for ray/primitive intersection.
+A primitive can be any geometric shape, mathematical function, etc.</p>
+<p>Every primitive has an unique ID, and a shader. When creating your
+own primitive, don't forget to call the super() contructor to auto-
+matically generate the id.</p>
+</div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/CartesianCoordinateSystem.html">CartesianCoordinateSystem</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/ImplicitFunction.html">ImplicitFunction</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/InfinitePlane.html">InfinitePlane</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/Scene.html">Scene</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/Sphere.html">Sphere</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>Primitive</strong>([<a href="../rt_shader/Shader.html">Shader</a> _shader]) <a class="anchor-link" href="#"
+              title="Permalink to Primitive.Primitive">#</a></h4>
+<div class="doc">
+<p>Creates a new <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> and assigns an unique id to it.
+The optional parameter <code>shader</code> can be used to set a shader for this
+primitive. If no shader is assigned, a default <a class="crossref" href="../rt_shader/AmbientShader.html">AmbientShader</a> will
+be created.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="color">
+final Vector4         <strong>color</strong> <a class="anchor-link"
+            href="#color"
+            title="Permalink to Primitive.color">#</a>
+        </h4>
+        <div class="doc">
+<p>The primary color of the primitive as vector4 (only used for GUI).</p>
+</div>
+</div>
+<div class="field"><h4 id="colorString">
+final String         <strong>colorString</strong> <a class="anchor-link"
+            href="#colorString"
+            title="Permalink to Primitive.colorString">#</a>
+        </h4>
+        <div class="doc">
+<p>The primary color of the primitive as CSS rgba string (only used for GUI).</p>
+</div>
+</div>
+<div class="field"><h4 id="id">
+final int         <strong>id</strong> <a class="anchor-link"
+            href="#id"
+            title="Permalink to Primitive.id">#</a>
+        </h4>
+        <div class="doc">
+<p>Unique id of the primitive.</p>
+</div>
+</div>
+<div class="field"><h4 id="origin">
+final Point3D         <strong>origin</strong> <a class="anchor-link"
+            href="#origin"
+            title="Permalink to Primitive.origin">#</a>
+        </h4>
+        <div class="doc">
+<p>The origin of the primitive (only used for GUI).</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="getShader">
+abstract <a href="../rt_shader/Shader.html">Shader</a> <strong>getShader</strong>(<a href="../rt_basics/Intersection.html">Intersection</a> intersect) <a class="anchor-link" href="#getShader"
+              title="Permalink to Primitive.getShader">#</a></h4>
+<div class="doc">
+<p>Returns the shader for a given intersection point.</p>
+</div>
+</div>
+<div class="method"><h4 id="intersect">
+abstract <a href="../rt_basics/Intersection.html">Intersection</a> <strong>intersect</strong>(<a href="../rt_basics/Ray.html">Ray</a> ray, num previousBestDistance) <a class="anchor-link" href="#intersect"
+              title="Permalink to Primitive.intersect">#</a></h4>
+<div class="doc">
+<p>Performs a ray - primitive intersection test.
+Returns an <a class="crossref" href="../rt_basics/Intersection.html">Intersection</a> object with the associated information.</p>
+<p>If the ray did not hit the primitive, the distance will be negative.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-04 19:17:25.463</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -1,0 +1,178 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ImplicitFunction class / rt_primitives Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="rt_primitives" data-type="ImplicitFunction">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../rt_primitives.html">rt_primitives</a> &rsaquo; <a href="../rt_primitives/ImplicitFunction.html">ImplicitFunction</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ImplicitFunction</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A <a class="crossref" href="../rt_primitives/ImplicitFunction.html">ImplicitFunction</a> is defined by a <a class="crossref" href="../math_expressions/MathFunction.html">MathFunction</a>.</p>
+<p>Its intersect uses Interval arithmetic and Newton's method to determine
+roots.</p>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../rt_primitives/Primitive.html">Primitive</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>ImplicitFunction</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>ImplicitFunction</strong>(MathFunction f, [<a href="../rt_shader/Shader.html">Shader</a> shader]) <a class="anchor-link" href="#"
+              title="Permalink to ImplicitFunction.ImplicitFunction">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../rt_primitives/Primitive.html">Primitive</a> and assigns an unique id to it.
+The optional parameter <code>shader</code> can be used to set a shader for this
+primitive. If no shader is assigned, a default <a class="crossref" href="../rt_shader/AmbientShader.html">AmbientShader</a> will
+be created.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div></div>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="cm">
+ContextModel         <strong>cm</strong> <a class="anchor-link"
+            href="#cm"
+            title="Permalink to ImplicitFunction.cm">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field inherited"><h4 id="color">
+final Vector4         <strong>color</strong> <a class="anchor-link"
+            href="#color"
+            title="Permalink to ImplicitFunction.color">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The primary color of the primitive as vector4 (only used for GUI).</p>
+</div>
+</div>
+<div class="field inherited"><h4 id="colorString">
+final String         <strong>colorString</strong> <a class="anchor-link"
+            href="#colorString"
+            title="Permalink to ImplicitFunction.colorString">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The primary color of the primitive as CSS rgba string (only used for GUI).</p>
+</div>
+</div>
+<div class="field"><h4 id="f">
+MathFunction         <strong>f</strong> <a class="anchor-link"
+            href="#f"
+            title="Permalink to ImplicitFunction.f">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field inherited"><h4 id="id">
+final int         <strong>id</strong> <a class="anchor-link"
+            href="#id"
+            title="Permalink to ImplicitFunction.id">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>Unique id of the primitive.</p>
+</div>
+</div>
+<div class="field"><h4 id="maxDistance">
+final num         <strong>maxDistance</strong> <a class="anchor-link"
+            href="#maxDistance"
+            title="Permalink to ImplicitFunction.maxDistance">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field inherited"><h4 id="origin">
+final Point3D         <strong>origin</strong> <a class="anchor-link"
+            href="#origin"
+            title="Permalink to ImplicitFunction.origin">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div><div class="doc">
+<p>The origin of the primitive (only used for GUI).</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="findRoot">
+num <strong>findRoot</strong>(MathFunction g, Interval i) <a class="anchor-link" href="#findRoot"
+              title="Permalink to ImplicitFunction.findRoot">#</a></h4>
+<div class="doc">
+</div>
+</div>
+<div class="method"><h4 id="findRootBF">
+num <strong>findRootBF</strong>(MathFunction g, Interval i) <a class="anchor-link" href="#findRootBF"
+              title="Permalink to ImplicitFunction.findRootBF">#</a></h4>
+<div class="doc">
+</div>
+</div>
+<div class="method"><h4 id="getShader">
+<a href="../rt_shader/Shader.html">Shader</a> <strong>getShader</strong>(<a href="../rt_basics/Intersection.html">Intersection</a> intersect) <a class="anchor-link" href="#getShader"
+              title="Permalink to ImplicitFunction.getShader">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the shader for a given intersection point.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div></div>
+</div>
+</div>
+<div class="method"><h4 id="intersect">
+<a href="../rt_basics/Intersection.html">Intersection</a> <strong>intersect</strong>(<a href="../rt_basics/Ray.html">Ray</a> r, num prevBestDistance) <a class="anchor-link" href="#intersect"
+              title="Permalink to ImplicitFunction.intersect">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Performs a ray - primitive intersection test.
+Returns an <a class="crossref" href="../rt_basics/Intersection.html">Intersection</a> object with the associated information.</p>
+<p>If the ray did not hit the primitive, the distance will be negative.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../rt_primitives/Primitive.html">Primitive</a> </div></div>
+</div>
+</div>
+<div class="method"><h4 id="newtonRoot">
+num <strong>newtonRoot</strong>(MathFunction f, num startValue) <a class="anchor-link" href="#newtonRoot"
+              title="Permalink to ImplicitFunction.newtonRoot">#</a></h4>
+<div class="doc">
+</div>
+</div>
+<div class="method"><h4 id="toString">
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ImplicitFunction.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-04 19:17:25.371</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
