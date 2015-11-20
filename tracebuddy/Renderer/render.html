@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>render method - Renderer class - tracebuddy library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the render method from the Renderer class, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/Renderer-class.html">Renderer</a></li>
+            <li class="self-crumb">render</li>
+          </ol>
+          <div class="self-name">render</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/Renderer-class.html">Renderer</a></li>
+          <li class="self-crumb">render</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">method</span> render
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="tracebuddy/Renderer/render.html#source">Source</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/Renderer-class.html">Renderer</a></h5>
+
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/Renderer-class.html#constructors">Constructors</a></li>
+      <li><a href="tracebuddy/Renderer/Renderer.html">Renderer</a></li>
+    
+      <li class="section-title">
+        <a href="tracebuddy/Renderer-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a class="" href="tracebuddy/Renderer/ambientLight.html">ambientLight</a></li>
+      <li><a class="" href="tracebuddy/Renderer/camera.html">camera</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/Renderer/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/Renderer/runtimeType.html">runtimeType</a></li>
+      <li><a class="" href="tracebuddy/Renderer/sampler.html">sampler</a></li>
+      <li><a class="" href="tracebuddy/Renderer/scene.html">scene</a></li>
+      <li><a class="" href="tracebuddy/Renderer/xRes.html">xRes</a></li>
+      <li><a class="" href="tracebuddy/Renderer/yRes.html">yRes</a></li>
+    
+      <li class="section-title inherited"><a href="tracebuddy/Renderer-class.html#operators">Operators</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/Renderer/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="tracebuddy/Renderer-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/Renderer/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="tracebuddy/Renderer/render.html">render</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/Renderer/toString.html">toString</a></li>
+    </ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="multi-line-signature">
+        <span class="returntype"><a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></span>
+        <span class="name ">render</span>(<wbr>)
+    </section>
+
+    <section class="desc markdown">
+      <p>Renders the Scene and returns an <a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a> containing the pixels
+of the final image.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">OutputMatrix render() {
+
+  List&lt;Sample&gt; samples;
+  List&lt;Ray&gt; primaryRays;
+
+  OutputMatrix om = new OutputMatrix(yRes, xRes);
+
+  // for each pixel..
+  for (int x = 0; x &lt; xRes; x++) {
+
+    if ((x+1) % 10 == 0) {print(&apos;Rendering column ${x+1}..&apos;);} //TODO
+
+    for (int y = 0; y &lt; yRes; y++) {
+      // color information for this pixel
+      Vector4 color = new Vector4.zero();
+
+      // generate samples
+      samples = sampler.getSamples(x, y);
+
+      // for each sample
+      for (Sample s in samples) {
+        // temporary color vector for this sample
+        Vector4 tempColor = new Vector4.zero();
+
+        primaryRays = camera.getPrimaryRays(x, y);
+
+        // integrate rays..
+        for (Ray r in primaryRays) {
+
+          // integrate radiance
+          //TODO count bounces for indirect radiance
+
+          Intersection ret = scene.intersect(r, 99999); //TODO fix hardcoded distance
+          if (ret.distance &gt;= EPS &amp;&amp; ret.distance &lt; 99999) {
+
+            //print (&apos;hit at ${ret.distance} with ${ret.prim} on ${ret.hitPoint}&apos;);
+
+            // get shader
+            Shader s = scene.getShader(ret);
+
+            // get ambience, reflectance and indirect radiance
+            tempColor += s.getAmbientCoeff().multiply(ambientLight);
+            //TODO for all light sources, integrate indirect radiance.
+            tempColor += s.getReflectance(-r.direction, r.origin - ret.hitPoint); //TODO dummy light source at camera
+
+            tempColor += s.getIndirectRadiance();
+          }
+        }
+
+        // weight ray
+        double rayWeight = 1.0 / primaryRays.length;
+        tempColor.scale(rayWeight);
+
+        // weight sample
+        tempColor.scale(s.weight);
+
+        // add to overall pixel color
+        color += tempColor;
+
+        // set pixel in output matrix
+        om.setPixel(y+1, x+1, color.rgb);
+      }
+    }
+  }
+
+  return om;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          tracebuddy 0.0.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

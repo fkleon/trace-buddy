@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>PerspectiveCamera class - tracebuddy library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the PerspectiveCamera class from the tracebuddy library, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+            <li class="self-crumb">PerspectiveCamera</li>
+          </ol>
+          <div class="self-name">PerspectiveCamera</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+          <li class="self-crumb">PerspectiveCamera</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">class</span> PerspectiveCamera
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="tracebuddy/PerspectiveCamera-class.html#instance-properties">Properties</a></li>
+          <li><a href="tracebuddy/PerspectiveCamera-class.html#constructors">Constructors</a></li>
+          <li><a href="tracebuddy/PerspectiveCamera-class.html#operators">Operators</a></li>
+          <li><a href="tracebuddy/PerspectiveCamera-class.html#instance-methods">Methods</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></h5>
+
+    <ol>
+      <li class="section-title"><a href="tracebuddy/tracebuddy-library.html#constants">Constants</a></li>
+      <li><a class="" href="tracebuddy/EPS.html">EPS</a></li>
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/tracebuddy-library.html#classes">Classes</a></li>
+      <li><a class="" href="tracebuddy/AmbientShader-class.html">AmbientShader</a></li>
+      <li><a class="" href="tracebuddy/BoundingBox-class.html">BoundingBox</a></li>
+      <li><a class="" href="tracebuddy/Camera-class.html">Camera</a></li>
+      <li><a class="" href="tracebuddy/CartesianCoordinateSystem-class.html">CartesianCoordinateSystem</a></li>
+      <li><a class="" href="tracebuddy/DefaultSampler-class.html">DefaultSampler</a></li>
+      <li><a class="" href="tracebuddy/IdGen-class.html">IdGen</a></li>
+      <li><a class="" href="tracebuddy/ImplicitFunction-class.html">ImplicitFunction</a></li>
+      <li><a class="" href="tracebuddy/InfinitePlane-class.html">InfinitePlane</a></li>
+      <li><a class="" href="tracebuddy/Intersection-class.html">Intersection</a></li>
+      <li><a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a></li>
+      <li><a class="" href="tracebuddy/PhongShader-class.html">PhongShader</a></li>
+      <li><a class="" href="tracebuddy/PluggableShader-class.html">PluggableShader</a></li>
+      <li><a class="" href="tracebuddy/Primitive-class.html">Primitive</a></li>
+      <li><a class="" href="tracebuddy/Ray-class.html">Ray</a></li>
+      <li><a class="" href="tracebuddy/RegularSampler-class.html">RegularSampler</a></li>
+      <li><a class="" href="tracebuddy/Renderer-class.html">Renderer</a></li>
+      <li><a class="" href="tracebuddy/Sample-class.html">Sample</a></li>
+      <li><a class="" href="tracebuddy/Sampler-class.html">Sampler</a></li>
+      <li><a class="" href="tracebuddy/Scene-class.html">Scene</a></li>
+      <li><a class="" href="tracebuddy/Shader-class.html">Shader</a></li>
+      <li><a class="" href="tracebuddy/Sphere-class.html">Sphere</a></li>
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="desc markdown">
+      <p>The <a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a> generates rays for a perspective projection.
+It is defined by its center, viewing direction, up vector,
+vertical opening angle of the image and resolution.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+        <dt>Inheritance</dt>
+        <dd><ul class="gt-separated dark clazz-relationships">
+          <li>Object</li>
+          <li><a class="" href="tracebuddy/Camera-class.html">Camera</a></li>
+          <li>PerspectiveCamera</li>
+        </ul></dd>
+
+
+
+
+      </dl>
+    </section>
+
+
+
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="PerspectiveCamera" class="callable">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/PerspectiveCamera.html">PerspectiveCamera</a></span><span class="signature">(<span class="parameter" id="-param-center"><span class="type-annotation">Point3D</span> <span class="parameter-name">center</span></span>, <span class="parameter" id="-param-forward"><span class="type-annotation">Vector3</span> <span class="parameter-name">forward</span></span>, <span class="parameter" id="-param-up"><span class="type-annotation">Vector3</span> <span class="parameter-name">up</span></span>, <span class="parameter" id="-param-vertOpeningAngle"><span class="type-annotation">num</span> <span class="parameter-name">vertOpeningAngle</span></span>, <span class="parameter" id="-param-_res"><span class="type-annotation">Vector2</span> <span class="parameter-name">_res</span></span>)</span>
+        </dt>
+        <dd>
+          <p>Creates a new <a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a>.
+Uses a forward vector.</p>
+        </dd>
+        <dt id="PerspectiveCamera.lookAt" class="callable">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/PerspectiveCamera.lookAt.html">PerspectiveCamera.lookAt</a></span><span class="signature">(<span class="parameter" id="lookAt-param-center"><span class="type-annotation">Point3D</span> <span class="parameter-name">center</span></span>, <span class="parameter" id="lookAt-param-lookAt"><span class="type-annotation">Point3D</span> <span class="parameter-name">lookAt</span></span>, <span class="parameter" id="lookAt-param-up"><span class="type-annotation">Vector3</span> <span class="parameter-name">up</span></span>, <span class="parameter" id="lookAt-param-vertOpeningAngle"><span class="type-annotation">num</span> <span class="parameter-name">vertOpeningAngle</span></span>, <span class="parameter" id="lookAt-param-_res"><span class="type-annotation">Vector2</span> <span class="parameter-name">_res</span></span>)</span>
+        </dt>
+        <dd>
+          <p>Creates a new <a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a>.
+Calculates forward vector based on given look-at point.</p>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="center" class="property inherited">
+          <span class="name"><a class="" href="tracebuddy/Camera/center.html">center</a></span>
+          <span class="signature">&#8594; Point3D</span>
+        </dt>
+        <dd class="inherited">
+          <p></p>
+          <div class="features">
+    read / write, inherited
+  </div>
+</dd>
+        <dt id="forward" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/forward.html">forward</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd class="inherited">
+          <p>Get a hash code for this object.<a href="tracebuddy/PerspectiveCamera/hashCode.html">&hellip;</a>
+</p>
+          <div class="features">
+    read-only, inherited
+  </div>
+</dd>
+        <dt id="res" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/res.html">res</a></span>
+          <span class="signature">&#8594; Vector2</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="right" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/right.html">right</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; Type</span>
+        </dt>
+        <dd class="inherited">
+          <p>A representation of the runtime type of the object.</p>
+          <div class="features">
+    read-only, inherited
+  </div>
+</dd>
+        <dt id="stepX" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/stepX.html">stepX</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="stepY" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/stepY.html">stepY</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="topLeft" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/topLeft.html">topLeft</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="up" class="property">
+          <span class="name"><a class="" href="tracebuddy/PerspectiveCamera/up.html">up</a></span>
+          <span class="signature">&#8594; Vector3</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          <p>The equality operator.<a href="tracebuddy/PerspectiveCamera/operator_equals.html">&hellip;</a>
+</p>
+          <div class="features">inherited</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="getPrimaryRays" class="callable">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/getPrimaryRays.html">getPrimaryRays</a></span><span class="signature">(<wbr><span class="parameter" id="getPrimaryRays-param-x"><span class="type-annotation">int</span> <span class="parameter-name">x</span></span>, <span class="parameter" id="getPrimaryRays-param-y"><span class="type-annotation">int</span> <span class="parameter-name">y</span></span>)
+            <span class="returntype parameter">&#8594; List&lt;<a class="" href="tracebuddy/Ray-class.html">Ray</a>&gt;</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns a collection of primary rays generated for the given pixel
+by this camera.</p>
+        </dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation">Invocation</span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          <p><code>noSuchMethod</code> is invoked when users invoke a non-existent method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code> in an <code>Invocation</code>.
+If <code>noSuchMethod</code> returns a value, that value becomes the result of
+the original invocation.<a href="tracebuddy/PerspectiveCamera/noSuchMethod.html">&hellip;</a>
+</p>
+          <div class="features">inherited</div>
+        </dd>
+        <dt id="rotate" class="callable">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/rotate.html">rotate</a></span><span class="signature">(<wbr><span class="parameter" id="rotate-param-horAngle"><span class="type-annotation">num</span> <span class="parameter-name">horAngle</span></span>, <span class="parameter" id="rotate-param-verAngle"><span class="type-annotation">num</span> <span class="parameter-name">verAngle</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Rotates this camera around the given horizontal and vertical angles.</p>
+        </dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; String</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          <p>Returns a string representation of this object.</p>
+          <div class="features">inherited</div>
+        </dd>
+        <dt id="zoom" class="callable">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera/zoom.html">zoom</a></span><span class="signature">(<wbr><span class="parameter" id="zoom-param-distance"><span class="type-annotation">num</span> <span class="parameter-name">distance</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Zooms in or out depending if the distance is positive or negativ.</p>
+        </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>PerspectiveCamera</h5>
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/PerspectiveCamera-class.html#constructors">Constructors</a></li>
+      <li><a href="tracebuddy/PerspectiveCamera/PerspectiveCamera.html">PerspectiveCamera</a></li>
+      <li><a href="tracebuddy/PerspectiveCamera/PerspectiveCamera.lookAt.html">lookAt</a></li>
+    
+      <li class="section-title">
+        <a href="tracebuddy/PerspectiveCamera-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a class="" href="tracebuddy/Camera/center.html">center</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/forward.html">forward</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/PerspectiveCamera/hashCode.html">hashCode</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/res.html">res</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/right.html">right</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/PerspectiveCamera/runtimeType.html">runtimeType</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/stepX.html">stepX</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/stepY.html">stepY</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/topLeft.html">topLeft</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/up.html">up</a></li>
+    
+      <li class="section-title inherited"><a href="tracebuddy/PerspectiveCamera-class.html#operators">Operators</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/PerspectiveCamera/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="tracebuddy/PerspectiveCamera-class.html#instance-methods">Methods</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/getPrimaryRays.html">getPrimaryRays</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/PerspectiveCamera/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/rotate.html">rotate</a></li>
+      <li class="inherited"><a class="" href="tracebuddy/PerspectiveCamera/toString.html">toString</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera/zoom.html">zoom</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          tracebuddy 0.0.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>tracebuddy library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="tracebuddy library API docs, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">tracebuddy</a></li>
+            <li class="self-crumb">tracebuddy</li>
+          </ol>
+          <div class="self-name">tracebuddy</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">tracebuddy</a></li>
+          <li class="self-crumb">tracebuddy</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">library</span> tracebuddy
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="tracebuddy/tracebuddy-library.html#constants">Constants</a></li>
+          <li><a href="tracebuddy/tracebuddy-library.html#classes">Classes</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">tracebuddy</a></h5>
+
+    <ol>
+      <li class="section-title"><a href="index.html">Libraries</a></li>
+      <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="desc markdown">
+      <p>TraceBuddy is a general purpose ray tracer.</p>
+<p>However, it's primary goal is to support rendering implicit functions using
+interval arithmetics.</p>
+    </section>
+    
+    <section class="summary offset-anchor" id="constants">
+      <h2>Constants</h2>
+
+      <dl class="properties">
+        <dt id="EPS" class="constant">
+          <span class="name "><a class="" href="tracebuddy/EPS.html">EPS</a></span>
+          <span class="signature">&#8594; num</span>
+        </dt>
+        <dd>
+          <p>relative accuracy for floating-point calculations</p>
+          <div>
+            <span class="features">const</span>
+            <span class="signature"><code>0.000001</code></span>
+          </div>
+        </dd>
+      </dl>
+    </section>
+
+
+
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="AmbientShader">
+          <span class="name "><a class="" href="tracebuddy/AmbientShader-class.html">AmbientShader</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/AmbientShader-class.html">AmbientShader</a> returns radiance based on its ambient coefficient.</p>
+        </dd>
+        <dt id="BoundingBox">
+          <span class="name "><a class="" href="tracebuddy/BoundingBox-class.html">BoundingBox</a></span>
+        </dt>
+        <dd>
+          <p>A 3-dimensional bounding box.</p>
+        </dd>
+        <dt id="Camera">
+          <span class="name "><a class="" href="tracebuddy/Camera-class.html">Camera</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Camera-class.html">Camera</a> is defined by its resolution.
+The camera generates <a class="" href="tracebuddy/Ray-class.html">Ray</a>s for every pixel of the image.</p>
+        </dd>
+        <dt id="CartesianCoordinateSystem">
+          <span class="name "><a class="" href="tracebuddy/CartesianCoordinateSystem-class.html">CartesianCoordinateSystem</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/CartesianCoordinateSystem-class.html">CartesianCoordinateSystem</a> is a special primitive,
+it represents the x,y and z-axes. Only one instance of the
+CartesianCoordinateSystem can exist per scene, therefore
+it is implemented as singleton.</p>
+        </dd>
+        <dt id="DefaultSampler">
+          <span class="name "><a class="" href="tracebuddy/DefaultSampler-class.html">DefaultSampler</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/DefaultSampler-class.html">DefaultSampler</a> generates one sample per pixel,
+which is positioned in the middel of the pixel.</p>
+        </dd>
+        <dt id="IdGen">
+          <span class="name "><a class="" href="tracebuddy/IdGen-class.html">IdGen</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/IdGen-class.html">IdGen</a> is a simple unique ID generator. It uses sequential ids.<a href="tracebuddy/IdGen-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="ImplicitFunction">
+          <span class="name "><a class="" href="tracebuddy/ImplicitFunction-class.html">ImplicitFunction</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/ImplicitFunction-class.html">ImplicitFunction</a> is defined by a <code>MathFunction</code>.<a href="tracebuddy/ImplicitFunction-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="InfinitePlane">
+          <span class="name "><a class="" href="tracebuddy/InfinitePlane-class.html">InfinitePlane</a></span>
+        </dt>
+        <dd>
+          <p>An <a class="" href="tracebuddy/InfinitePlane-class.html">InfinitePlane</a> is specified by its plane equation.</p>
+        </dd>
+        <dt id="Intersection">
+          <span class="name "><a class="" href="tracebuddy/Intersection-class.html">Intersection</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/Intersection-class.html">Intersection</a> class represents a ray/object intersection.
+It contains the distance to the hit point, the affected <a class="" href="tracebuddy/Primitive-class.html">Primitive</a>,
+and the hit point as <code>Point3D</code>.<a href="tracebuddy/Intersection-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="OutputMatrix">
+          <span class="name "><a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></span>
+        </dt>
+        <dd>
+          <p>Matrix containing the output colors at every pixel of the final image
+set by the renderer. The color information are stored as RGB vectors,
+with each component in the interval <code>0..1</code>.</p>
+        </dd>
+        <dt id="PerspectiveCamera">
+          <span class="name "><a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a> generates rays for a perspective projection.
+It is defined by its center, viewing direction, up vector,
+vertical opening angle of the image and resolution.</p>
+        </dd>
+        <dt id="PhongShader">
+          <span class="name "><a class="" href="tracebuddy/PhongShader-class.html">PhongShader</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/PhongShader-class.html">PhongShader</a> uses the phong reflection model to determine the surface
+radiance.<a href="tracebuddy/PhongShader-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="PluggableShader">
+          <span class="name "><a class="" href="tracebuddy/PluggableShader-class.html">PluggableShader</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/PluggableShader-class.html">PluggableShader</a> can be used together with a primitive.
+It is aware of its location and its surface normal to return
+the proper radiance.</p>
+        </dd>
+        <dt id="Primitive">
+          <span class="name "><a class="" href="tracebuddy/Primitive-class.html">Primitive</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Primitive-class.html">Primitive</a> is an arbitrary object which can be part of a scene and
+rendered by the ray tracer.<a href="tracebuddy/Primitive-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Ray">
+          <span class="name "><a class="" href="tracebuddy/Ray-class.html">Ray</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Ray-class.html">Ray</a> can be represented by its origin in space, direction vector and
+time traveled:<a href="tracebuddy/Ray-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="RegularSampler">
+          <span class="name "><a class="" href="tracebuddy/RegularSampler-class.html">RegularSampler</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/RegularSampler-class.html">RegularSampler</a> generates multiple samples per pixel,
+distributed regularly.</p>
+        </dd>
+        <dt id="Renderer">
+          <span class="name "><a class="" href="tracebuddy/Renderer-class.html">Renderer</a></span>
+        </dt>
+        <dd>
+          <p>The <a class="" href="tracebuddy/Renderer-class.html">Renderer</a> takes a <a class="" href="tracebuddy/Sampler-class.html">Sampler</a>, <a class="" href="tracebuddy/Camera-class.html">Camera</a> and <a class="" href="tracebuddy/Scene-class.html">Scene</a> and can render
+an image based on this information.<a href="tracebuddy/Renderer-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Sample">
+          <span class="name "><a class="" href="tracebuddy/Sample-class.html">Sample</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Sample-class.html">Sample</a> has a position within a pixel and a weigth.</p>
+        </dd>
+        <dt id="Sampler">
+          <span class="name "><a class="" href="tracebuddy/Sampler-class.html">Sampler</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Sampler-class.html">Sampler</a> generates samples for a given pixel.</p>
+        </dd>
+        <dt id="Scene">
+          <span class="name "><a class="" href="tracebuddy/Scene-class.html">Scene</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Scene-class.html">Scene</a> basically is a collection of <a class="" href="tracebuddy/Primitive-class.html">Primitive</a>s which together
+form the scene to be rendered.<a href="tracebuddy/Scene-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Shader">
+          <span class="name "><a class="" href="tracebuddy/Shader-class.html">Shader</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Shader-class.html">Shader</a> determines the appearance of a <a class="" href="tracebuddy/Primitive-class.html">Primitive</a> at
+a certain hit point.<a href="tracebuddy/Shader-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Sphere">
+          <span class="name "><a class="" href="tracebuddy/Sphere-class.html">Sphere</a></span>
+        </dt>
+        <dd>
+          <p>A <a class="" href="tracebuddy/Sphere-class.html">Sphere</a>, defined by its center point and radius.</p>
+        </dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>tracebuddy</h5>
+    <ol>
+      <li class="section-title"><a href="tracebuddy/tracebuddy-library.html#constants">Constants</a></li>
+      <li><a class="" href="tracebuddy/EPS.html">EPS</a></li>
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/tracebuddy-library.html#classes">Classes</a></li>
+      <li><a class="" href="tracebuddy/AmbientShader-class.html">AmbientShader</a></li>
+      <li><a class="" href="tracebuddy/BoundingBox-class.html">BoundingBox</a></li>
+      <li><a class="" href="tracebuddy/Camera-class.html">Camera</a></li>
+      <li><a class="" href="tracebuddy/CartesianCoordinateSystem-class.html">CartesianCoordinateSystem</a></li>
+      <li><a class="" href="tracebuddy/DefaultSampler-class.html">DefaultSampler</a></li>
+      <li><a class="" href="tracebuddy/IdGen-class.html">IdGen</a></li>
+      <li><a class="" href="tracebuddy/ImplicitFunction-class.html">ImplicitFunction</a></li>
+      <li><a class="" href="tracebuddy/InfinitePlane-class.html">InfinitePlane</a></li>
+      <li><a class="" href="tracebuddy/Intersection-class.html">Intersection</a></li>
+      <li><a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></li>
+      <li><a class="" href="tracebuddy/PerspectiveCamera-class.html">PerspectiveCamera</a></li>
+      <li><a class="" href="tracebuddy/PhongShader-class.html">PhongShader</a></li>
+      <li><a class="" href="tracebuddy/PluggableShader-class.html">PluggableShader</a></li>
+      <li><a class="" href="tracebuddy/Primitive-class.html">Primitive</a></li>
+      <li><a class="" href="tracebuddy/Ray-class.html">Ray</a></li>
+      <li><a class="" href="tracebuddy/RegularSampler-class.html">RegularSampler</a></li>
+      <li><a class="" href="tracebuddy/Renderer-class.html">Renderer</a></li>
+      <li><a class="" href="tracebuddy/Sample-class.html">Sample</a></li>
+      <li><a class="" href="tracebuddy/Sampler-class.html">Sampler</a></li>
+      <li><a class="" href="tracebuddy/Scene-class.html">Scene</a></li>
+      <li><a class="" href="tracebuddy/Shader-class.html">Shader</a></li>
+      <li><a class="" href="tracebuddy/Sphere-class.html">Sphere</a></li>
+    
+    </ol>
+  </div><!--/sidebar-offcanvas-right-->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          tracebuddy 0.0.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>
