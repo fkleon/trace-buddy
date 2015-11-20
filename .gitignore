@@ -2,12 +2,18 @@
 .project
 pubspec.lock
 .buildlog
+.packages
 
-# Symlinks #
+# Symlinks
 packages
 *.lnk
 
-# Folders #
+# Folders
 packages/
 out/
 build/
+.pub/
+.atom/
+
+# Documentation
+doc/

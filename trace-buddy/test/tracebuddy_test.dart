@@ -1,6 +1,6 @@
 library tracebuddy_test_suite;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart' hide Ray, Sphere;
 import 'package:math_expressions/math_expressions.dart';
 
@@ -8,9 +8,9 @@ import 'test_framework.dart';
 
 import '../lib/tracebuddy.dart';
 
-part 'ray_test.dart';
-part 'prim_test.dart';
-part 'output_matrix_test.dart';
+part 'ray.dart';
+part 'primitives.dart';
+part 'output_matrix.dart';
 
 /**
  * Registers all ray tracing test sets and executes the test suite afterwards.

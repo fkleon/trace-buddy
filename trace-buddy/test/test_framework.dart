@@ -1,6 +1,6 @@
 library test_framework;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 /**
  * Allows the automatic execution of several [TestSet]s.
