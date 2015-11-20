@@ -10,4 +10,4 @@ dependencies:
   tracebuddy:
     path: ../trace-buddy
   web_ui: ">=0.4.28 <0.5.0"
-  source_maps: ">=0.9.0 < 0.10.0" # source_maps 0.11.0 breaks something
+  source_maps: ">=0.9.0 <0.10.0" # source_maps 0.10.0 breaks something
