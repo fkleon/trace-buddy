@@ -1,5 +1,8 @@
 /**
- * TraceBuddy is a raytracer to render implicit functions.
+ * TraceBuddy is a general purpose ray tracer.
+ *
+ * However, it's primary goal is to support rendering implicit functions using
+ * interval arithmetics.
  */
 library tracebuddy;
 

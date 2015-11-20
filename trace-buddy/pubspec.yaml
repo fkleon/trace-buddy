@@ -1,6 +1,6 @@
 name:  tracebuddy
 version: 0.0.1
-description:  TraceBuddy is a raytracer to render implicit functions.
+description:  TraceBuddy is a ray tracer designed to render implicit functions.
 authors:
 - Frederik Leonhardt <frederik.leonhardt@gmail.com>
 - Michael Frey <asakash117@gmail.com>
