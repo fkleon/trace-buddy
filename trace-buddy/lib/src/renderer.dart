@@ -87,6 +87,33 @@ class OutputMatrix {
    */
   List<Vector3> getSerialized() => new List.from(_content);
 
+  /**
+   * Returns an array containing all colors in serialized RGBA byte form,
+   * structured by row after row.
+   */
+  List<int> getSerializedRGBA() {
+    // RGBA
+    List<int> bytes = new List(4 * _content.length);
+
+    int i = 0;
+    for (Vector3 color in _content) {
+      bytes[i++] = _asRgbInt(color[0]);
+      bytes[i++] = _asRgbInt(color[1]);
+      bytes[i++] = _asRgbInt(color[2]);
+      bytes[i++] = 255;
+    }
+
+    return bytes;
+  }
+
+  /*
+   * Converts a double [0..1] to a RGB int [0..255].
+   */
+  int _asRgbInt(double value) {
+    assert(value >= 0 || value <= 1);
+    return (value*255).toInt();
+  }
+
   bool _isValidColumn(int column) => (column > 0 && column <= columns);
   bool _isValidRow(int row) => (row > 0 && row <= rows);
 }

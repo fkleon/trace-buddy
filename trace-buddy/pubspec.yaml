@@ -9,6 +9,7 @@ dependencies:
   vector_math:
     git: git://github.com/google/vector_math.dart.git
   math_expressions: ">=0.1.0 <1.0.0"
+  image: ">=1.1.25 <2.0.0"
 
 dev_dependencies:
   test: ">=0.12.0 <0.13.0"

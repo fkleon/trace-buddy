@@ -1,5 +1,7 @@
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 import 'package:math_expressions/math_expressions.dart';
+import 'package:image/image.dart';
+import 'dart:io' show File;
 
 import '../lib/tracebuddy.dart';
 
@@ -7,6 +9,8 @@ Scene scene;
 Sampler sampler;
 Camera camera;
 Renderer renderer;
+
+int height, width;
 
 /**
  * Creates the renderer and all associated objects.
@@ -64,7 +68,7 @@ void createRenderer([double scale = 1.0]) {
   // load camera
   if (camera == null) {
     Point3D cameraOrigin = new Point3D(-5.0,2.0,-5.0);
-    Vector2 res = new Vector2(100.0,50.0);
+    Vector2 res = new Vector2(width.toDouble(),height.toDouble());
 
     camera = new PerspectiveCamera.lookAt(
         cameraOrigin,
@@ -78,10 +82,20 @@ void createRenderer([double scale = 1.0]) {
   renderer = new Renderer(scene, sampler, camera);
 }
 
-/**
- * Registers all ray tracing test sets and executes the test suite afterwards.
- */
-void main() {
+// renders a scene and writes the output to a file
+main() async {
+  // create scene and camera
+  width = 320;
+  height = 240;
   createRenderer();
-  renderer.render();
+
+  // render the image
+  OutputMatrix om = renderer.render();
+
+  // write image and scale up
+  Image image = new Image.fromBytes(width, height, om.getSerializedRGBA());
+  Image scaledImage = copyResize(image, width * 2);
+
+  File file = await new File('image.png').writeAsBytes(encodePng(scaledImage));
+  print('Output image written to ${file}!');
 }
