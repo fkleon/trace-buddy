@@ -26,4 +26,4 @@ use pub's development server to access it:
 
 `pub serve`
 
-Then go to <http://localhost/out/web/TraceBuddy.html> in your browser.
+Then go to <http://localhost:8080/out/web/TraceBuddy.html> in your browser.
