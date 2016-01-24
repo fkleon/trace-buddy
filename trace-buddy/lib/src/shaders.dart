@@ -54,7 +54,7 @@ abstract class Shader {
 abstract class PluggableShader extends Shader {
 
   /// The position of the hit point.
-  Point3D position;
+  Point3 position;
 
   Vector3 _normal; // normalized
 

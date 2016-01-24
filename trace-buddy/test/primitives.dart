@@ -16,10 +16,10 @@ class PrimTests extends TestSet {
   };
 
   void initTests() {
-    prim_origin = new Point3D.zero();
-    prim_s1 = new Sphere(new Point3D(10.0, 0.0, 0.0), 1);
-    prim_s2 = new Sphere(new Point3D(-10.0, -10.0, -10.0), 2);
-    prim_p1 = new InfinitePlane(new Point3D(0.0, 2.0, 0.0), new Vector3(0.0, 1.0, 0.0));
+    prim_origin = new Point3.zero();
+    prim_s1 = new Sphere(new Point3(10.0, 0.0, 0.0), 1);
+    prim_s2 = new Sphere(new Point3(-10.0, -10.0, -10.0), 2);
+    prim_p1 = new InfinitePlane(new Point3(0.0, 2.0, 0.0), new Vector3(0.0, 1.0, 0.0));
     prim_r1 = new Ray(prim_origin, new Vector3(1.0, 0.0, 0.0));
     prim_r2 = new Ray(prim_origin, new Vector3(10.0, 1.0, 0.0).normalize());
     prim_r3 = new Ray(prim_origin, new Vector3(10.0, 2.0, 0.0));
@@ -38,12 +38,12 @@ class PrimTests extends TestSet {
   Sphere prim_s1, prim_s2;
   InfinitePlane prim_p1, prim_p2;
   Ray prim_r1, prim_r2, prim_r3, prim_r4;
-  Point3D prim_origin;
+  Point3 prim_origin;
 
   void sphereCreationValid(){
-    expect(prim_s1.center, equals(new Point3D(10.0, 0.0, 0.0)));
+    expect(prim_s1.center, equals(new Point3(10.0, 0.0, 0.0)));
     expect(prim_s1.radius, equals(1));
-    expect(prim_s2.center, equals(new Point3D(-10.0, -10.0, -10.0)));
+    expect(prim_s2.center, equals(new Point3(-10.0, -10.0, -10.0)));
     expect(prim_s2.radius, equals(2));
   }
 

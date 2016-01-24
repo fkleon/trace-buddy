@@ -11,19 +11,19 @@ class IntersectionBenchmark extends BenchmarkBase {
   // Not measured: setup code executed before the benchmark runs.
   void setup() {
     // init sphere
-    c = new Point3D(10.0, 0.0, 0.0);
+    c = new Point3(10.0, 0.0, 0.0);
     r = 1.0;
 
     // init ray with 2 hitpoints
-    o1 = new Point3D.zero();
+    o1 = new Point3.zero();
     d1 = new Vector3(10.0,1.0,0.0).normalize();
 
     // init ray with 1 hitpoint
-    o2 = new Point3D(0.0,1.0,0.0);
+    o2 = new Point3(0.0,1.0,0.0);
     d2 = new Vector3(10.0, 0.0, 0.0).normalize();
 
     // init ray with no hitpoint
-    o3 = new Point3D.zero();
+    o3 = new Point3.zero();
     d3 = new Vector3(1.0, 1.0, 0.0).normalize();
   }
 
@@ -31,12 +31,12 @@ class IntersectionBenchmark extends BenchmarkBase {
   void teardown() { }
 
   static const double EPS = 0.00001;
-  Point3D c, o1, o2, o3;
+  Point3 c, o1, o2, o3;
   double r;
   Vector3 d1, d2, d3;
 
   // expects normalized direction vector
-  double calcDet(Point3D o, Vector3 d, Point3D c, num r) {
+  double calcDet(Point3 o, Vector3 d, Point3 c, num r) {
     //print('-- CALC DET --');
 
     double A = d.dot(d);
@@ -66,7 +66,7 @@ class IntersectionBenchmark extends BenchmarkBase {
   }
 
   // expects normalized direction vector
-  double calcRT(Point3D o, Vector3 d, Point3D c, num r) {
+  double calcRT(Point3 o, Vector3 d, Point3 c, num r) {
     //print('-- CALC RT --');
 
     Vector3 distance = o-c;
@@ -90,12 +90,12 @@ class IntersectionBenchmark extends BenchmarkBase {
   }
 
   // buggy
-  double calcGeom(Point3D o, Vector3 d, Point3D c, num r) {
+  double calcGeom(Point3 o, Vector3 d, Point3 c, num r) {
     //print('-- CALC GEOM --');
 
     Vector3 b = d.scale((c-o).dot(d));
     //print('b: $b');
-    Point3D B = new Point3D(b.x, b.y, b.z);
+    Point3 B = new Point3(b.x, b.y, b.z);
     //print('B: $B');
 
     Vector3 dist = B-c;

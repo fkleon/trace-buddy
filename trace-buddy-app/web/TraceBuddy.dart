@@ -103,9 +103,9 @@ class RenderController {
       Shader phongRedShader = new PhongShader(red, red, 50.0, red);
       Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
 
-      List<Primitive> primitives = [new InfinitePlane(new Point3D(0.0,-2.0,0.0),new Vector3(0.0, 1.0, 0.0), phongTurquisShader),
-                                    new Sphere(new Point3D(10.0,0.0,0.0),2,phongGreenShader),
-                                    new Sphere(new Point3D(-4.0,-1.0,1.0),0.2,phongRedShader)];
+      List<Primitive> primitives = [new InfinitePlane(new Point3(0.0,-2.0,0.0),new Vector3(0.0, 1.0, 0.0), phongTurquisShader),
+                                    new Sphere(new Point3(10.0,0.0,0.0),2,phongGreenShader),
+                                    new Sphere(new Point3(-4.0,-1.0,1.0),0.2,phongRedShader)];
 
       Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
       Number two = new Number(2);
@@ -130,12 +130,12 @@ class RenderController {
 
     // load camera
     if (camera == null) {
-      Point3D cameraOrigin = view == null ? new Point3D(-5.0,2.0,-5.0) : this.view.cameraOrigin;
+      Point3 cameraOrigin = view == null ? new Point3(-5.0,2.0,-5.0) : this.view.cameraOrigin;
       Vector2 res = view == null ? new Vector2(300.0,200.0) : this.view.res.scale(scale);
 
       camera = new PerspectiveCamera.lookAt(
           cameraOrigin,
-          new Point3D(0.0,0.0,0.0),
+          new Point3(0.0,0.0,0.0),
           new Vector3(0.0,1.0,0.0),
           60,
           res);
@@ -362,8 +362,8 @@ class TraceBuddyView {
   int get yRes => _parseInt(_yResStr);
   Vector2 get res => new Vector2(xRes.toDouble(), yRes.toDouble());
 
-  Point3D get cameraOrigin =>
-      new Point3D(_parseDouble(xOriginStr),
+  Point3 get cameraOrigin =>
+      new Point3(_parseDouble(xOriginStr),
                   _parseDouble(yOriginStr),
                   _parseDouble(zOriginStr));
 

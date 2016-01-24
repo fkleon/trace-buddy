@@ -49,7 +49,7 @@ abstract class Primitive {
    * The following getters are only used to display information in the GUI.
    */
   /// The origin of the primitive (only used for GUI).
-  Point3D get origin => null;
+  Point3 get origin => null;
 
   /// The primary color of the primitive as vector4 (only used for GUI).
   Vector4 get color => _shader == null ? new Vector4.zero() : _shader.getAmbientCoeff();
@@ -158,7 +158,7 @@ class Scene extends Primitive {
     // TODO iterate over indexable primitives
 
     // package everything nicely
-    Intersection bestHit = new Intersection(bestDistance, bestPrimitive, r.getPoint3D(bestDistance));
+    Intersection bestHit = new Intersection(bestDistance, bestPrimitive, r.getPoint3(bestDistance));
     return bestHit;
   }
 
@@ -179,13 +179,13 @@ class InfinitePlane extends Primitive {
   Vector4 equation;
 
   /// The plane origin.
-  Point3D origin;
+  Point3 origin;
 
   /**
    * Creates a new [InfinitePlane] from the given origin, normal and shader.
    */
-  InfinitePlane(Point3D this.origin, Vector3 normal, [Shader shader]) : super(shader){
-    double w = -normal.dot(origin.toVec3());
+  InfinitePlane(Point3 this.origin, Vector3 normal, [Shader shader]) : super(shader){
+    double w = -normal.dot(origin);
     equation = new Vector4(normal.x, normal.y, normal.z ,w);
   }
 
@@ -199,11 +199,13 @@ class InfinitePlane extends Primitive {
 
     if (div.abs() > EPS) {
       // calculate distance from ray origin to plane
-      var dist = (-r.origin.toVec4().dot(equation)) / div;
+      // use homogeneous vector4 representation
+      Vector4 vec4 = -(r.origin.xyzz..w = 1.0);
+      var dist = vec4.dot(equation) / div;
 
       intersect.distance = dist;
       intersect.prim = this;
-      intersect.hitPoint = r.getPoint3D(dist);
+      intersect.hitPoint = r.getPoint3(dist);
     }
 
     return intersect;
@@ -236,7 +238,7 @@ class CartesianCoordinateSystem extends Primitive {
 
   InfinitePlane _xAxis, _yAxis, _zAxis;
 
-  Point3D get origin => new Point3D.zero();
+  Point3 get origin => new Point3.zero();
 
   /**
    * Returns always the same instance of CartesianCoordinateSystem in the
@@ -253,7 +255,7 @@ class CartesianCoordinateSystem extends Primitive {
    * Internal constructor to realize singleton implementation.
    */
   CartesianCoordinateSystem._internal() {
-    var origin = new Point3D.zero();
+    var origin = new Point3.zero();
     this._xAxis = new InfinitePlane(origin, new Vector3(0.0, 1.0, 0.0));
     this._yAxis = new InfinitePlane(origin, new Vector3(1.0, 0.0, 0.0));
     this._zAxis = new InfinitePlane(origin, new Vector3(0.0, 1.0, 0.0));
@@ -299,19 +301,19 @@ class CartesianCoordinateSystem extends Primitive {
 class Sphere extends Primitive {
 
   /// The center of this sphere.
-  Point3D center;
+  Point3 center;
 
   /// The radius of this sphere.
   num radius;
 
-  Point3D get origin => center;
+  Point3 get origin => center;
 
   /**
    * Creates a new [Sphere] with the given center, radius and shader.
    *
    * The radius of a sphere must not be zero or less.
    */
-  Sphere(Point3D this.center, num this.radius, [Shader shader]) : super(shader) {
+  Sphere(Point3 this.center, num this.radius, [Shader shader]) : super(shader) {
     if (radius<=0) throw new ArgumentError('Radius of sphere must not be zero or less');
   }
 
@@ -328,7 +330,7 @@ class Sphere extends Primitive {
       return intersect;
     } else {
       intersect.distance = l1;
-      intersect.hitPoint = r.getPoint3D(l1);
+      intersect.hitPoint = r.getPoint3(l1);
       intersect.prim = this;
       return intersect;
     }
@@ -356,7 +358,7 @@ class Sphere extends Primitive {
 
       intersect.distance = dist;
       intersect.prim = this;
-      intersect.hitPoint = r.getPoint3D(dist);
+      intersect.hitPoint = r.getPoint3(dist);
     }
 
     return intersect;
@@ -420,7 +422,7 @@ class ImplicitFunction extends Primitive {
     //num distance = findRoot(f, i);
     //findRoot(g, i);
 
-    Intersection int = new Intersection(distance, this, r.getPoint3D(distance));
+    Intersection int = new Intersection(distance, this, r.getPoint3(distance));
     return int;
   }
 

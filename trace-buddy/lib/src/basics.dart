@@ -9,24 +9,19 @@ const num EPS = 0.000001;
  *
  *     r(t) = o + td
  */
-class Ray {
-
-  /// The origin of this ray.
-  Point3D origin;
-
-  /// The direction vector of this ray.
-  Vector3 direction;
+class Ray extends VectorMath.Ray {
 
   /**
    * Creates a [Ray] from a given origin and direction vector.
    */
-  Ray(Point3D this.origin, Vector3 this.direction);
+  Ray(Point3 origin, Vector3 direction) :
+    super.originDirection(origin, direction);
 
   /**
    * Returns the point in space after this ray has traveled a given distance
    * from its origin.
    */
-  Point3D getPoint3D(num distance) => this.origin + (this.direction * distance.toDouble());
+  Point3 getPoint3(double distance) => new Point3.vec(this.at(distance));
 
   String toString() => "Ray [$origin --> $direction].";
 }
@@ -34,7 +29,7 @@ class Ray {
 /**
  * The [Intersection] class represents a ray/object intersection.
  * It contains the distance to the hit point, the affected [Primitive],
- * and the hit point as [Point3D].
+ * and the hit point as [Point3].
  *
  * If there is no hit, distance will be negative.
  */
@@ -44,7 +39,7 @@ class Intersection {
   num distance;
 
   /// The hit point.
-  Point3D hitPoint;
+  Point3 hitPoint;
 
   /// The affected primitive.
   Primitive prim;
@@ -62,7 +57,7 @@ class Intersection {
  */
 class BoundingBox {
   /// Corner points of this bounding box.
-  Point3D minCorner, maxCorner;
+  Point3 minCorner, maxCorner;
 
   /**
    * Creates a bounding box with the given corners.
@@ -73,8 +68,8 @@ class BoundingBox {
   /**
    * Creates a new empty bounding box.
    */
-  BoundingBox.empty():  this.minCorner = new Point3D.splat(double.MAX_FINITE),
-                        this.maxCorner = new Point3D.splat(-double.MAX_FINITE);
+  BoundingBox.empty():  this.minCorner = new Point3.splat(double.MAX_FINITE),
+                        this.maxCorner = new Point3.splat(-double.MAX_FINITE);
 
   /**
    * Intersects this box with the given ray and returns a vec2 containing
@@ -100,12 +95,12 @@ class BoundingBox {
   /**
    * Extends this bounding box with the given point.
    */
-  void extend(Point3D point) {
+  void extend(Point3 point) {
     Vector3 newMin = new Vector3.zero(), newMax = new Vector3.zero();
-    Vector3.min(minCorner.toVec3(), point.toVec3(), newMin);
-    Vector3.max(maxCorner.toVec3(), point.toVec3(), newMax);
-    minCorner = new Point3D.vec(newMin);
-    maxCorner = new Point3D.vec(newMax);
+    Vector3.min(minCorner, point, newMin);
+    Vector3.max(maxCorner, point, newMax);
+    minCorner = new Point3.vec(newMin);
+    maxCorner = new Point3.vec(newMax);
   }
 
   /**
@@ -113,10 +108,10 @@ class BoundingBox {
    */
   void extendBB(BoundingBox bbox) {
     Vector3 newMin = new Vector3.zero(), newMax = new Vector3.zero();
-    Vector3.min(minCorner.toVec3(), bbox.minCorner.toVec3(), newMin);
-    Vector3.max(maxCorner.toVec3(), bbox.maxCorner.toVec3(), newMax);
-    minCorner = new Point3D.vec(newMin);
-    maxCorner = new Point3D.vec(newMax);
+    Vector3.min(minCorner, bbox.minCorner, newMin);
+    Vector3.max(maxCorner, bbox.maxCorner, newMax);
+    minCorner = new Point3.vec(newMin);
+    maxCorner = new Point3.vec(newMax);
   }
 
   // TODO area and volume for acceleration structures

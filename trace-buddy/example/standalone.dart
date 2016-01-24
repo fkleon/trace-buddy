@@ -40,9 +40,9 @@ void createRenderer([double scale = 1.0]) {
     Shader phongRedShader = new PhongShader(red, red, 50.0, red);
     Shader phongTurquisShader = new PhongShader(turquis, turquis, 50.0, turquis);
 
-    List<Primitive> primitives = [new InfinitePlane(new Point3D(0.0,-2.0,0.0),new Vector3(0.0, 1.0, 0.0), phongTurquisShader),
-                                  new Sphere(new Point3D(10.0,0.0,0.0),2,phongGreenShader),
-                                  new Sphere(new Point3D(-4.0,-1.0,1.0),0.2,phongRedShader)];
+    List<Primitive> primitives = [new InfinitePlane(new Point3(0.0,-2.0,0.0),new Vector3(0.0, 1.0, 0.0), phongTurquisShader),
+                                  new Sphere(new Point3(10.0,0.0,0.0),2,phongGreenShader),
+                                  new Sphere(new Point3(-4.0,-1.0,1.0),0.2,phongRedShader)];
 
     Variable x = new Variable('x'), y = new Variable('y'), z = new Variable('z');
     Number two = new Number(2);
@@ -67,12 +67,12 @@ void createRenderer([double scale = 1.0]) {
 
   // load camera
   if (camera == null) {
-    Point3D cameraOrigin = new Point3D(-5.0,2.0,-5.0);
+    Point3 cameraOrigin = new Point3(-5.0,2.0,-5.0);
     Vector2 res = new Vector2(width.toDouble(),height.toDouble());
 
     camera = new PerspectiveCamera.lookAt(
         cameraOrigin,
-        new Point3D(0.0,0.0,0.0),
+        new Point3(0.0,0.0,0.0),
         new Vector3(0.0,1.0,0.0),
         60,
         res);

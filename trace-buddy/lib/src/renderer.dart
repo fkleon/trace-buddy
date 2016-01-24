@@ -229,7 +229,7 @@ class Renderer {
  * The camera generates [Ray]s for every pixel of the image.
  */
 abstract class Camera {
-  Point3D center;
+  Point3 center;
 
   /**
    * Returns a collection of primary rays generated for the given pixel
@@ -266,7 +266,7 @@ class PerspectiveCamera extends Camera {
    * Creates a new [PerspectiveCamera].
    * Uses a forward vector.
    */
-  PerspectiveCamera(Point3D center, Vector3 this.forward, Vector3 up, num vertOpeningAngle, Vector2 this._res) {
+  PerspectiveCamera(Point3 center, Vector3 this.forward, Vector3 up, num vertOpeningAngle, Vector2 this._res) {
     _init(center, up, vertOpeningAngle);
 
     print("Created new PerspectiveCamera:");
@@ -284,7 +284,7 @@ class PerspectiveCamera extends Camera {
    * Creates a new [PerspectiveCamera].
    * Calculates forward vector based on given look-at point.
    */
-  PerspectiveCamera.lookAt(Point3D center, Point3D lookAt, Vector3 up, num vertOpeningAngle, Vector2 this._res) {
+  PerspectiveCamera.lookAt(Point3 center, Point3 lookAt, Vector3 up, num vertOpeningAngle, Vector2 this._res) {
     this.forward = lookAt-center;
     _init(center, up, vertOpeningAngle);
 
@@ -300,7 +300,7 @@ class PerspectiveCamera extends Camera {
   }
 
 
-  void _init(Point3D center, Vector3 up, num vertOpeningAngle) {
+  void _init(Point3 center, Vector3 up, num vertOpeningAngle) {
     this.center = center;
 
     num resX = _res.x.toDouble();
@@ -334,7 +334,7 @@ class PerspectiveCamera extends Camera {
     num y = center.y;
     num z = center.x * -(Math.sin(horRadiance)) + center.z * Math.cos(horRadiance);
 
-    center = new Point3D(x, y, z);
+    center = new Point3(x, y, z);
 
     // Then rotate up and down around origin
     num myAxisX = right.x;
@@ -345,7 +345,7 @@ class PerspectiveCamera extends Camera {
     num rotY = (myAxisY * myAxisX * (1 - Math.cos(verRadiance)) + myAxisZ * Math.sin(verRadiance))*center.x + (myAxisY * myAxisY * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.y + (myAxisY * myAxisZ * (1 - Math.cos(verRadiance)) - myAxisX * Math.sin(verRadiance))*center.z;
     num rotZ = (myAxisZ * myAxisX * (1 - Math.cos(verRadiance)) - myAxisY * Math.sin(verRadiance))*center.x + (myAxisZ * myAxisY * (1 - Math.cos(verRadiance)) + myAxisX * Math.sin(verRadiance))*center.y + (myAxisZ * myAxisZ * (1 - Math.cos(verRadiance)) + Math.cos(verRadiance))*center.z;
 
-    center = new Point3D(rotX, rotY, rotZ);
+    center = new Point3(rotX, rotY, rotZ);
   }
 
   void zoom(num distance) {
@@ -354,7 +354,7 @@ class PerspectiveCamera extends Camera {
     num newCenterY = center.y + distance * forward.y;
     num newCenterZ = center.z + distance * forward.z;
 
-    center = new Point3D(newCenterX, newCenterY, newCenterZ);
+    center = new Point3(newCenterX, newCenterY, newCenterZ);
   }
 
   List<Ray> getPrimaryRays(int x, int y) {

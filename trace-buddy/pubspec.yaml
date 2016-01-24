@@ -6,12 +6,11 @@ authors:
 - Michael Frey <asakash117@gmail.com>
 
 dependencies:
-  vector_math:
-    git: git://github.com/google/vector_math.dart.git
-  math_expressions: ">=0.1.0 <1.0.0"
-  image: ">=1.1.25 <2.0.0"
+  vector_math: '>=1.4.4 <2.0.0'
+  math_expressions: '>=0.3.0-dev'
+  image: '>=1.1.25 <2.0.0'
 
 dev_dependencies:
-  test: ">=0.12.0 <0.13.0"
+  test: '>=0.12.0 <0.13.0'
   benchmark_harness:
     git: https://github.com/dart-lang/benchmark_harness
