@@ -467,7 +467,7 @@ class ImplicitFunction extends Primitive {
         // Monotonous part of function.
         // -> calculate root
         print(i);
-        _newtonRoot(g, gDerived, (i.min+i.max)/2);
+        return _newtonRoot(g, gDerived, (i.min+i.max)/2.0);
       } else {
         // Recursively split.
         num r1 = findRoot(g, new Interval(i.min, (i.min+i.max)/2.0));
