@@ -1,7 +1,10 @@
 part of tracebuddy;
 
 /// relative accuracy for floating-point calculations
-const num EPS = 0.000001;
+const double EPS = 0.000001;
+
+// maximum distance for calculations
+const double MAX_DIST = 999999.0;
 
 /**
  * A [Ray] can be represented by its origin in space, direction vector and

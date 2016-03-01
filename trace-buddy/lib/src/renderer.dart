@@ -201,9 +201,8 @@ class Renderer {
 
             // integrate radiance
             //TODO count bounces for indirect radiance
-
-            Intersection ret = scene.intersect(r, 99999); //TODO fix hardcoded distance
-            if (ret.distance >= EPS && ret.distance < 99999) {
+            Intersection ret = scene.intersect(r, MAX_DIST);
+            if (ret.distance >= EPS && ret.distance < MAX_DIST) {
 
               //print ('hit at ${ret.distance} with ${ret.prim} on ${ret.hitPoint}');
 

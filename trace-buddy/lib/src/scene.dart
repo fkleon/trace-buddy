@@ -136,9 +136,9 @@ class Scene extends Primitive {
    * Will only return hit points which are closer than the specified
    * `prevBestDistance`.
    */
-  Intersection intersect(Ray r, num prevBestDistance) {
+  Intersection intersect(Ray r, double prevBestDistance) {
 
-    num bestDistance = prevBestDistance;
+    double bestDistance = prevBestDistance;
     Primitive bestPrimitive = null;
 
     //print('Finding intersetion with ${nonIdxPrimitives.length} primitives..');
@@ -416,7 +416,7 @@ class ImplicitFunction extends Primitive {
     //Interval i = f.evaluate(Expr.EvaluationType.INTERVAL, cm);
     //print(i);
 
-    num distance = findRootBF(f, i);
+    double distance = findRootBF(f, i);
 
     //TODO f needs to be composite for this to work, or have x, y, z substituted.
     //num distance = findRoot(f, i);
@@ -426,7 +426,7 @@ class ImplicitFunction extends Primitive {
     return int;
   }
 
-  num findRootBF(MathFunction g, Interval i) {
+  double findRootBF(MathFunction g, Interval i) {
     //print('Analyze $i');
     if (i.length() < 0.001) {
       return i.min;
@@ -443,7 +443,7 @@ class ImplicitFunction extends Primitive {
       num r2 = findRootBF(g, new Interval((i.min + i.max) / 2.0, i.max));
       return Math.min(r1, r2); // Return root ar minimal distance.
     } else {
-      return 9999999;
+      return MAX_DIST;
     }
   }
 
@@ -478,7 +478,7 @@ class ImplicitFunction extends Primitive {
       // No root.
       // Return negative value for no hit.
 //      return -1;
-      return 999999;
+      return MAX_DIST;
     }
   }
 
