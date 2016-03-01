@@ -7,7 +7,8 @@ authors:
 
 dependencies:
   vector_math: '>=1.4.4 <2.0.0'
-  math_expressions: '>=0.3.0-dev'
+  math_expressions:
+    git: https://github.com/fkleon/math-expressions.git
   image: '>=1.1.25 <2.0.0'
 
 dev_dependencies:
