@@ -93,9 +93,8 @@ main() async {
   OutputMatrix om = renderer.render();
 
   // write image and scale up
-  Image image = new Image.fromBytes(width, height, om.getSerializedRGBA());
-  Image scaledImage = copyResize(image, width * 2);
-
+  Image image = new Image.fromBytes(width, height, om.getBytesRGBA(), Image.RGBA);
+  Image scaledImage = copyResize(image, width * 2, height * 2, AVERAGE);
   File file = await new File('image.png').writeAsBytes(encodePng(scaledImage));
   print('Output image written to ${file}!');
 }

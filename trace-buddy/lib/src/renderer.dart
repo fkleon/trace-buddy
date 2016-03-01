@@ -2,25 +2,34 @@ part of tracebuddy;
 
 /**
  * Matrix containing the output colors at every pixel of the final image
- * set by the renderer. The color information are stored as RGB vectors,
- * with each component in the interval [0..1].
+ * set by the renderer. The color information are stored as uint8 clamped
+ * RGB<A> values, with each component in the interval [0..255].
+ *
+ * Indices are 0-based.
  */
 class OutputMatrix {
 
-  final int rows, columns;
+  // RGB<A>
+  static int OFFSET = 4;
+
+  // Number of rows and number of internal columns - i.e. columns * offset
+  final int rows, _columns;
+
+  // Number of columns for the external user of this class
+  int get columns => _columns ~/ OFFSET;
 
   /// Color information of every pixel. Stored in a serialized form:
   /// `[(row1_col1, row1_col2, .. row1_colN), .. , (rowN_col1, ..)]`
-  List<Vector3> _content;
+  /// where each entry consists of four uint8 for the RGBA values.
+  Uint8ClampedList _content;
 
   /**
    * Initializes a output matrix of size rows*columns and initially set all
    * color information to black.
    */
-  OutputMatrix(int this.rows, int this.columns) {
-    // init the array (serialized matrix)
-    _content = new List<Vector3>(rows*columns);
-
+  OutputMatrix(int this.rows, int columns) :
+      this._columns = columns * OFFSET {
+    this._content = new Uint8ClampedList(rows * _columns);
     // set all pixel to black
     clear();
   }
@@ -29,40 +38,41 @@ class OutputMatrix {
    * Clears the matrix to black.
    */
   void clear() {
-    Vector3 black = new Vector3.zero();
-    for (int i = 0; i<rows*columns; i++) {
-      _content[i] = black;
-    }
+    _content.fillRange(0, _content.length, 0);
   }
 
   /**
-   * Sets the given pixel to given color.
-   *
-   * Note:
-   * width = row,
-   * heigth = column. //TODO: really? this sounds wrong..
+   * Sets the given pixel to given RGBA color.
+   * The color values are expected to be normalised into the range [0.0..1.0].
    *
    * Throws an argument error, if either row or column does not exist.
-   *
    */
-  setPixel(int row, int column, Vector3 color) {
-    if (!_isValidRow(row) || !_isValidColumn(column)) throw new ArgumentError('No such row or column: $row,$column.');
+  setPixel(int row, int column, Vector4 color) {
+    if (!_isValidRow(row) || !_isValidColumn(column))
+      throw new ArgumentError('No such row or column: $row,$column.');
 
-    _content[((row - 1) * columns) + (column - 1)] = color.clone();
+    int startIdx = (row * _columns) + (column * OFFSET);
+    _content.setRange(startIdx, startIdx + OFFSET,
+      _scaledToRgba(color).storage
+      .map((d) => d.toInt())
+    );
   }
 
   /**
-   * Sets the colors of the given row.
+   * Sets the RGBA colors of the given row.
+   * The color values are expected to be normalised into the range [0.0..1.0].
    *
    * Throws an argument error, if row is invalid.
    */
-  setRow(int row, List<Vector3> colors) {
+  setRow(int row, List<Vector4> colors) {
     if (!_isValidRow(row)) throw new ArgumentError('No such row: $row.');
 
-    int startIndex = (row-1)*columns;
-    for (int i = 0; i<columns; i++) {
-      _content[((row - 1) * columns) + i] = colors[i].clone();
-    }
+    int startIdx = row * _columns;
+    List<double> colorBytes = new List(colors.length * OFFSET);
+    colors
+      .asMap().forEach((i, c) => _scaledToRgba(c).copyIntoArray(colorBytes, i * OFFSET));
+
+    _content.setRange(startIdx, startIdx + _columns, colorBytes.map((d) => d.toInt()));
   }
 
   /**
@@ -70,52 +80,57 @@ class OutputMatrix {
    *
    * Throws an argument error, if column is invalid.
    */
-  Vector3 getPixel(int row, int column) {
-    if (!_isValidColumn(column)) throw new ArgumentError('No such column: $column.');
+  Vector4 getPixel(int row, int column) {
+    if (!_isValidRow(row) || !_isValidColumn(column))
+      throw new ArgumentError('No such row/column: $row,$column.');
 
-    return _content[((row - 1) * columns) + (column - 1)];
+    int startIdx = (row * _columns) + (column * OFFSET);
+    return new Vector4(
+      _content[startIdx++].toDouble(),
+      _content[startIdx++].toDouble(),
+      _content[startIdx++].toDouble(),
+      _content[startIdx].toDouble()
+    );
   }
 
   /**
-   * Returns a list of colors for given row.
+   * Returns a list of colors for the given row.
    */
-  Iterable<Vector3> getRow(int row) => _content.getRange((row - 1) * columns, row*columns);
+  Iterable<Vector4> getRow(int row) {
+    if (!_isValidRow(row)) throw new ArgumentError('No such row: $row.');
 
-  /**
-   * Returns an array containing all colors in serialized form,
-   * structured by row after row.
-   */
-  List<Vector3> getSerialized() => new List.from(_content);
+    int startIdx = row * _columns;
+    List<double> rowBytes = new List.from(
+      _content
+        .getRange(startIdx, startIdx + _columns)
+        .map((i) => i.toDouble())
+    );
 
-  /**
-   * Returns an array containing all colors in serialized RGBA byte form,
-   * structured by row after row.
-   */
-  List<int> getSerializedRGBA() {
-    // RGBA
-    List<int> bytes = new List(4 * _content.length);
-
-    int i = 0;
-    for (Vector3 color in _content) {
-      bytes[i++] = _asRgbInt(color[0]);
-      bytes[i++] = _asRgbInt(color[1]);
-      bytes[i++] = _asRgbInt(color[2]);
-      bytes[i++] = 255;
+    List<Vector4> vecRow = new List(columns);
+    for (int column = 0; column < columns; column++) {
+      vecRow[column] = new Vector4.array(rowBytes, column * OFFSET);
     }
-
-    return bytes;
+    return vecRow;
   }
 
-  /*
-   * Converts a double [0..1] to a RGB int [0..255].
+  /**
+   * Returns an array containing all colors in serialized RGB form,
+   * structured by row after row.
    */
-  int _asRgbInt(double value) {
-    assert(value >= 0 || value <= 1);
-    return (value*255).toInt();
+  List<int> getBytesRGBA() => _content;
+  List<int> getIntRGBA() => new Uint32List.view(_content.buffer);
+
+  // Scales the double RGBA colour representations [0..1] to a RGB double [0..255].
+  Vector4 _scaledToRgba(Vector4 rgbaColour) {
+    //if (rgbaColour.storage.any((value) => !(value >= 0.0 && value <= 1.0))) {
+    //  print('Illegal range for value in $rgbColour, clamping!');
+    //}
+    return rgbaColour.scaled(255.0);
+    //return colour.scaled(255.0);
   }
 
-  bool _isValidColumn(int column) => (column > 0 && column <= columns);
-  bool _isValidRow(int row) => (row > 0 && row <= rows);
+  bool _isValidColumn(int column) => (column >= 0 && column < columns);
+  bool _isValidRow(int row) => (row >= 0 && row < rows);
 }
 
 /**
@@ -214,8 +229,11 @@ class Renderer {
           // add to overall pixel color
           color += tempColor;
 
+          // alpha always set manually - not supported in shaders yet
+          color.a = 1.0;
+
           // set pixel in output matrix
-          om.setPixel(y+1, x+1, color.rgb);
+          om.setPixel(y, x, color.rgba);
         }
       }
     }

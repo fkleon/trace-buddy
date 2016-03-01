@@ -6,6 +6,7 @@
  */
 library tracebuddy;
 
+import 'dart:typed_data';
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 import 'package:vector_math/vector_math.dart' as VectorMath show Ray;
