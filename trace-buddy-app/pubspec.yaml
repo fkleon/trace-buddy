@@ -1,6 +1,6 @@
-name:  tracebuddy-app
+name: tracebuddy_app
 version: 0.0.1
-description:  Web app for the TraceBuddy ray tracer.
+description: Web app for the TraceBuddy ray tracer.
 authors:
 - Frederik Leonhardt <frederik.leonhardt@gmail.com>
 - Michael Frey <asakash117@gmail.com>
