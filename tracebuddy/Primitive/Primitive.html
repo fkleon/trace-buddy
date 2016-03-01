@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <meta name="description" content="API docs for the Primitive constructor from the Class Primitive class from the tracebuddy library, for the Dart programming language.">
   <title>Primitive constructor - Primitive class - tracebuddy library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
   <link rel="stylesheet" href="static-assets/prettify.css">
   <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="static-assets/styles.css">
-
-  <meta name="description" content="API docs for the Primitive constructor from the Class Primitive class from the tracebuddy library, for the Dart programming language.">
   <link rel="icon" href="static-assets/favicon.png">
 
   <!-- Do not remove placeholder -->
@@ -88,47 +86,46 @@
       <li class="section-title">
         <a href="tracebuddy/Primitive-class.html#instance-properties">Properties</a>
       </li>
-      <li><a class="" href="tracebuddy/Primitive/color.html">color</a></li>
-      <li><a class="" href="tracebuddy/Primitive/colorString.html">colorString</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/hashCode.html">hashCode</a></li>
-      <li><a class="" href="tracebuddy/Primitive/id.html">id</a></li>
-      <li><a class="" href="tracebuddy/Primitive/origin.html">origin</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/runtimeType.html">runtimeType</a></li>
+      <li><a href="tracebuddy/Primitive/color.html">color</a></li>
+      <li><a href="tracebuddy/Primitive/colorString.html">colorString</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/hashCode.html">hashCode</a></li>
+      <li><a href="tracebuddy/Primitive/id.html">id</a></li>
+      <li><a href="tracebuddy/Primitive/origin.html">origin</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title inherited"><a href="tracebuddy/Primitive-class.html#operators">Operators</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/operator_equals.html">operator ==</a></li>
     
       <li class="section-title"><a href="tracebuddy/Primitive-class.html#instance-methods">Methods</a></li>
-      <li><a class="" href="tracebuddy/Primitive/getShader.html">getShader</a></li>
-      <li><a class="" href="tracebuddy/Primitive/intersect.html">intersect</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/noSuchMethod.html">noSuchMethod</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/toString.html">toString</a></li>
+      <li><a href="tracebuddy/Primitive/getShader.html">getShader</a></li>
+      <li><a href="tracebuddy/Primitive/intersect.html">intersect</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/toString.html">toString</a></li>
     </ol>
 
   </div><!--/.sidebar-offcanvas-left-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-
-      <section class="multi-line-signature">
-        
-                <span class="name ">Primitive</span>(<wbr>[<span class="parameter" id="-param-_shader"><span class="type-annotation"><a class="" href="tracebuddy/Shader-class.html">Shader</a></span> <span class="parameter-name">_shader</span></span>])
-      </section>
+    <section class="multi-line-signature">
+      
+            <span class="name ">Primitive</span>(<wbr>[<span class="parameter" id="-param-_shader"><span class="type-annotation"><a href="tracebuddy/Shader-class.html">Shader</a></span> <span class="parameter-name">_shader</span></span>])
+    </section>
 
     <section class="desc markdown">
-      <p>Creates a new <a class="" href="tracebuddy/Primitive-class.html">Primitive</a> and assigns an unique id to it.
+      <p>Creates a new <a href="tracebuddy/Primitive-class.html">Primitive</a> and assigns an unique id to it.
 The optional parameter <code>shader</code> can be used to set a shader for this
-primitive. If no shader is assigned, a default <a class="" href="tracebuddy/AmbientShader-class.html">AmbientShader</a> will
+primitive. If no shader is assigned, a default <a href="tracebuddy/AmbientShader-class.html">AmbientShader</a> will
 be created.</p>
     </section>
     
-      <section class="summary source-code" id="source">
-        <h2><span>Source</span> </h2>
-        <pre><code class="prettyprint lang-dart">Primitive([Shader this._shader]) : id = new IdGen().nextId() {
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">Primitive([Shader this._shader]) : id = new IdGen().nextId() {
   if (_shader == null) {
     _shader = new AmbientShader(new Vector4(1.0,0.0,0.0,0.0));
   }
 }</code></pre>
-      </section>
+    </section>
 
   </div> <!-- /.main-content -->
 

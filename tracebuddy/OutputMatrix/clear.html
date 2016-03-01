@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <meta name="description" content="API docs for the clear method from the OutputMatrix class, for the Dart programming language.">
   <title>clear method - OutputMatrix class - tracebuddy library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
   <link rel="stylesheet" href="static-assets/prettify.css">
   <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="static-assets/styles.css">
-
-  <meta name="description" content="API docs for the clear method from the OutputMatrix class, for the Dart programming language.">
   <link rel="icon" href="static-assets/favicon.png">
 
   <!-- Do not remove placeholder -->
@@ -79,6 +77,8 @@
 
     <ol>
     
+      <li class="section-title"><a href="tracebuddy/OutputMatrix-class.html#static-properties">Static properties</a></li>
+      <li><a href="tracebuddy/OutputMatrix/OFFSET.html">OFFSET</a></li>
     
     
       <li class="section-title"><a href="tracebuddy/OutputMatrix-class.html#constructors">Constructors</a></li>
@@ -87,35 +87,33 @@
       <li class="section-title">
         <a href="tracebuddy/OutputMatrix-class.html#instance-properties">Properties</a>
       </li>
-      <li><a class="" href="tracebuddy/OutputMatrix/columns.html">columns</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/OutputMatrix/hashCode.html">hashCode</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/rows.html">rows</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/OutputMatrix/runtimeType.html">runtimeType</a></li>
+      <li><a href="tracebuddy/OutputMatrix/columns.html">columns</a></li>
+      <li class="inherited"><a href="tracebuddy/OutputMatrix/hashCode.html">hashCode</a></li>
+      <li><a href="tracebuddy/OutputMatrix/rows.html">rows</a></li>
+      <li class="inherited"><a href="tracebuddy/OutputMatrix/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title inherited"><a href="tracebuddy/OutputMatrix-class.html#operators">Operators</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/OutputMatrix/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="tracebuddy/OutputMatrix/operator_equals.html">operator ==</a></li>
     
       <li class="section-title"><a href="tracebuddy/OutputMatrix-class.html#instance-methods">Methods</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/clear.html">clear</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/getPixel.html">getPixel</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/getRow.html">getRow</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/getSerialized.html">getSerialized</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/getSerializedRGBA.html">getSerializedRGBA</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/OutputMatrix/noSuchMethod.html">noSuchMethod</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/setPixel.html">setPixel</a></li>
-      <li><a class="" href="tracebuddy/OutputMatrix/setRow.html">setRow</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/OutputMatrix/toString.html">toString</a></li>
+      <li><a href="tracebuddy/OutputMatrix/clear.html">clear</a></li>
+      <li><a href="tracebuddy/OutputMatrix/getBytesRGBA.html">getBytesRGBA</a></li>
+      <li><a href="tracebuddy/OutputMatrix/getIntRGBA.html">getIntRGBA</a></li>
+      <li><a href="tracebuddy/OutputMatrix/getPixel.html">getPixel</a></li>
+      <li><a href="tracebuddy/OutputMatrix/getRow.html">getRow</a></li>
+      <li class="inherited"><a href="tracebuddy/OutputMatrix/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/OutputMatrix/setPixel.html">setPixel</a></li>
+      <li><a href="tracebuddy/OutputMatrix/setRow.html">setRow</a></li>
+      <li class="inherited"><a href="tracebuddy/OutputMatrix/toString.html">toString</a></li>
     </ol>
 
   </div><!--/.sidebar-offcanvas-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-
     <section class="multi-line-signature">
-        <span class="returntype">void</span>
-        <span class="name ">clear</span>(<wbr>)
+      <span class="returntype">void</span>
+      <span class="name ">clear</span>(<wbr>)
     </section>
-
     <section class="desc markdown">
       <p>Clears the matrix to black.</p>
     </section>
@@ -123,10 +121,7 @@
     <section class="summary source-code" id="source">
       <h2><span>Source</span> </h2>
       <pre><code class="prettyprint lang-dart">void clear() {
-  Vector3 black = new Vector3.zero();
-  for (int i = 0; i&lt;rows*columns; i++) {
-    _content[i] = black;
-  }
+  _content.fillRange(0, _content.length, 0);
 }</code></pre>
     </section>
 

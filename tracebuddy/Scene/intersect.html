@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <meta name="description" content="API docs for the intersect method from the Scene class, for the Dart programming language.">
   <title>intersect method - Scene class - tracebuddy library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
   <link rel="stylesheet" href="static-assets/prettify.css">
   <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="static-assets/styles.css">
-
-  <meta name="description" content="API docs for the intersect method from the Scene class, for the Dart programming language.">
   <link rel="icon" href="static-assets/favicon.png">
 
   <!-- Do not remove placeholder -->
@@ -87,37 +85,35 @@
       <li class="section-title">
         <a href="tracebuddy/Scene-class.html#instance-properties">Properties</a>
       </li>
-      <li><a class="" href="tracebuddy/Scene/ccs.html">ccs</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/color.html">color</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/colorString.html">colorString</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Scene/hashCode.html">hashCode</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/id.html">id</a></li>
-      <li><a class="" href="tracebuddy/Scene/nonIdxPrimitives.html">nonIdxPrimitives</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/origin.html">origin</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Scene/runtimeType.html">runtimeType</a></li>
+      <li><a href="tracebuddy/Scene/ccs.html">ccs</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/color.html">color</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/colorString.html">colorString</a></li>
+      <li class="inherited"><a href="tracebuddy/Scene/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/id.html">id</a></li>
+      <li><a href="tracebuddy/Scene/nonIdxPrimitives.html">nonIdxPrimitives</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/origin.html">origin</a></li>
+      <li class="inherited"><a href="tracebuddy/Scene/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title inherited"><a href="tracebuddy/Scene-class.html#operators">Operators</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Scene/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="tracebuddy/Scene/operator_equals.html">operator ==</a></li>
     
       <li class="section-title"><a href="tracebuddy/Scene-class.html#instance-methods">Methods</a></li>
-      <li><a class="" href="tracebuddy/Scene/add.html">add</a></li>
-      <li><a class="" href="tracebuddy/Scene/displayCCS.html">displayCCS</a></li>
-      <li><a class="" href="tracebuddy/Scene/getShader.html">getShader</a></li>
-      <li><a class="" href="tracebuddy/Scene/intersect.html">intersect</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Scene/noSuchMethod.html">noSuchMethod</a></li>
-      <li><a class="" href="tracebuddy/Scene/remove.html">remove</a></li>
-      <li><a class="" href="tracebuddy/Scene/toString.html">toString</a></li>
+      <li><a href="tracebuddy/Scene/add.html">add</a></li>
+      <li><a href="tracebuddy/Scene/displayCCS.html">displayCCS</a></li>
+      <li><a href="tracebuddy/Scene/getShader.html">getShader</a></li>
+      <li><a href="tracebuddy/Scene/intersect.html">intersect</a></li>
+      <li class="inherited"><a href="tracebuddy/Scene/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/Scene/remove.html">remove</a></li>
+      <li><a href="tracebuddy/Scene/toString.html">toString</a></li>
     </ol>
 
   </div><!--/.sidebar-offcanvas-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-
     <section class="multi-line-signature">
-        <span class="returntype"><a class="" href="tracebuddy/Intersection-class.html">Intersection</a></span>
-        <span class="name ">intersect</span>(<wbr><span class="parameter" id="intersect-param-r"><span class="type-annotation"><a class="" href="tracebuddy/Ray-class.html">Ray</a></span> <span class="parameter-name">r</span></span>, <span class="parameter" id="intersect-param-prevBestDistance"><span class="type-annotation">num</span> <span class="parameter-name">prevBestDistance</span></span>)
+      <span class="returntype"><a href="tracebuddy/Intersection-class.html">Intersection</a></span>
+      <span class="name ">intersect</span>(<wbr><span class="parameter" id="intersect-param-r"><span class="type-annotation"><a href="tracebuddy/Ray-class.html">Ray</a></span> <span class="parameter-name">r</span></span>, <span class="parameter" id="intersect-param-prevBestDistance"><span class="type-annotation">double</span> <span class="parameter-name">prevBestDistance</span></span>)
     </section>
-
     <section class="desc markdown">
       <p>Performs a ray - scene intersection.</p>
 <p>Iterates over all primitives and calls their intersect.
@@ -127,9 +123,9 @@ Will only return hit points which are closer than the specified
     
     <section class="summary source-code" id="source">
       <h2><span>Source</span> </h2>
-      <pre><code class="prettyprint lang-dart">Intersection intersect(Ray r, num prevBestDistance) {
+      <pre><code class="prettyprint lang-dart">Intersection intersect(Ray r, double prevBestDistance) {
 
-  num bestDistance = prevBestDistance;
+  double bestDistance = prevBestDistance;
   Primitive bestPrimitive = null;
 
   //print(&apos;Finding intersetion with ${nonIdxPrimitives.length} primitives..&apos;);
@@ -149,7 +145,7 @@ Will only return hit points which are closer than the specified
   // TODO iterate over indexable primitives
 
   // package everything nicely
-  Intersection bestHit = new Intersection(bestDistance, bestPrimitive, r.getPoint3D(bestDistance));
+  Intersection bestHit = new Intersection(bestDistance, bestPrimitive, r.getPoint3(bestDistance));
   return bestHit;
 }</code></pre>
     </section>

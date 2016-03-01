@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the intersectsWithAabb3 method from the Ray class, for the Dart programming language.">
+  <title>intersectsWithAabb3 method - Ray class - tracebuddy library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/Ray-class.html">Ray</a></li>
+            <li class="self-crumb">intersectsWithAabb3</li>
+          </ol>
+          <div class="self-name">intersectsWithAabb3</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/Ray-class.html">Ray</a></li>
+          <li class="self-crumb">intersectsWithAabb3</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">method</span> intersectsWithAabb3
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="tracebuddy/Ray/intersectsWithAabb3.html#source">Source</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/Ray-class.html">Ray</a></h5>
+
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/Ray-class.html#constructors">Constructors</a></li>
+      <li><a href="tracebuddy/Ray/Ray.html">Ray</a></li>
+    
+      <li class="section-title inherited">
+        <a href="tracebuddy/Ray-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="tracebuddy/Ray/direction.html">direction</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/origin.html">origin</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title inherited"><a href="tracebuddy/Ray-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="tracebuddy/Ray-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/at.html">at</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/copyAt.html">copyAt</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/copyFrom.html">copyFrom</a></li>
+      <li><a href="tracebuddy/Ray/getPoint3.html">getPoint3</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithAabb3.html">intersectsWithAabb3</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithQuad.html">intersectsWithQuad</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithSphere.html">intersectsWithSphere</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithTriangle.html">intersectsWithTriangle</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/Ray/toString.html">toString</a></li>
+    </ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <section class="multi-line-signature">
+      <span class="returntype">double</span>
+      <span class="name ">intersectsWithAabb3</span>(<wbr><span class="parameter" id="intersectsWithAabb3-param-other"><span class="type-annotation">Aabb3</span> <span class="parameter-name">other</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Return the distance from the origin of <code>this</code> to the intersection with
+<code>other</code> if <code>this</code> intersects with <code>other</code>, or null if the don't intersect.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">double intersectsWithAabb3(Aabb3 other) {
+  final otherMin = other.min;
+  final otherMax = other.max;
+
+  var tNear = -double.MAX_FINITE;
+  var tFar = double.MAX_FINITE;
+
+  for (var i = 0; i &lt; 3; ++i) {
+    if (_direction[i] == 0.0) {
+      if (_origin[i] &lt; otherMin[i] || _origin[i] &gt; otherMax[i]) {
+        return null;
+      }
+    } else {
+      var t1 = (otherMin[i] - _origin[i]) / _direction[i];
+      var t2 = (otherMax[i] - _origin[i]) / _direction[i];
+
+      if (t1 &gt; t2) {
+        final temp = t1;
+        t1 = t2;
+        t2 = temp;
+      }
+
+      if (t1 &gt; tNear) {
+        tNear = t1;
+      }
+
+      if (t2 &lt; tFar) {
+        tFar = t2;
+      }
+
+      if (tNear &gt; tFar || tFar &lt; 0) {
+        return null;
+      }
+    }
+  }
+
+  return tNear;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          tracebuddy 0.0.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

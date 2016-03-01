@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the intersectsWithQuad method from the Ray class, for the Dart programming language.">
+  <title>intersectsWithQuad method - Ray class - tracebuddy library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+            <li><a href="tracebuddy/Ray-class.html">Ray</a></li>
+            <li class="self-crumb">intersectsWithQuad</li>
+          </ol>
+          <div class="self-name">intersectsWithQuad</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></li>
+          <li><a href="tracebuddy/Ray-class.html">Ray</a></li>
+          <li class="self-crumb">intersectsWithQuad</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">method</span> intersectsWithQuad
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="tracebuddy/Ray/intersectsWithQuad.html#source">Source</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/tracebuddy-library.html">tracebuddy</a></h5>
+    <h5><a href="tracebuddy/Ray-class.html">Ray</a></h5>
+
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="tracebuddy/Ray-class.html#constructors">Constructors</a></li>
+      <li><a href="tracebuddy/Ray/Ray.html">Ray</a></li>
+    
+      <li class="section-title inherited">
+        <a href="tracebuddy/Ray-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="tracebuddy/Ray/direction.html">direction</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/origin.html">origin</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title inherited"><a href="tracebuddy/Ray-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="tracebuddy/Ray-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/at.html">at</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/copyAt.html">copyAt</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/copyFrom.html">copyFrom</a></li>
+      <li><a href="tracebuddy/Ray/getPoint3.html">getPoint3</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithAabb3.html">intersectsWithAabb3</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithQuad.html">intersectsWithQuad</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithSphere.html">intersectsWithSphere</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/intersectsWithTriangle.html">intersectsWithTriangle</a></li>
+      <li class="inherited"><a href="tracebuddy/Ray/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/Ray/toString.html">toString</a></li>
+    </ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <section class="multi-line-signature">
+      <span class="returntype">double</span>
+      <span class="name ">intersectsWithQuad</span>(<wbr><span class="parameter" id="intersectsWithQuad-param-other"><span class="type-annotation">Quad</span> <span class="parameter-name">other</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Return the distance from the origin of <code>this</code> to the intersection with
+<code>other</code> if <code>this</code> intersects with <code>other</code>, or null if the don't intersect.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">double intersectsWithQuad(Quad other) {
+  const double EPSILON = 10e-6;
+
+  // First triangle
+  var point0 = other._point0;
+  var point1 = other._point1;
+  var point2 = other._point2;
+
+  _e1
+    ..setFrom(point1)
+    ..sub(point0);
+  _e2
+    ..setFrom(point2)
+    ..sub(point0);
+
+  _direction.crossInto(_e2, _q);
+  final a0 = _e1.dot(_q);
+
+  if (!(a0 &gt; -EPSILON &amp;&amp; a0 &lt; EPSILON)) {
+    final f = 1 / a0;
+    _s
+      ..setFrom(_origin)
+      ..sub(point0);
+    final u = f * (_s.dot(_q));
+
+    if (u &gt;= 0.0) {
+      _s.crossInto(_e1, _r);
+      final v = f * (_direction.dot(_r));
+
+      if (!(v &lt; -EPSILON || u + v &gt; 1.0 + EPSILON)) {
+        final t = f * (_e2.dot(_r));
+
+        return t;
+      }
+    }
+  }
+
+  // Second triangle
+  point0 = other._point3;
+  point1 = other._point0;
+  point2 = other._point2;
+
+  _e1
+    ..setFrom(point1)
+    ..sub(point0);
+  _e2
+    ..setFrom(point2)
+    ..sub(point0);
+
+  _direction.crossInto(_e2, _q);
+  final a1 = _e1.dot(_q);
+
+  if (!(a1 &gt; -EPSILON &amp;&amp; a1 &lt; EPSILON)) {
+    final f = 1 / a1;
+    _s
+      ..setFrom(_origin)
+      ..sub(point0);
+    final u = f * (_s.dot(_q));
+
+    if (u &gt;= 0.0) {
+      _s.crossInto(_e1, _r);
+      final v = f * (_direction.dot(_r));
+
+      if (!(v &lt; -EPSILON || u + v &gt; 1.0 + EPSILON)) {
+        final t = f * (_e2.dot(_r));
+
+        return t;
+      }
+    }
+  }
+
+  return null;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          tracebuddy 0.0.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

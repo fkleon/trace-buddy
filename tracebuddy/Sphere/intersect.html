@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <meta name="description" content="API docs for the intersect method from the Sphere class, for the Dart programming language.">
   <title>intersect method - Sphere class - tracebuddy library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
   <link rel="stylesheet" href="static-assets/prettify.css">
   <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="static-assets/styles.css">
-
-  <meta name="description" content="API docs for the intersect method from the Sphere class, for the Dart programming language.">
   <link rel="icon" href="static-assets/favicon.png">
 
   <!-- Do not remove placeholder -->
@@ -87,34 +85,32 @@
       <li class="section-title">
         <a href="tracebuddy/Sphere-class.html#instance-properties">Properties</a>
       </li>
-      <li><a class="" href="tracebuddy/Sphere/center.html">center</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/color.html">color</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/colorString.html">colorString</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Sphere/hashCode.html">hashCode</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Primitive/id.html">id</a></li>
-      <li><a class="" href="tracebuddy/Sphere/origin.html">origin</a></li>
-      <li><a class="" href="tracebuddy/Sphere/radius.html">radius</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Sphere/runtimeType.html">runtimeType</a></li>
+      <li><a href="tracebuddy/Sphere/center.html">center</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/color.html">color</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/colorString.html">colorString</a></li>
+      <li class="inherited"><a href="tracebuddy/Sphere/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="tracebuddy/Primitive/id.html">id</a></li>
+      <li><a href="tracebuddy/Sphere/origin.html">origin</a></li>
+      <li><a href="tracebuddy/Sphere/radius.html">radius</a></li>
+      <li class="inherited"><a href="tracebuddy/Sphere/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title inherited"><a href="tracebuddy/Sphere-class.html#operators">Operators</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Sphere/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="tracebuddy/Sphere/operator_equals.html">operator ==</a></li>
     
       <li class="section-title"><a href="tracebuddy/Sphere-class.html#instance-methods">Methods</a></li>
-      <li><a class="" href="tracebuddy/Sphere/getShader.html">getShader</a></li>
-      <li><a class="" href="tracebuddy/Sphere/intersect.html">intersect</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Sphere/noSuchMethod.html">noSuchMethod</a></li>
-      <li><a class="" href="tracebuddy/Sphere/toString.html">toString</a></li>
+      <li><a href="tracebuddy/Sphere/getShader.html">getShader</a></li>
+      <li><a href="tracebuddy/Sphere/intersect.html">intersect</a></li>
+      <li class="inherited"><a href="tracebuddy/Sphere/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/Sphere/toString.html">toString</a></li>
     </ol>
 
   </div><!--/.sidebar-offcanvas-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-
     <section class="multi-line-signature">
-        <span class="returntype"><a class="" href="tracebuddy/Intersection-class.html">Intersection</a></span>
-        <span class="name ">intersect</span>(<wbr><span class="parameter" id="intersect-param-r"><span class="type-annotation"><a class="" href="tracebuddy/Ray-class.html">Ray</a></span> <span class="parameter-name">r</span></span>, <span class="parameter" id="intersect-param-prevBestDistance"><span class="type-annotation">num</span> <span class="parameter-name">prevBestDistance</span></span>)
+      <span class="returntype"><a href="tracebuddy/Intersection-class.html">Intersection</a></span>
+      <span class="name ">intersect</span>(<wbr><span class="parameter" id="intersect-param-r"><span class="type-annotation"><a href="tracebuddy/Ray-class.html">Ray</a></span> <span class="parameter-name">r</span></span>, <span class="parameter" id="intersect-param-prevBestDistance"><span class="type-annotation">num</span> <span class="parameter-name">prevBestDistance</span></span>)
     </section>
-
     <section class="desc markdown">
       <p>Performs a ray - primitive intersection test.
 Returns an <code>Intersection</code> object with the associated information.</p>
@@ -136,7 +132,7 @@ Returns an <code>Intersection</code> object with the associated information.</p>
     return intersect;
   } else {
     intersect.distance = l1;
-    intersect.hitPoint = r.getPoint3D(l1);
+    intersect.hitPoint = r.getPoint3(l1);
     intersect.prim = this;
     return intersect;
   }
@@ -164,7 +160,7 @@ Returns an <code>Intersection</code> object with the associated information.</p>
 
     intersect.distance = dist;
     intersect.prim = this;
-    intersect.hitPoint = r.getPoint3D(dist);
+    intersect.hitPoint = r.getPoint3(dist);
   }
 
   return intersect;

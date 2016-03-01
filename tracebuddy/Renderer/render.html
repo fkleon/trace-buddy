@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <meta name="description" content="API docs for the render method from the Renderer class, for the Dart programming language.">
   <title>render method - Renderer class - tracebuddy library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' type='text/css'>
   <link rel="stylesheet" href="static-assets/prettify.css">
   <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="static-assets/styles.css">
-
-  <meta name="description" content="API docs for the render method from the Renderer class, for the Dart programming language.">
   <link rel="icon" href="static-assets/favicon.png">
 
   <!-- Do not remove placeholder -->
@@ -87,35 +85,33 @@
       <li class="section-title">
         <a href="tracebuddy/Renderer-class.html#instance-properties">Properties</a>
       </li>
-      <li><a class="" href="tracebuddy/Renderer/ambientLight.html">ambientLight</a></li>
-      <li><a class="" href="tracebuddy/Renderer/camera.html">camera</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Renderer/hashCode.html">hashCode</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Renderer/runtimeType.html">runtimeType</a></li>
-      <li><a class="" href="tracebuddy/Renderer/sampler.html">sampler</a></li>
-      <li><a class="" href="tracebuddy/Renderer/scene.html">scene</a></li>
-      <li><a class="" href="tracebuddy/Renderer/xRes.html">xRes</a></li>
-      <li><a class="" href="tracebuddy/Renderer/yRes.html">yRes</a></li>
+      <li><a href="tracebuddy/Renderer/ambientLight.html">ambientLight</a></li>
+      <li><a href="tracebuddy/Renderer/camera.html">camera</a></li>
+      <li class="inherited"><a href="tracebuddy/Renderer/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="tracebuddy/Renderer/runtimeType.html">runtimeType</a></li>
+      <li><a href="tracebuddy/Renderer/sampler.html">sampler</a></li>
+      <li><a href="tracebuddy/Renderer/scene.html">scene</a></li>
+      <li><a href="tracebuddy/Renderer/xRes.html">xRes</a></li>
+      <li><a href="tracebuddy/Renderer/yRes.html">yRes</a></li>
     
       <li class="section-title inherited"><a href="tracebuddy/Renderer-class.html#operators">Operators</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Renderer/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="tracebuddy/Renderer/operator_equals.html">operator ==</a></li>
     
       <li class="section-title"><a href="tracebuddy/Renderer-class.html#instance-methods">Methods</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Renderer/noSuchMethod.html">noSuchMethod</a></li>
-      <li><a class="" href="tracebuddy/Renderer/render.html">render</a></li>
-      <li class="inherited"><a class="" href="tracebuddy/Renderer/toString.html">toString</a></li>
+      <li class="inherited"><a href="tracebuddy/Renderer/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="tracebuddy/Renderer/render.html">render</a></li>
+      <li class="inherited"><a href="tracebuddy/Renderer/toString.html">toString</a></li>
     </ol>
 
   </div><!--/.sidebar-offcanvas-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-
     <section class="multi-line-signature">
-        <span class="returntype"><a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></span>
-        <span class="name ">render</span>(<wbr>)
+      <span class="returntype"><a href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a></span>
+      <span class="name ">render</span>(<wbr>)
     </section>
-
     <section class="desc markdown">
-      <p>Renders the Scene and returns an <a class="" href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a> containing the pixels
+      <p>Renders the Scene and returns an <a href="tracebuddy/OutputMatrix-class.html">OutputMatrix</a> containing the pixels
 of the final image.</p>
     </section>
     
@@ -152,9 +148,8 @@ of the final image.</p>
 
           // integrate radiance
           //TODO count bounces for indirect radiance
-
-          Intersection ret = scene.intersect(r, 99999); //TODO fix hardcoded distance
-          if (ret.distance &gt;= EPS &amp;&amp; ret.distance &lt; 99999) {
+          Intersection ret = scene.intersect(r, MAX_DIST);
+          if (ret.distance &gt;= EPS &amp;&amp; ret.distance &lt; MAX_DIST) {
 
             //print (&apos;hit at ${ret.distance} with ${ret.prim} on ${ret.hitPoint}&apos;);
 
@@ -180,8 +175,11 @@ of the final image.</p>
         // add to overall pixel color
         color += tempColor;
 
+        // alpha always set manually - not supported in shaders yet
+        color.a = 1.0;
+
         // set pixel in output matrix
-        om.setPixel(y+1, x+1, color.rgb);
+        om.setPixel(y, x, color.rgba);
       }
     }
   }
